@@ -134,31 +134,65 @@ const THEME_CSS = `
 
 /* ----------------------- speech ----------------------- */
 let JP_VOICE = null;
-function pickVoice() {
+let TTS_UNLOCKED = false;
+let VOICE_PREF = null; // user-chosen voiceURI (web voice list is separate from iOS system setting)
+const VOICE_KEY = "kotodama:voice";
+try { VOICE_PREF = localStorage.getItem(VOICE_KEY) || null; } catch (e) {}
+
+// All Japanese voices the *browser* exposes (NOT the iOS Accessibility voice list).
+function jaVoices() {
   try {
     const vs = window.speechSynthesis?.getVoices?.() || [];
-    JP_VOICE = vs.find(v => /ja[-_]?JP/i.test(v.lang)) || vs.find(v => /japan/i.test(v.name)) || null;
+    const ja = vs.filter(v => /ja[-_]?JP/i.test(v.lang) || /日本|Kyoko|Otoya|O-?ren|Hattori|Ichiro|Sayaka|Nanami/i.test(v.name));
+    return ja;
+  } catch (e) { return []; }
+}
+function pickVoice() {
+  try {
+    const ja = jaVoices();
+    JP_VOICE = (VOICE_PREF && ja.find(v => v.voiceURI === VOICE_PREF || v.name === VOICE_PREF)) || ja[0] || null;
+  } catch (e) {}
+}
+function setVoicePref(uri) {
+  VOICE_PREF = uri || null;
+  try { uri ? localStorage.setItem(VOICE_KEY, uri) : localStorage.removeItem(VOICE_KEY); } catch (e) {}
+  pickVoice();
+}
+// Mobile browsers (iOS Safari, Android Chrome) block speech until it has been
+// triggered once inside a real user gesture. Warm it up silently on first touch.
+function unlockTTS() {
+  if (TTS_UNLOCKED) return;
+  try {
+    const synth = window.speechSynthesis;
+    if (!synth) return;
+    if (!JP_VOICE) pickVoice();
+    const u = new SpeechSynthesisUtterance("\u3042"); // "あ"
+    u.volume = 0; u.lang = "ja-JP";
+    if (JP_VOICE) u.voice = JP_VOICE;
+    synth.speak(u);
+    TTS_UNLOCKED = true;
   } catch (e) {}
 }
 if (typeof window !== "undefined" && window.speechSynthesis) {
   pickVoice();
   window.speechSynthesis.onvoiceschanged = pickVoice;
+  // first gesture of any kind unlocks audio
+  window.addEventListener("pointerdown", unlockTTS, { passive: true });
+  window.addEventListener("touchstart", unlockTTS, { passive: true });
 }
 function speak(text) {
   try {
     const synth = window.speechSynthesis;
     if (!synth || !text) return;
-    if (!JP_VOICE) pickVoice();            // voices may have loaded after init
+    if (!JP_VOICE) pickVoice();
+    if (!TTS_UNLOCKED) TTS_UNLOCKED = true; // a direct speak() implies a gesture path
+    if (synth.paused) synth.resume();       // Chrome can get stuck paused
     synth.cancel();
-    // Delay after cancel: on iOS/Safari an immediate speak() clips the first
-    // ~100ms of the utterance, which turns a bare vowel like "あ" into a
-    // plosive-sounding blip ("pa"). A short gap lets the onset render cleanly.
-    setTimeout(() => {
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = "ja-JP"; u.rate = 0.9; u.pitch = 1.0;
-      if (JP_VOICE) u.voice = JP_VOICE;
-      synth.speak(u);
-    }, 60);
+    // Fire synchronously so the user gesture still "counts" on mobile.
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "ja-JP"; u.rate = 0.9; u.pitch = 1.0;
+    if (JP_VOICE) u.voice = JP_VOICE;
+    synth.speak(u);
   } catch (e) {}
 }
 
@@ -1775,6 +1809,32 @@ function StatBar({ icon, cls, val, max, label }) {
   );
 }
 
+function VoicePicker() {
+  const [voices, setVoices] = useState(() => jaVoices());
+  const [cur, setCur] = useState(VOICE_PREF || "");
+  useEffect(() => {
+    const update = () => { pickVoice(); setVoices(jaVoices()); };
+    update();
+    if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = update;
+    const t = setTimeout(update, 600);
+    return () => clearTimeout(t);
+  }, []);
+  if (!voices.length) return null; // browser exposes no Japanese voice to select
+  const selected = cur || (JP_VOICE && JP_VOICE.voiceURI) || voices[0].voiceURI || "";
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 12 }}>
+      <Volume2 size={15} color="var(--muted)" />
+      <span style={{ fontSize: 12, color: "var(--muted)", flex: "none" }}>声</span>
+      <select value={selected}
+        onChange={(e) => { const v = e.target.value; setCur(v); setVoicePref(v); speak("こんにちは。"); }}
+        style={{ flex: 1, background: "var(--panel)", color: "var(--ink)", border: "1px solid var(--line)", borderRadius: 8, padding: "6px 8px", fontSize: 13 }}>
+        {voices.map(v => <option key={v.voiceURI} value={v.voiceURI}>{v.name}</option>)}
+      </select>
+      <button className="kw-chip kw-tap" onClick={() => speak("こんにちは。")} style={{ flex: "none" }}>試聴</button>
+    </div>
+  );
+}
+
 function Hub({ save, persist, onMap, onCodex, onReview, onLesson }) {
   const region = REGIONS.find(r => r.id === save.region);
   const nodes = ALL_NODES.filter(n => n.region === save.region);
@@ -1811,6 +1871,7 @@ function Hub({ save, persist, onMap, onCodex, onReview, onLesson }) {
             ふりがな {save.furigana ? "ON" : "OFF"}
           </button>
         </div>
+        <VoicePicker />
         {/* chapter quest progress */}
         <div style={{ marginTop: 14 }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--muted)", marginBottom: 5 }}>
