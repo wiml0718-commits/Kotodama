@@ -1,0 +1,1414 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="description" content="言ノ葉世界 — 異世界転生で学ぶ日本語 RPG (CEFR A1→C2)" />
+<title>言ノ葉世界 — Kotodama RPG</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body, #root { height: 100%; }
+  body { margin: 0; background: #0f0b22; -webkit-font-smoothing: antialiased; }
+  * { -webkit-tap-highlight-color: transparent; }
+  #boot { color:#a99fd6; font-family:system-ui,sans-serif; text-align:center; padding-top:40vh; }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.383.0?deps=react@18.3.1,react-dom@18.3.1"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+</head>
+<body>
+<div id="root"><div id="boot">言霊を読み込み中… (Loading)</div></div>
+<script type="text/babel" data-type="module" data-presets="react">
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { createRoot } from "react-dom/client";
+import {
+  Swords, Sparkles, BookOpen, Map, Heart, Star, Volume2, ChevronRight,
+  Scroll, Crown, Flame, Shield, RotateCcw, Lock, Check, X, Zap, Trophy, Droplet
+} from "lucide-react";
+
+/* ============================================================
+   言ノ葉世界  —  Kotodama : Isekai Japanese RPG  (A1 → C2)
+   ============================================================ */
+
+const THEME_CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Zen+Maru+Gothic:wght@400;500;700;900&family=Shippori+Mincho:wght@500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root{
+  --bg:#15102b; --bg2:#1d1640; --panel:#241b48; --panel2:#2d2257;
+  --line:#3b2f6b; --ink:#ece6ff; --muted:#a99fd6;
+  --gold:#f5c451; --gold-dim:#caa23c; --mana:#5fd3c4; --violet:#a78bfa;
+  --rose:#f06b6b; --leaf:#7ee0a0; --parch:#f3e9cf; --parch-ink:#3a2f23;
+  --jp:'Zen Maru Gothic',sans-serif;
+  --brush:'Yuji Syuku',serif;
+  --mincho:'Shippori Mincho',serif;
+  --ui:'Space Grotesk',sans-serif;
+}
+*{box-sizing:border-box}
+.kw-root{font-family:var(--jp);color:var(--ink);background:
+  radial-gradient(1200px 600px at 50% -10%, #2a205c 0%, transparent 60%),
+  radial-gradient(900px 500px at 90% 110%, #3a2a6b 0%, transparent 55%),
+  linear-gradient(180deg,#15102b,#0f0b22);min-height:100%;}
+.kw-shell{max-width:520px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.kw-num{font-family:var(--ui);font-variant-numeric:tabular-nums}
+.kw-brush{font-family:var(--brush)}
+.kw-mincho{font-family:var(--mincho)}
+.kw-eyebrow{font-family:var(--ui);letter-spacing:.28em;text-transform:uppercase;font-size:11px;color:var(--gold-dim);font-weight:600}
+
+/* buttons */
+.kw-btn{font-family:var(--jp);font-weight:700;border:none;cursor:pointer;border-radius:14px;
+  padding:14px 18px;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:transform .08s ease, filter .15s ease;color:#1a1330}
+.kw-btn:active{transform:translateY(2px) scale(.99)}
+.kw-btn-gold{background:linear-gradient(180deg,#ffd873,#e7ad3b);box-shadow:0 6px 0 #9c7724, 0 10px 18px rgba(0,0,0,.35)}
+.kw-btn-gold:active{box-shadow:0 2px 0 #9c7724}
+.kw-btn-mana{background:linear-gradient(180deg,#7ee9da,#3fb6a6);box-shadow:0 6px 0 #2a7c70,0 10px 18px rgba(0,0,0,.35)}
+.kw-btn-mana:active{box-shadow:0 2px 0 #2a7c70}
+.kw-btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);box-shadow:none}
+.kw-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+.kw-card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1.5px solid var(--line);
+  border-radius:18px;box-shadow:0 12px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04)}
+.kw-chip{font-family:var(--ui);font-size:11px;font-weight:600;letter-spacing:.06em;padding:4px 9px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted)}
+
+/* meters */
+.kw-bar{height:11px;border-radius:999px;background:#120d26;border:1px solid var(--line);overflow:hidden;position:relative}
+.kw-bar > i{display:block;height:100%;border-radius:999px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.bar-hp > i{background:linear-gradient(90deg,#ff8a8a,#f0524f)}
+.bar-mp > i{background:linear-gradient(90deg,#8af0e4,#37b3a3)}
+.bar-xp > i{background:linear-gradient(90deg,#ffe08a,#f0b53e)}
+.bar-foe > i{background:linear-gradient(90deg,#c79bff,#8a4ff0)}
+
+/* parchment */
+.kw-scroll{background:
+  linear-gradient(180deg,#f6eed6,#ecdfbe);
+  color:var(--parch-ink);border-radius:16px;border:1.5px solid #cdb784;
+  box-shadow:0 12px 30px rgba(0,0,0,.4), inset 0 0 60px rgba(150,110,40,.12);
+  position:relative}
+
+/* rune reveal */
+@keyframes runeIn{0%{opacity:0;transform:scale(.4) rotate(-12deg);filter:blur(6px)}
+  60%{opacity:1;transform:scale(1.12) rotate(3deg);filter:blur(0)}100%{transform:scale(1) rotate(0)}}
+.kw-rune{animation:runeIn .6s cubic-bezier(.2,.9,.2,1) both}
+@keyframes glow{0%,100%{text-shadow:0 0 12px rgba(245,196,81,.35)}50%{text-shadow:0 0 28px rgba(245,196,81,.85)}}
+.kw-glow{animation:glow 2.4s ease-in-out infinite}
+@keyframes floatUp{0%{opacity:0;transform:translateY(8px) scale(.8)}20%{opacity:1}100%{opacity:0;transform:translateY(-46px) scale(1.1)}}
+.kw-dmg{animation:floatUp 1s ease-out forwards;position:absolute;font-family:var(--ui);font-weight:700}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+.kw-shake{animation:shake .35s ease}
+@keyframes pop{0%{transform:scale(.7);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.kw-pop{animation:pop .3s ease both}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.kw-bob{animation:bob 3.2s ease-in-out infinite}
+@keyframes sweep{0%{background-position:-160% 0}100%{background-position:260% 0}}
+.kw-title-glint{background:linear-gradient(100deg,#caa23c 30%,#fff3cf 50%,#caa23c 70%);
+  background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sweep 5s linear infinite}
+
+.kw-opt{width:100%;text-align:left;background:var(--panel);border:1.5px solid var(--line);border-radius:14px;
+  padding:15px 16px;font-family:var(--jp);font-size:17px;color:var(--ink);cursor:pointer;
+  transition:transform .07s ease,border-color .12s ease,background .12s ease;display:flex;align-items:center;gap:12px}
+.kw-opt:active{transform:scale(.99)}
+.kw-opt.good{border-color:var(--leaf);background:rgba(126,224,160,.14)}
+.kw-opt.bad{border-color:var(--rose);background:rgba(240,107,107,.14)}
+.kw-opt.dim{opacity:.45}
+.kw-optkey{font-family:var(--ui);font-size:12px;font-weight:700;width:24px;height:24px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--muted);flex:none}
+
+.kw-fade{animation:fade .4s ease both}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.kw-tap{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.kw-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0;background:none;border:none;cursor:pointer;color:var(--muted);font-family:var(--ui);font-size:10px;font-weight:600;letter-spacing:.04em}
+.kw-tab.on{color:var(--gold)}
+.kw-token{font-family:var(--jp);font-size:18px;font-weight:700;padding:10px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel);cursor:pointer;color:var(--ink)}
+.kw-token:active{transform:scale(.96)}
+.kw-token.used{opacity:.3;pointer-events:none}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.001ms !important}}
+`;
+
+/* ----------------------- speech ----------------------- */
+let JP_VOICE = null;
+function pickVoice() {
+  try {
+    const vs = window.speechSynthesis?.getVoices?.() || [];
+    JP_VOICE = vs.find(v => /ja[-_]?JP/i.test(v.lang)) || vs.find(v => /japan/i.test(v.name)) || null;
+  } catch (e) {}
+}
+if (typeof window !== "undefined" && window.speechSynthesis) {
+  pickVoice();
+  window.speechSynthesis.onvoiceschanged = pickVoice;
+}
+function speak(text) {
+  try {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "ja-JP"; u.rate = 0.82; u.pitch = 1.0;
+    if (JP_VOICE) u.voice = JP_VOICE;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+
+/* ----------------------- storage ----------------------- */
+const SAVE_KEY = "kotodama:save:v1";
+const mem = {};
+// Persists to the browser's localStorage (with an in-memory fallback).
+async function loadSave() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    return raw ? JSON.parse(raw) : (mem[SAVE_KEY] || null);
+  } catch (e) { return mem[SAVE_KEY] || null; }
+}
+async function writeSave(obj) {
+  mem[SAVE_KEY] = obj;
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(obj)); } catch (e) {}
+}
+
+/* ----------------------- world / CEFR map ----------------------- */
+const REGIONS = [
+  { id: "A1", name: "木漏れ陽の村", romaji: "Komorebi Village", rank: "F", color: "#7ee0a0",
+    desc: "転生したばかり。文字（かな）すら読めぬ。挨拶と名乗りから始めよ。", content: true },
+  { id: "A2", name: "隊商の街道", romaji: "Caravan Road", rank: "E", color: "#5fd3c4",
+    desc: "市場で買い物、数え方、過去形、形容詞、在処。旅人として街道を歩め。", content: true },
+  { id: "B1", name: "王都ことのは", romaji: "Royal Capital", rank: "D–C", color: "#8ab4ff",
+    desc: "過去形・て形・日常会話。王都で名を上げよ。", content: false },
+  { id: "B2", name: "大迷宮", romaji: "Great Labyrinth", rank: "B", color: "#a78bfa",
+    desc: "複雑な文法・敬語の入口。迷宮の深層へ。", content: false },
+  { id: "C1", name: "魔王城", romaji: "Demon Castle", rank: "A", color: "#f0a06b",
+    desc: "ニュアンス・慣用句・含意。魔王と言葉を交わす。", content: false },
+  { id: "C2", name: "賢者の塔", romaji: "Sage's Tower", rank: "S", color: "#f5c451",
+    desc: "文学・抽象・完全なる熟達。賢者として頂へ。", content: false },
+];
+
+/* ----------------------- A1 lessons ----------------------- */
+// teach card: { jp, reading, romaji, meaning, note? }
+// quiz item: { kind:'mc'|'listen'|'build'|'kana', ... }
+const LESSONS = [
+  {
+    id: "a1-1", region: "A1", title: "始まりの言ノ葉", romaji: "First Words", icon: "scroll",
+    intro: "目を覚ますと見知らぬ森。村人が君に話しかける。まず「挨拶（あいさつ）」の言霊を覚えよ。",
+    teach: [
+      { jp: "こんにちは", reading: "こんにちは", romaji: "konnichiwa", meaning: "你好（白天的問候）" },
+      { jp: "おはよう", reading: "おはよう", romaji: "ohayō", meaning: "早安（口語）", note: "丁寧形は「おはようございます」" },
+      { jp: "こんばんは", reading: "こんばんは", romaji: "konbanwa", meaning: "晚安（傍晚的問候）" },
+      { jp: "ありがとう", reading: "ありがとう", romaji: "arigatō", meaning: "謝謝", note: "更禮貌：「ありがとうございます」" },
+      { jp: "さようなら", reading: "さようなら", romaji: "sayōnara", meaning: "再見" },
+      { jp: "すみません", reading: "すみません", romaji: "sumimasen", meaning: "不好意思／對不起（也用來叫人）" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「ありがとう」の意味は？", answer: "謝謝", choices: ["謝謝", "再見", "早安", "對不起"] },
+      { kind: "listen", jp: "こんにちは", answer: "你好", choices: ["你好", "謝謝", "晚安", "再見"] },
+      { kind: "mc", prompt: "傍晚見面該說？", answer: "こんばんは", choices: ["こんばんは", "おはよう", "ありがとう", "さようなら"] },
+      { kind: "listen", jp: "すみません", answer: "不好意思", choices: ["不好意思", "你好", "早安", "謝謝"] },
+      { kind: "mc", prompt: "「早安（口語）」是？", answer: "おはよう", choices: ["おはよう", "こんばんは", "さようなら", "すみません"] },
+      { kind: "listen", jp: "さようなら", answer: "再見", choices: ["再見", "你好", "對不起", "晚安"] },
+    ],
+  },
+  {
+    id: "a1-2", region: "A1", title: "名乗りの儀", romaji: "The Naming Rite", icon: "sparkles",
+    intro: "村長が問う——「お前は何者だ？」。自分の名を名乗る言霊「〜は〜です」を授かる。",
+    teach: [
+      { jp: "わたし", reading: "わたし", romaji: "watashi", meaning: "我" },
+      { jp: "〜は〜です", reading: "〜は〜です", romaji: "～wa ～desu", meaning: "（主題）是（～）。", note: "は唸作 wa。です＝是（禮貌斷定）" },
+      { jp: "はじめまして", reading: "はじめまして", romaji: "hajimemashite", meaning: "初次見面（你好）" },
+      { jp: "どうぞよろしく", reading: "どうぞよろしく", romaji: "dōzo yoroshiku", meaning: "請多指教" },
+      { jp: "おなまえは？", reading: "おなまえは？", romaji: "onamae wa?", meaning: "你叫什麼名字？" },
+      { jp: "がくせい", reading: "がくせい", romaji: "gakusei", meaning: "學生" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「我是學生」怎麼說？", answer: "わたしはがくせいです", choices: ["わたしはがくせいです", "わたしのがくせい", "がくせいですか", "はじめまして"] },
+      { kind: "build", prompt: "排出：『我是 Rimuru。』", target: ["わたし", "は", "リムル", "です"], pool: ["です", "リムル", "わたし", "は", "の", "か"] },
+      { kind: "listen", jp: "はじめまして", answer: "初次見面", choices: ["初次見面", "請多指教", "你叫什麼名字", "我"] },
+      { kind: "mc", prompt: "「は」在「わたしは」中唸作？", answer: "wa", choices: ["wa", "ha", "ba", "pa"] },
+      { kind: "build", prompt: "排出：『你叫什麼名字？』(口語)", target: ["おなまえ", "は", "？"], pool: ["は", "？", "おなまえ", "です", "わたし"] },
+      { kind: "mc", prompt: "「どうぞよろしく」用在？", answer: "自我介紹結尾", choices: ["自我介紹結尾", "道歉時", "道別時", "吃飯前"] },
+    ],
+  },
+  {
+    id: "a1-3", region: "A1", title: "母音の石碑", romaji: "Vowel Steles", icon: "flame",
+    intro: "石碑に五つの原初の符文が光る。これを読めねば、いかなる魔法も唱えられぬ。あ・い・う・え・お。",
+    teach: [
+      { jp: "あ", reading: "あ", romaji: "a", meaning: "符文「a」", note: "如「ありがとう」的開頭" },
+      { jp: "い", reading: "い", romaji: "i", meaning: "符文「i」", note: "如「いいえ」(不)" },
+      { jp: "う", reading: "う", romaji: "u", meaning: "符文「u」", note: "如「うみ」(海)" },
+      { jp: "え", reading: "え", romaji: "e", meaning: "符文「e」", note: "如「えき」(車站)" },
+      { jp: "お", reading: "お", romaji: "o", meaning: "符文「o」", note: "如「おはよう」的開頭" },
+    ],
+    quiz: [
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "あ", answer: "a", choices: ["a", "o", "e", "u"] },
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "お", answer: "o", choices: ["o", "a", "u", "i"] },
+      { kind: "kana", prompt: "「u」是哪個符文？", jp: "う", answer: "う", choices: ["う", "あ", "え", "お"], showRomajiPrompt: true },
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "え", answer: "e", choices: ["e", "i", "a", "o"] },
+      { kind: "kana", prompt: "「i」是哪個符文？", jp: "い", answer: "い", choices: ["い", "う", "え", "あ"], showRomajiPrompt: true },
+      { kind: "listen", jp: "あおい", answer: "聽到的順序：a-o-i", choices: ["a-o-i", "a-i-o", "o-a-i", "i-o-a"] },
+    ],
+  },
+  {
+    id: "a1-4", region: "A1", title: "数の魔法", romaji: "Number Magic", icon: "zap",
+    intro: "商人が指を折って数える。1から10まで——数の言霊は、あらゆる取引と呪文の土台だ。",
+    teach: [
+      { jp: "いち", reading: "いち", romaji: "ichi", meaning: "1" },
+      { jp: "に", reading: "に", romaji: "ni", meaning: "2" },
+      { jp: "さん", reading: "さん", romaji: "san", meaning: "3" },
+      { jp: "よん", reading: "よん", romaji: "yon", meaning: "4", note: "也讀作「し shi」" },
+      { jp: "ご", reading: "ご", romaji: "go", meaning: "5" },
+      { jp: "ろく", reading: "ろく", romaji: "roku", meaning: "6" },
+      { jp: "なな", reading: "なな", romaji: "nana", meaning: "7", note: "也讀作「しち shichi」" },
+      { jp: "はち", reading: "はち", romaji: "hachi", meaning: "8" },
+      { jp: "きゅう", reading: "きゅう", romaji: "kyū", meaning: "9", note: "也讀作「く ku」" },
+      { jp: "じゅう", reading: "じゅう", romaji: "jū", meaning: "10" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「さん」是多少？", answer: "3", choices: ["3", "2", "4", "1"] },
+      { kind: "listen", jp: "なな", answer: "7", choices: ["7", "8", "2", "9"] },
+      { kind: "mc", prompt: "「8」怎麼說？", answer: "はち", choices: ["はち", "なな", "きゅう", "ろく"] },
+      { kind: "listen", jp: "じゅう", answer: "10", choices: ["10", "1", "5", "6"] },
+      { kind: "build", prompt: "由小到大排：1・2・3", target: ["いち", "に", "さん"], pool: ["さん", "いち", "に", "ご"] },
+      { kind: "mc", prompt: "「9」的另一種唸法是？", answer: "く", choices: ["く", "し", "ろく", "ご"] },
+    ],
+  },
+  {
+    id: "a1-5", region: "A1", title: "助詞の門", romaji: "Gate of Particles", icon: "scroll",
+    intro: "森を抜けると石の門。刻まれた助詞「の」「も」を理解せねば、門は開かぬ。まずは身の回りの名を覚えよ。",
+    teach: [
+      { jp: "ほん", reading: "ほん", romaji: "hon", meaning: "書／書本" },
+      { jp: "みず", reading: "みず", romaji: "mizu", meaning: "水" },
+      { jp: "ねこ", reading: "ねこ", romaji: "neko", meaning: "貓" },
+      { jp: "いぬ", reading: "いぬ", romaji: "inu", meaning: "狗" },
+      { jp: "〜の〜", reading: "〜の〜", romaji: "～no～", meaning: "的（所屬）", note: "A の B＝A 的 B。わたしのほん＝我的書" },
+      { jp: "〜も", reading: "〜も", romaji: "～mo", meaning: "也", note: "取代は。わたしもがくせいです＝我也是學生" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「水」是哪一個？", answer: "みず", choices: ["みず", "ほん", "ねこ", "いぬ"] },
+      { kind: "build", prompt: "排出：『我的貓』", target: ["わたし", "の", "ねこ"], pool: ["の", "ねこ", "わたし", "は", "も"] },
+      { kind: "listen", jp: "いぬ", answer: "狗", choices: ["狗", "貓", "書", "水"] },
+      { kind: "mc", prompt: "「の」的用法是？", answer: "表示「的」（所屬）", choices: ["表示「的」（所屬）", "表示疑問", "表示也", "表示和"] },
+      { kind: "build", prompt: "排出：『我也是學生。』", target: ["わたし", "も", "がくせい", "です"], pool: ["も", "がくせい", "わたし", "です", "は"] },
+      { kind: "listen", jp: "ねこ", answer: "貓", choices: ["貓", "狗", "水", "書"] },
+    ],
+  },
+  {
+    id: "a1-6", region: "A1", title: "指し示す言葉", romaji: "Words That Point", icon: "sparkles",
+    intro: "市場で商人が品を指す——「これは？それは？」。距離で変わる指示の言霊と、疑問の「か」を授かろう。",
+    teach: [
+      { jp: "これ", reading: "これ", romaji: "kore", meaning: "這個（靠近我）" },
+      { jp: "それ", reading: "それ", romaji: "sore", meaning: "那個（靠近你）" },
+      { jp: "あれ", reading: "あれ", romaji: "are", meaning: "那個（離我們都遠）" },
+      { jp: "なん", reading: "なん", romaji: "nan", meaning: "什麼", note: "接です時用「なん」→ なんですか" },
+      { jp: "〜か", reading: "〜か", romaji: "～ka", meaning: "嗎？（疑問助詞）", note: "放句尾把句子變問句。ですか＝嗎？" },
+      { jp: "〜じゃないです", reading: "〜じゃないです", romaji: "～ja nai desu", meaning: "不是", note: "です的否定（口語）。更禮貌：ではありません" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「這個（在我手上）」怎麼說？", answer: "これ", choices: ["これ", "それ", "あれ", "なん"] },
+      { kind: "build", prompt: "排出：『這是什麼？』", target: ["これ", "は", "なん", "です", "か"], pool: ["は", "なん", "これ", "です", "か", "それ"] },
+      { kind: "listen", jp: "それ", answer: "那個（你那邊）", choices: ["那個（你那邊）", "這個（我這邊）", "那個（很遠）", "什麼"] },
+      { kind: "mc", prompt: "「あれ」用在？", answer: "離雙方都遠的東西", choices: ["離雙方都遠的東西", "靠近我的東西", "靠近你的東西", "疑問"] },
+      { kind: "mc", prompt: "「これはみずじゃないです」的意思？", answer: "這不是水", choices: ["這不是水", "這是水", "那是水", "這是什麼"] },
+      { kind: "build", prompt: "排出：『那個（遠）是狗。』", target: ["あれ", "は", "いぬ", "です"], pool: ["は", "いぬ", "あれ", "です", "か"] },
+    ],
+  },
+  {
+    id: "a1-7", region: "A1", title: "動詞の息吹", romaji: "Breath of Verbs", icon: "zap",
+    intro: "言霊に「動き」が宿る。ます形の動詞と、対象を示す「を」を得れば、ついに行動を語れる。",
+    teach: [
+      { jp: "たべます", reading: "たべます", romaji: "tabemasu", meaning: "吃", note: "ます形＝禮貌的現在／未來式" },
+      { jp: "のみます", reading: "のみます", romaji: "nomimasu", meaning: "喝" },
+      { jp: "いきます", reading: "いきます", romaji: "ikimasu", meaning: "去" },
+      { jp: "みます", reading: "みます", romaji: "mimasu", meaning: "看" },
+      { jp: "〜を", reading: "〜を", romaji: "～o", meaning: "（受詞助詞）把…", note: "標示動作對象。みずをのみます＝喝水。を唸作 o" },
+      { jp: "〜ません", reading: "〜ません", romaji: "～masen", meaning: "不…（否定）", note: "ます的否定。たべません＝不吃" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「喝」怎麼說？", answer: "のみます", choices: ["のみます", "たべます", "いきます", "みます"] },
+      { kind: "build", prompt: "排出：『喝水。』", target: ["みず", "を", "のみます"], pool: ["を", "のみます", "みず", "たべます"] },
+      { kind: "listen", jp: "たべます", answer: "吃", choices: ["吃", "喝", "去", "看"] },
+      { kind: "mc", prompt: "受詞助詞「を」唸作？", answer: "o", choices: ["o", "wa", "ha", "ni"] },
+      { kind: "build", prompt: "排出：『我看書。』", target: ["わたし", "は", "ほん", "を", "みます"], pool: ["は", "ほん", "わたし", "を", "みます", "の"] },
+      { kind: "mc", prompt: "「いきません」的意思？", answer: "不去", choices: ["不去", "去", "不吃", "不看"] },
+    ],
+  },
+];
+
+const BOSS = {
+  id: "a1-boss", region: "A1", title: "スライム王", romaji: "The Slime King", icon: "crown",
+  intro: "村の泉に巨大なスライムが現れた。今まで集めた全ての言霊で立ち向かえ！正しい言霊だけが、その核を打ち砕く。",
+  hp: 220, atk: 16,
+  quiz: [
+    { kind: "mc", prompt: "「ありがとう」の意味は？", answer: "謝謝", choices: ["謝謝", "再見", "早安", "對不起"] },
+    { kind: "build", prompt: "排出：『我是 Rimuru。』", target: ["わたし", "は", "リムル", "です"], pool: ["です", "リムル", "わたし", "は", "の"] },
+    { kind: "kana", prompt: "這個符文怎麼讀？", jp: "お", answer: "o", choices: ["o", "a", "u", "e"] },
+    { kind: "listen", jp: "なな", answer: "7", choices: ["7", "8", "2", "9"] },
+    { kind: "mc", prompt: "傍晚見面該說？", answer: "こんばんは", choices: ["こんばんは", "おはよう", "ありがとう", "さようなら"] },
+    { kind: "mc", prompt: "「わたしのねこ」的意思？", answer: "我的貓", choices: ["我的貓", "你的貓", "貓的我", "我和貓"] },
+    { kind: "build", prompt: "排出：『喝水。』", target: ["みず", "を", "のみます"], pool: ["を", "のみます", "みず", "たべます"] },
+    { kind: "listen", jp: "じゅう", answer: "10", choices: ["10", "1", "5", "100"] },
+    { kind: "mc", prompt: "「これ」是指？", answer: "靠近我的東西", choices: ["靠近我的東西", "靠近你的東西", "很遠的東西", "疑問"] },
+    { kind: "kana", prompt: "「i」是哪個符文？", jp: "い", answer: "い", choices: ["い", "う", "え", "あ"], showRomajiPrompt: true },
+    { kind: "build", prompt: "排出：『這是什麼？』", target: ["これ", "は", "なん", "です", "か"], pool: ["は", "なん", "これ", "です", "か"] },
+    { kind: "mc", prompt: "「いきません」的意思？", answer: "不去", choices: ["不去", "去", "不喝", "不看"] },
+  ],
+};
+
+/* ----------------------- A2 lessons ----------------------- */
+const A2_LESSONS = [
+  {
+    id: "a2-1", region: "A2", title: "市場の声", romaji: "Market Voices", icon: "scroll",
+    intro: "街道の市場に着いた。物を買うには「ください」と値の言霊が要る。商人に話しかけよう。",
+    teach: [
+      { jp: "パン", reading: "パン", romaji: "pan", meaning: "麵包" },
+      { jp: "コーヒー", reading: "コーヒー", romaji: "kōhī", meaning: "咖啡" },
+      { jp: "ください", reading: "ください", romaji: "kudasai", meaning: "請給（我）", note: "名詞＋を＋ください＝請給我…" },
+      { jp: "いくら", reading: "いくら", romaji: "ikura", meaning: "多少錢" },
+      { jp: "〜えん", reading: "〜えん", romaji: "～en", meaning: "…日圓", note: "貨幣單位。ごえん＝5 日圓" },
+      { jp: "ありがとうございます", reading: "ありがとうございます", romaji: "arigatō gozaimasu", meaning: "謝謝（禮貌）", note: "比「ありがとう」更正式" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「請給我麵包」怎麼說？", answer: "パンをください", choices: ["パンをください", "パンですか", "パンはいくら", "コーヒーをください"] },
+      { kind: "build", prompt: "排出：『請給我咖啡。』", target: ["コーヒー", "を", "ください"], pool: ["を", "ください", "コーヒー", "パン"] },
+      { kind: "listen", jp: "いくら", answer: "多少錢", choices: ["多少錢", "請給", "謝謝", "咖啡"] },
+      { kind: "mc", prompt: "「〜えん」是什麼？", answer: "日圓（貨幣）", choices: ["日圓（貨幣）", "多少錢", "請給", "謝謝"] },
+      { kind: "build", prompt: "排出：『這個多少錢？』", target: ["これ", "は", "いくら", "です", "か"], pool: ["は", "いくら", "これ", "です", "か"] },
+      { kind: "listen", jp: "ください", answer: "請給（我）", choices: ["請給（我）", "多少錢", "謝謝", "麵包"] },
+    ],
+  },
+  {
+    id: "a2-2", region: "A2", title: "数えの呪文", romaji: "Counting Spell", icon: "zap",
+    intro: "物の数を数える固有の言霊——和語の数え方。これを誤れば取引で損をする。",
+    teach: [
+      { jp: "ひとつ", reading: "ひとつ", romaji: "hitotsu", meaning: "一個" },
+      { jp: "ふたつ", reading: "ふたつ", romaji: "futatsu", meaning: "兩個" },
+      { jp: "みっつ", reading: "みっつ", romaji: "mittsu", meaning: "三個" },
+      { jp: "よっつ", reading: "よっつ", romaji: "yottsu", meaning: "四個" },
+      { jp: "いつつ", reading: "いつつ", romaji: "itsutsu", meaning: "五個" },
+      { jp: "〜をふたつください", reading: "〜をふたつください", romaji: "～o futatsu kudasai", meaning: "請給我兩個…", note: "數量放在動詞前面" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「三個」怎麼說？", answer: "みっつ", choices: ["みっつ", "ふたつ", "よっつ", "ひとつ"] },
+      { kind: "listen", jp: "ふたつ", answer: "兩個", choices: ["兩個", "一個", "三個", "五個"] },
+      { kind: "build", prompt: "排出：『請給我兩個麵包。』", target: ["パン", "を", "ふたつ", "ください"], pool: ["を", "ふたつ", "パン", "ください", "みっつ"] },
+      { kind: "mc", prompt: "「五個」怎麼說？", answer: "いつつ", choices: ["いつつ", "よっつ", "みっつ", "ひとつ"] },
+      { kind: "listen", jp: "よっつ", answer: "四個", choices: ["四個", "三個", "五個", "兩個"] },
+      { kind: "build", prompt: "排出：『請給我一個咖啡。』", target: ["コーヒー", "を", "ひとつ", "ください"], pool: ["を", "ひとつ", "コーヒー", "ください", "ふたつ"] },
+    ],
+  },
+  {
+    id: "a2-3", region: "A2", title: "過去の記憶", romaji: "Past Memory", icon: "sparkles",
+    intro: "旅の記録を綴れ。ます形が過去へ姿を変える——「ました／ませんでした」。",
+    teach: [
+      { jp: "たべました", reading: "たべました", romaji: "tabemashita", meaning: "吃了", note: "ます→ました（過去）" },
+      { jp: "のみました", reading: "のみました", romaji: "nomimashita", meaning: "喝了" },
+      { jp: "いきました", reading: "いきました", romaji: "ikimashita", meaning: "去了" },
+      { jp: "みました", reading: "みました", romaji: "mimashita", meaning: "看了" },
+      { jp: "〜ませんでした", reading: "〜ませんでした", romaji: "～masen deshita", meaning: "沒…（過去否定）", note: "たべませんでした＝沒吃" },
+      { jp: "きのう", reading: "きのう", romaji: "kinō", meaning: "昨天" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「吃了」怎麼說？", answer: "たべました", choices: ["たべました", "たべます", "たべません", "たべませんでした"] },
+      { kind: "build", prompt: "排出：『昨天去了。』", target: ["きのう", "いきました"], pool: ["きのう", "いきました", "いきます"] },
+      { kind: "listen", jp: "のみました", answer: "喝了", choices: ["喝了", "吃了", "去了", "看了"] },
+      { kind: "mc", prompt: "「のみませんでした」的意思？", answer: "沒喝（過去）", choices: ["沒喝（過去）", "喝了", "不喝", "喝"] },
+      { kind: "build", prompt: "排出：『昨天我看了書。』", target: ["きのう", "わたし", "は", "ほん", "を", "みました"], pool: ["きのう", "わたし", "は", "ほん", "を", "みました", "みます"] },
+      { kind: "mc", prompt: "「きのう」的意思？", answer: "昨天", choices: ["昨天", "今天", "明天", "現在"] },
+    ],
+  },
+  {
+    id: "a2-4", region: "A2", title: "形容詞の彩り", romaji: "Color of Adjectives", icon: "flame",
+    intro: "世界に色と形を与える言霊——い形容詞。物の様子を語れるようになる。",
+    teach: [
+      { jp: "おおきい", reading: "おおきい", romaji: "ōkii", meaning: "大的" },
+      { jp: "ちいさい", reading: "ちいさい", romaji: "chiisai", meaning: "小的" },
+      { jp: "たかい", reading: "たかい", romaji: "takai", meaning: "貴的／高的" },
+      { jp: "やすい", reading: "やすい", romaji: "yasui", meaning: "便宜的" },
+      { jp: "おいしい", reading: "おいしい", romaji: "oishii", meaning: "好吃的" },
+      { jp: "い形容詞＋です", reading: "〜いです", romaji: "～i desu", meaning: "（形容詞）＋です", note: "い形容詞直接接です：おおきいです" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「大的」怎麼說？", answer: "おおきい", choices: ["おおきい", "ちいさい", "たかい", "やすい"] },
+      { kind: "listen", jp: "おいしい", answer: "好吃的", choices: ["好吃的", "大的", "便宜的", "小的"] },
+      { kind: "build", prompt: "排出：『這個便宜。』", target: ["これ", "は", "やすい", "です"], pool: ["は", "やすい", "これ", "です", "たかい"] },
+      { kind: "mc", prompt: "「たかい」可以指？", answer: "貴或高", choices: ["貴或高", "便宜", "小", "好吃"] },
+      { kind: "listen", jp: "ちいさい", answer: "小的", choices: ["小的", "大的", "貴的", "好吃的"] },
+      { kind: "build", prompt: "排出：『那個（遠）很大。』", target: ["あれ", "は", "おおきい", "です"], pool: ["は", "おおきい", "あれ", "です", "ちいさい"] },
+    ],
+  },
+  {
+    id: "a2-5", region: "A2", title: "在処の地図", romaji: "Map of Whereabouts", icon: "scroll",
+    intro: "物と者の在り処を示せ——無生物は「あります」、生物は「います」。場所の言霊と共に。",
+    teach: [
+      { jp: "あります", reading: "あります", romaji: "arimasu", meaning: "有／在（無生物）", note: "物・植物に使う" },
+      { jp: "います", reading: "います", romaji: "imasu", meaning: "有／在（生物）", note: "人・動物に使う" },
+      { jp: "どこ", reading: "どこ", romaji: "doko", meaning: "哪裡" },
+      { jp: "ここ", reading: "ここ", romaji: "koko", meaning: "這裡" },
+      { jp: "そこ", reading: "そこ", romaji: "soko", meaning: "那裡（你那邊）" },
+      { jp: "〜に〜があります", reading: "〜に〜があります", romaji: "～ni ～ga arimasu", meaning: "在…有…", note: "場所＋に＋物＋が＋あります" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「貓在哪裡？」要用哪個動詞？", answer: "います", choices: ["います", "あります", "ください", "みます"] },
+      { kind: "build", prompt: "排出：『這裡有水。』", target: ["ここ", "に", "みず", "が", "あります"], pool: ["に", "みず", "ここ", "が", "あります", "います"] },
+      { kind: "listen", jp: "どこ", answer: "哪裡", choices: ["哪裡", "這裡", "那裡", "有"] },
+      { kind: "mc", prompt: "無生物的「有／在」用？", answer: "あります", choices: ["あります", "います", "いきます", "みます"] },
+      { kind: "build", prompt: "排出：『狗在那裡（你那邊）。』", target: ["いぬ", "は", "そこ", "に", "います"], pool: ["は", "そこ", "いぬ", "に", "います", "あります"] },
+      { kind: "listen", jp: "ここ", answer: "這裡", choices: ["這裡", "那裡", "哪裡", "有"] },
+    ],
+  },
+];
+
+const BOSS_A2 = {
+  id: "a2-boss", region: "A2", title: "砂漠の大サソリ", romaji: "Giant Desert Scorpion", icon: "crown",
+  intro: "隊商を狙う巨大なサソリが砂を割って現れた！A2 で得た全ての言霊で迎え撃て。一つの油断が命取りだ。",
+  hp: 260, atk: 18,
+  quiz: [
+    { kind: "mc", prompt: "「請給我麵包」怎麼說？", answer: "パンをください", choices: ["パンをください", "パンですか", "パンはいくら", "コーヒーです"] },
+    { kind: "build", prompt: "排出：『請給我咖啡。』", target: ["コーヒー", "を", "ください"], pool: ["を", "ください", "コーヒー", "パン"] },
+    { kind: "listen", jp: "いくら", answer: "多少錢", choices: ["多少錢", "請給", "謝謝", "便宜"] },
+    { kind: "mc", prompt: "「三個」怎麼說？", answer: "みっつ", choices: ["みっつ", "ふたつ", "よっつ", "ひとつ"] },
+    { kind: "build", prompt: "排出：『請給我兩個麵包。』", target: ["パン", "を", "ふたつ", "ください"], pool: ["を", "ふたつ", "パン", "ください", "みっつ"] },
+    { kind: "mc", prompt: "「吃了」怎麼說？", answer: "たべました", choices: ["たべました", "たべます", "たべません", "たべる"] },
+    { kind: "listen", jp: "のみました", answer: "喝了", choices: ["喝了", "吃了", "去了", "看了"] },
+    { kind: "mc", prompt: "「きのう」的意思？", answer: "昨天", choices: ["昨天", "今天", "明天", "現在"] },
+    { kind: "mc", prompt: "「大的」怎麼說？", answer: "おおきい", choices: ["おおきい", "ちいさい", "たかい", "やすい"] },
+    { kind: "build", prompt: "排出：『這個便宜。』", target: ["これ", "は", "やすい", "です"], pool: ["は", "やすい", "これ", "です", "たかい"] },
+    { kind: "mc", prompt: "生物的「有／在」用？", answer: "います", choices: ["います", "あります", "いきます", "みます"] },
+    { kind: "build", prompt: "排出：『這裡有水。』", target: ["ここ", "に", "みず", "が", "あります"], pool: ["に", "みず", "ここ", "が", "あります", "います"] },
+  ],
+};
+
+const ALL_NODES = [...LESSONS, BOSS, ...A2_LESSONS, BOSS_A2];
+
+/* ----------------------- mastery gate helpers ----------------------- */
+const MASTERY_GATE = 3; // 全言霊が ★3 以上で領域突破
+function regionWords(regionId) {
+  return ALL_NODES.filter(n => n.region === regionId).flatMap(n => n.teach || []).map(t => t.jp);
+}
+function regionMastered(save, regionId) {
+  const boss = ALL_NODES.find(n => n.region === regionId && n.id.endsWith("boss"));
+  if (boss && !save.done[boss.id]) return false;
+  const words = regionWords(regionId);
+  if (words.length === 0) return false;
+  return words.every(w => (save.codex[w]?.mastery || 0) >= MASTERY_GATE);
+}
+function regionUnlocked(save, regionId) {
+  const idx = REGIONS.findIndex(r => r.id === regionId);
+  if (idx <= 0) return true;
+  return regionMastered(save, REGIONS[idx - 1].id);
+}
+function regionMasteryStats(save, regionId) {
+  const words = regionWords(regionId);
+  const mastered = words.filter(w => (save.codex[w]?.mastery || 0) >= MASTERY_GATE).length;
+  return { mastered, total: words.length };
+}
+
+/* ----------------------- helpers ----------------------- */
+const xpToNext = (lv) => 60 + lv * 50;
+function freshSave() {
+  return {
+    name: "転生者", lv: 1, xp: 0, hp: 100, maxHp: 100, mp: 30, maxMp: 30,
+    gold: 0, region: "A1", done: {}, codex: {}, srs: {},
+    furigana: true, created: Date.now(),
+  };
+}
+function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+function shuffle(a) { const r = [...a]; for (let i = r.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0;[r[i], r[j]] = [r[j], r[i]]; } return r; }
+const ICONS = { scroll: Scroll, sparkles: Sparkles, flame: Flame, zap: Zap, crown: Crown };
+
+/* ============================================================
+   ROOT
+   ============================================================ */
+export default function App() {
+  const [save, setSave] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+  const [view, setView] = useState("title");
+  const [activeNode, setActiveNode] = useState(null);
+  const [result, setResult] = useState(null);
+
+  useEffect(() => {
+    let on = true;
+    loadSave().then(s => { if (!on) return; setSave(s); setLoaded(true); });
+    return () => { on = false; };
+  }, []);
+
+  const persist = useCallback((next) => { setSave(next); writeSave(next); }, []);
+
+  const startNew = () => { const s = freshSave(); persist(s); setView("hub"); };
+  const continueGame = () => setView("hub");
+
+  if (!loaded) {
+    return (<div className="kw-root"><style>{THEME_CSS}</style>
+      <div className="kw-shell" style={{ alignItems: "center", justifyContent: "center" }}>
+        <div className="kw-brush kw-glow" style={{ fontSize: 40, color: "var(--gold)" }}>言霊</div>
+        <div style={{ color: "var(--muted)", fontFamily: "var(--ui)", marginTop: 10 }}>記憶を呼び覚ましています…</div>
+      </div></div>);
+  }
+
+  return (
+    <div className="kw-root">
+      <style>{THEME_CSS}</style>
+      <div className="kw-shell">
+        {view === "title" && <Title save={save} onNew={startNew} onContinue={continueGame} />}
+        {view === "hub" && <Hub save={save} persist={persist}
+          onMap={() => setView("map")} onCodex={() => setView("codex")} onReview={() => setView("review")}
+          onLesson={(node) => { setActiveNode(node); setView("lesson"); }} />}
+        {view === "map" && <WorldMap save={save} onBack={() => setView("hub")}
+          onEnter={(regionId) => {
+            const next = ALL_NODES.filter(n => n.region === regionId).find(n => !save.done[n.id])
+              || ALL_NODES.find(n => n.region === regionId);
+            if (regionId !== save.region) persist({ ...save, region: regionId });
+            setActiveNode(next); setView("lesson");
+          }} />}
+        {view === "codex" && <Codex save={save} onBack={() => setView("hub")} />}
+        {view === "review" && <Review save={save} persist={persist} onBack={() => setView("hub")} />}
+        {view === "lesson" && <Lesson node={activeNode} save={save}
+          onExit={() => setView("hub")}
+          onBattle={() => setView("battle")} />}
+        {view === "battle" && <Battle node={activeNode} save={save} persist={persist}
+          onWin={(res) => { setResult(res); setView("result"); }}
+          onFlee={() => setView("hub")} />}
+        {view === "result" && <ResultScreen result={result} node={activeNode} onHome={() => setView("hub")} />}
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   TITLE
+   ============================================================ */
+function Title({ save, onNew, onContinue }) {
+  const has = save && save.created;
+  return (
+    <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: 26, textAlign: "center" }}>
+      <div className="kw-eyebrow" style={{ marginBottom: 14 }}>異世界転生 · 日本語 RPG</div>
+      <div className="kw-brush kw-glow kw-bob" style={{ fontSize: 74, lineHeight: 1, color: "var(--gold)" }}>言ノ葉</div>
+      <div className="kw-brush kw-title-glint" style={{ fontSize: 30, marginTop: 4, letterSpacing: 4 }}>世界</div>
+      <div className="kw-mincho" style={{ color: "var(--muted)", marginTop: 18, fontSize: 15, lineHeight: 1.9 }}>
+        言葉は魔法。文字は符文。<br />語りを極め、村人から賢者へ——<br />A1 から C2 まで、君の物語が始まる。
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 30 }}>
+        {has && <button className="kw-btn kw-btn-gold" onClick={onContinue}>
+          <Flame size={18} /> 旅を続ける　<span className="kw-num" style={{ opacity: .7, fontSize: 13 }}>Lv.{save.lv}</span>
+        </button>}
+        <button className={`kw-btn ${has ? "kw-btn-ghost" : "kw-btn-gold"}`} onClick={onNew}>
+          <Sparkles size={18} /> {has ? "新しく転生する" : "転生する（はじめる）"}
+        </button>
+      </div>
+      <div style={{ marginTop: 26, fontFamily: "var(--ui)", fontSize: 11, color: "var(--line)", letterSpacing: ".1em" }}>
+        CEFR A1 · 木漏れ陽の村より
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   HUB
+   ============================================================ */
+function StatBar({ icon, cls, val, max, label }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      {icon}
+      <div style={{ flex: 1 }}>
+        <div className={`kw-bar ${cls}`}><i style={{ width: `${clamp(val / max * 100, 0, 100)}%` }} /></div>
+      </div>
+      <div className="kw-num" style={{ fontSize: 12, color: "var(--muted)", width: 58, textAlign: "right" }}>{val}/{max}</div>
+    </div>
+  );
+}
+
+function Hub({ save, persist, onMap, onCodex, onReview, onLesson }) {
+  const region = REGIONS.find(r => r.id === save.region);
+  const nodes = ALL_NODES.filter(n => n.region === save.region);
+  const nextIdx = nodes.findIndex(n => !save.done[n.id]);
+  const codexCount = Object.keys(save.codex).length;
+  const dueCount = Object.values(save.srs).filter(s => s.due <= Date.now()).length;
+  const mstat = regionMasteryStats(save, save.region);
+  const mastered = regionMastered(save, save.region);
+  const allCleared = nextIdx === -1;
+
+  return (
+    <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", padding: 16, paddingBottom: 86 }}>
+      {/* hero card */}
+      <div className="kw-card kw-pop" style={{ padding: 16 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <div>
+            <div className="kw-eyebrow">{region.romaji} · Rank {region.rank}</div>
+            <div className="kw-brush" style={{ fontSize: 26, color: "var(--gold)", marginTop: 2 }}>{region.name}</div>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <div className="kw-num" style={{ fontSize: 11, color: "var(--muted)" }}>LEVEL</div>
+            <div className="kw-num kw-glow" style={{ fontSize: 34, fontWeight: 700, color: "var(--gold)", lineHeight: 1 }}>{save.lv}</div>
+          </div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 7, marginTop: 14 }}>
+          <StatBar icon={<Heart size={15} color="#f0524f" />} cls="bar-hp" val={save.hp} max={save.maxHp} />
+          <StatBar icon={<Droplet size={15} color="#37b3a3" />} cls="bar-mp" val={save.mp} max={save.maxMp} />
+          <StatBar icon={<Star size={15} color="#f0b53e" />} cls="bar-xp" val={save.xp} max={xpToNext(save.lv)} />
+        </div>
+        <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+          <div className="kw-chip">所持金 <span className="kw-num" style={{ color: "var(--gold)" }}>{save.gold}</span> G</div>
+          <div className="kw-chip">図鑑 <span className="kw-num" style={{ color: "var(--mana)" }}>{codexCount}</span></div>
+          <button className="kw-chip kw-tap" style={{ marginLeft: "auto", borderColor: save.furigana ? "var(--gold-dim)" : "var(--line)", color: save.furigana ? "var(--gold)" : "var(--muted)" }}
+            onClick={() => persist({ ...save, furigana: !save.furigana })}>
+            ふりがな {save.furigana ? "ON" : "OFF"}
+          </button>
+        </div>
+        {/* region mastery gate */}
+        <div style={{ marginTop: 14 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--muted)", marginBottom: 5 }}>
+            <span>領域踏破 — 言霊 ★{MASTERY_GATE}+ {mastered && <span style={{ color: "var(--leaf)" }}>· 達成！</span>}</span>
+            <span className="kw-num">{mstat.mastered}/{mstat.total}</span>
+          </div>
+          <div className="kw-bar bar-xp"><i style={{ width: `${mstat.total ? mstat.mastered / mstat.total * 100 : 0}%`, background: mastered ? "linear-gradient(90deg,#7ee0a0,#37b3a3)" : undefined }} /></div>
+        </div>
+      </div>
+
+      {/* breakthrough nudge */}
+      {allCleared && !mastered && (
+        <button className="kw-card kw-tap" onClick={onReview}
+          style={{ padding: 13, marginTop: 12, display: "flex", alignItems: "center", gap: 12, borderColor: "var(--violet)" }}>
+          <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(167,139,250,.16)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Shield size={20} color="var(--violet)" />
+          </div>
+          <div style={{ textAlign: "left", flex: 1 }}>
+            <div style={{ fontWeight: 700 }}>全クエスト攻略済み</div>
+            <div style={{ fontSize: 12, color: "var(--muted)" }}>あと <span className="kw-num" style={{ color: "var(--violet)" }}>{mstat.total - mstat.mastered}</span> 語を ★{MASTERY_GATE} へ。修行かクエスト再挑戦で磨け。</div>
+          </div>
+          <ChevronRight size={18} color="var(--muted)" />
+        </button>
+      )}
+
+      {/* review banner */}
+      {dueCount > 0 && (
+        <button className="kw-card kw-tap" onClick={onReview}
+          style={{ padding: 13, marginTop: 12, display: "flex", alignItems: "center", gap: 12, borderColor: "var(--gold-dim)" }}>
+          <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(245,196,81,.14)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <RotateCcw size={20} color="var(--gold)" />
+          </div>
+          <div style={{ textAlign: "left", flex: 1 }}>
+            <div style={{ fontWeight: 700 }}>修行（復習）の時間だ</div>
+            <div style={{ fontSize: 12, color: "var(--muted)" }}><span className="kw-num">{dueCount}</span> 個の言霊が君を待つ</div>
+          </div>
+          <ChevronRight size={18} color="var(--muted)" />
+        </button>
+      )}
+
+      {/* quest list */}
+      <div className="kw-eyebrow" style={{ marginTop: 20, marginBottom: 10 }}>クエスト — {region.name}</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {nodes.map((n, i) => {
+          const done = !!save.done[n.id];
+          const locked = i > nextIdx && nextIdx !== -1;
+          const isNext = i === nextIdx;
+          const Ico = ICONS[n.icon] || Scroll;
+          const isBoss = n.id.endsWith("boss");
+          return (
+            <button key={n.id} disabled={locked}
+              className="kw-card kw-tap"
+              onClick={() => !locked && onLesson(n)}
+              style={{
+                padding: 14, display: "flex", alignItems: "center", gap: 13, textAlign: "left",
+                opacity: locked ? .5 : 1, cursor: locked ? "not-allowed" : "pointer",
+                borderColor: isBoss ? "#7a3f8f" : isNext ? "var(--gold-dim)" : "var(--line)",
+                background: isBoss ? "linear-gradient(180deg,#33203f,#2a1b3a)" : undefined,
+              }}>
+              <div style={{
+                width: 44, height: 44, borderRadius: 12, flex: "none",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                background: done ? "rgba(126,224,160,.16)" : isBoss ? "rgba(167,139,250,.18)" : "rgba(245,196,81,.12)",
+              }}>
+                {locked ? <Lock size={20} color="var(--muted)" /> :
+                  done ? <Check size={22} color="var(--leaf)" /> :
+                    <Ico size={22} color={isBoss ? "var(--violet)" : "var(--gold)"} />}
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                  <span style={{ fontWeight: 700, fontSize: 16 }}>{n.title}</span>
+                  {isBoss && <span className="kw-chip" style={{ color: "var(--violet)", borderColor: "#7a3f8f" }}>BOSS</span>}
+                </div>
+                <div className="kw-mincho" style={{ fontSize: 12, color: "var(--muted)" }}>{n.romaji}{done ? " · 攻略済み" : isNext ? " · 挑戦せよ" : ""}</div>
+              </div>
+              {!locked && <ChevronRight size={18} color="var(--muted)" />}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* bottom nav */}
+      <BottomNav active="home" onMap={onMap} onCodex={onCodex} onReview={onReview} dueCount={dueCount} />
+    </div>
+  );
+}
+
+function BottomNav({ active, onMap, onCodex, onReview, dueCount }) {
+  return (
+    <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, maxWidth: 520, margin: "0 auto",
+      background: "linear-gradient(180deg,rgba(20,15,40,.4),#15102b 40%)", backdropFilter: "blur(8px)",
+      borderTop: "1px solid var(--line)", display: "flex", padding: "4px 8px 8px" }}>
+      <button className={`kw-tab ${active === "home" ? "on" : ""}`} disabled><Crown size={20} /><span>拠点</span></button>
+      <button className="kw-tab" onClick={onMap}><Map size={20} /><span>地図</span></button>
+      <button className="kw-tab" onClick={onReview} style={{ position: "relative" }}>
+        <RotateCcw size={20} /><span>修行</span>
+        {dueCount > 0 && <span className="kw-num" style={{ position: "absolute", top: 2, right: "30%", background: "var(--rose)", color: "#fff", fontSize: 9, borderRadius: 999, padding: "0 5px", fontWeight: 700 }}>{dueCount}</span>}
+      </button>
+      <button className="kw-tab" onClick={onCodex}><BookOpen size={20} /><span>図鑑</span></button>
+    </div>
+  );
+}
+
+/* ============================================================
+   WORLD MAP (CEFR)
+   ============================================================ */
+function WorldMap({ save, onBack, onEnter }) {
+  return (
+    <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", padding: 16 }}>
+      <TopBar title="世界地図" sub="CEFR · A1 → C2" onBack={onBack} />
+      <div className="kw-mincho" style={{ color: "var(--muted)", fontSize: 13, lineHeight: 1.8, margin: "4px 2px 16px" }}>
+        六つの領域を踏破し、賢者の塔の頂を目指せ。各領域が欧州言語参照枠の一段に対応する。前の領域を極めねば、次へは進めぬ。
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12, position: "relative" }}>
+        {REGIONS.map((r, i) => {
+          const here = r.id === save.region;
+          const unlocked = regionUnlocked(save, r.id);
+          const open = r.content && unlocked;
+          const stats = regionMasteryStats(save, r.id);
+          const mastered = r.content && regionMastered(save, r.id);
+          const prev = REGIONS[i - 1];
+          return (
+            <div key={r.id} className="kw-card" style={{ padding: 15, opacity: open || mastered ? 1 : .6, position: "relative",
+              borderColor: here ? "var(--gold-dim)" : mastered ? `${r.color}66` : "var(--line)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 13 }}>
+                <div style={{ width: 50, height: 50, borderRadius: 14, flex: "none", display: "flex", alignItems: "center", justifyContent: "center",
+                  background: `${r.color}22`, border: `1.5px solid ${r.color}55` }}>
+                  <span className="kw-num" style={{ fontWeight: 700, fontSize: 18, color: r.color }}>{r.id}</span>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                    <span className="kw-brush" style={{ fontSize: 19, color: r.color }}>{r.name}</span>
+                    <span className="kw-chip" style={{ borderColor: `${r.color}55`, color: r.color }}>Rank {r.rank}</span>
+                    {here && <span className="kw-chip" style={{ color: "var(--gold)", borderColor: "var(--gold-dim)" }}>現在地</span>}
+                    {mastered && <span className="kw-chip" style={{ color: "var(--leaf)", borderColor: "var(--leaf)" }}>踏破</span>}
+                  </div>
+                  <div className="kw-mincho" style={{ fontSize: 12, color: "var(--muted)", marginTop: 4, lineHeight: 1.6 }}>{r.desc}</div>
+                </div>
+                {!open && <Lock size={18} color="var(--muted)" />}
+              </div>
+
+              {/* mastery progress for content regions */}
+              {r.content && (open || mastered) && (
+                <div style={{ marginTop: 11 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>
+                    <span>言霊 熟練度 ★{MASTERY_GATE}+</span>
+                    <span className="kw-num">{stats.mastered}/{stats.total}</span>
+                  </div>
+                  <div className="kw-bar bar-xp"><i style={{ width: `${stats.total ? stats.mastered / stats.total * 100 : 0}%` }} /></div>
+                </div>
+              )}
+
+              {/* locked gate condition */}
+              {r.content && !unlocked && (
+                <div style={{ marginTop: 11, padding: "9px 11px", borderRadius: 10, background: "rgba(240,107,107,.08)", border: "1px solid #5a3050" }}>
+                  <div style={{ fontSize: 11.5, color: "var(--muted)", lineHeight: 1.6 }}>
+                    🔒 突破条件：<b style={{ color: "var(--ink)" }}>{prev?.name}</b> のボス撃破 ＋ 全言霊 ★{MASTERY_GATE} 以上
+                  </div>
+                </div>
+              )}
+
+              {open && (
+                <button className="kw-btn kw-btn-gold" style={{ marginTop: 12, fontSize: 14, padding: "10px" }}
+                  onClick={() => onEnter(r.id)}>
+                  {here ? "この領域で続ける" : "この領域へ向かう"} <ChevronRight size={16} />
+                </button>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <div className="kw-mincho" style={{ textAlign: "center", color: "var(--line)", fontSize: 12, marginTop: 18, marginBottom: 8 }}>
+        B1 以降は続編で解放。今は A1・A2 を完全踏破せよ。
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   CODEX (figure book)
+   ============================================================ */
+function Codex({ save, onBack }) {
+  const items = Object.values(save.codex);
+  return (
+    <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", padding: 16 }}>
+      <TopBar title="言霊図鑑" sub={`収集 ${items.length} 語`} onBack={onBack} />
+      {items.length === 0 ? (
+        <div className="kw-card" style={{ padding: 30, textAlign: "center", marginTop: 20 }}>
+          <BookOpen size={32} color="var(--muted)" style={{ margin: "0 auto 10px" }} />
+          <div className="kw-mincho" style={{ color: "var(--muted)" }}>まだ言霊を集めていない。<br />クエストで最初の言葉を授かろう。</div>
+        </div>
+      ) : (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 4 }}>
+          {items.map((it) => (
+            <button key={it.jp} className="kw-card kw-tap" onClick={() => speak(it.reading || it.jp)}
+              style={{ padding: 13, textAlign: "left" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <span style={{ fontSize: 22, fontWeight: 700 }}>{it.jp}</span>
+                <Volume2 size={15} color="var(--muted)" />
+              </div>
+              <div className="kw-num" style={{ fontSize: 11, color: "var(--mana)", marginTop: 2 }}>{it.romaji}</div>
+              <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 3 }}>{it.meaning}</div>
+              <div style={{ marginTop: 6, display: "flex", gap: 2 }}>
+                {[0, 1, 2, 3, 4].map(s => <Star key={s} size={11} color={s < (it.mastery || 0) ? "var(--gold)" : "var(--line)"} fill={s < (it.mastery || 0) ? "var(--gold)" : "none"} />)}
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ============================================================
+   LESSON  (teach phase)
+   ============================================================ */
+function FuriWord({ item, furigana, big }) {
+  return (
+    <div style={{ textAlign: "center" }}>
+      {furigana && item.romaji && (
+        <div className="kw-num" style={{ fontSize: big ? 14 : 11, color: "var(--mana)", letterSpacing: ".06em" }}>{item.romaji}</div>
+      )}
+      <div className="kw-rune" style={{ fontSize: big ? 56 : 30, fontWeight: 700, lineHeight: 1.15 }}>{item.jp}</div>
+    </div>
+  );
+}
+
+function Lesson({ node, save, onExit, onBattle }) {
+  const [i, setI] = useState(0);
+  const teach = node.teach || [];
+  const [phase, setPhase] = useState("intro"); // intro -> cards
+
+  useEffect(() => { if (phase === "cards") { const c = teach[i]; if (c) speak(c.reading || c.jp); } }, [i, phase]);
+
+  const Ico = ICONS[node.icon] || Scroll;
+  const isBoss = node.id.endsWith("boss");
+
+  if (phase === "intro") {
+    return (
+      <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", padding: 18 }}>
+        <TopBar title={node.title} sub={node.romaji} onBack={onExit} />
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <div className="kw-pop" style={{ width: 76, height: 76, borderRadius: 20, margin: "0 auto 18px",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            background: isBoss ? "rgba(167,139,250,.16)" : "rgba(245,196,81,.13)", border: `1.5px solid ${isBoss ? "#7a3f8f" : "var(--gold-dim)"}` }}>
+            <Ico size={38} color={isBoss ? "var(--violet)" : "var(--gold)"} />
+          </div>
+          <div className="kw-scroll kw-mincho" style={{ padding: "22px 20px", fontSize: 16, lineHeight: 2 }}>
+            {node.intro}
+          </div>
+        </div>
+        <button className="kw-btn kw-btn-gold" style={{ marginTop: 16 }}
+          onClick={() => isBoss ? onBattle() : setPhase("cards")}>
+          {isBoss ? <>戦いを始める <Swords size={18} /></> : <>言霊を授かる <ChevronRight size={18} /></>}
+        </button>
+      </div>
+    );
+  }
+
+  // teach cards
+  const card = teach[i];
+  const last = i === teach.length - 1;
+  return (
+    <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", padding: 18 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
+        <button className="kw-tap" onClick={onExit} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer", display: "flex" }}><X size={22} /></button>
+        <div className="kw-bar bar-xp" style={{ flex: 1 }}><i style={{ width: `${(i + 1) / teach.length * 100}%` }} /></div>
+        <span className="kw-num" style={{ fontSize: 12, color: "var(--muted)" }}>{i + 1}/{teach.length}</span>
+      </div>
+
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <div className="kw-card" style={{ padding: "34px 22px", textAlign: "center" }}>
+          <FuriWord item={card} furigana={save.furigana} big />
+          <button className="kw-btn kw-btn-mana kw-tap" style={{ width: "auto", margin: "18px auto 0", padding: "9px 16px", fontSize: 14 }}
+            onClick={() => speak(card.reading || card.jp)}>
+            <Volume2 size={16} /> 聞く
+          </button>
+          <div style={{ height: 1, background: "var(--line)", margin: "20px 0" }} />
+          <div style={{ fontSize: 20, fontWeight: 700, color: "var(--gold)" }}>{card.meaning}</div>
+          {card.note && <div className="kw-mincho" style={{ fontSize: 13, color: "var(--muted)", marginTop: 10, lineHeight: 1.7 }}>{card.note}</div>}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
+        {i > 0 && <button className="kw-btn kw-btn-ghost" style={{ flex: "none", width: 56 }} onClick={() => setI(i - 1)}>←</button>}
+        <button className="kw-btn kw-btn-gold" style={{ flex: 1 }}
+          onClick={() => last ? onBattle() : setI(i + 1)}>
+          {last ? <>魔物が現れた！戦う <Swords size={18} /></> : <>次へ <ChevronRight size={18} /></>}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   BATTLE  (quiz combat)
+   ============================================================ */
+function Battle({ node, save, persist, onWin, onFlee }) {
+  const isBoss = node.id.endsWith("boss");
+  const quiz = node.quiz || [];
+  const foeAtk = isBoss ? (node.atk || 16) : 14;
+  const foeName = isBoss ? node.title : "言ノ葉の魔物";
+  const foeEmoji = node.id === "a2-boss" ? "🦂" : isBoss ? "👑🫧" : "🫧";
+
+  const coresTotal = quiz.length;
+  const [remaining, setRemaining] = useState(() => shuffle(quiz));
+  const [turn, setTurn] = useState(0);
+  const [hp, setHp] = useState(save.hp);
+  const [combo, setCombo] = useState(0);
+  const [picked, setPicked] = useState(null);
+  const [locked, setLocked] = useState(false);
+  const [dmg, setDmg] = useState(null);        // foe-hit popup
+  const [heroDmg, setHeroDmg] = useState(null); // hero-hit popup
+  const [shakeFoe, setShakeFoe] = useState(false);
+  const [shakeHero, setShakeHero] = useState(false);
+  const [flash, setFlash] = useState(null);
+  const attemptsRef = useRef(0);
+  const startRef = useRef(Date.now());
+
+  const q = remaining[0];
+  const coresLeft = remaining.length;
+  const foePct = (coresLeft / coresTotal) * 100;
+
+  useEffect(() => { startRef.current = Date.now(); }, [turn]);
+
+  // STRICT: a question only leaves the queue once answered correctly.
+  // Wrong answers re-queue the same item a couple of slots later.
+  function resolve(correct) {
+    setLocked(true);
+    attemptsRef.current += 1;
+    if (correct) {
+      const fast = Date.now() - startRef.current < 4500;
+      const crit = fast && combo >= 2;
+      const rest = remaining.slice(1);
+      setCombo(c => c + 1);
+      setFlash(crit ? "crit" : "hit");
+      setShakeFoe(true);
+      setDmg({ crit, left: rest.length });
+      setTimeout(() => setShakeFoe(false), 360);
+      setTimeout(() => {
+        setDmg(null); setFlash(null);
+        if (rest.length === 0) { finishWin(); return; }
+        setRemaining(rest); setPicked(null); setLocked(false); setTurn(t => t + 1);
+      }, 1000);
+    } else {
+      const nh = clamp(hp - foeAtk, 0, save.maxHp);
+      const rest = remaining.slice(1);
+      const pos = Math.min(2, rest.length);
+      const requeued = [...rest.slice(0, pos), remaining[0], ...rest.slice(pos)];
+      setCombo(0);
+      setFlash("miss");
+      setShakeHero(true);
+      setHeroDmg(foeAtk);
+      setTimeout(() => setShakeHero(false), 360);
+      setTimeout(() => setHp(nh), 120);
+      setTimeout(() => {
+        setHeroDmg(null); setFlash(null);
+        if (nh <= 0) { finishLose(); return; }
+        setRemaining(requeued); setPicked(null); setLocked(false); setTurn(t => t + 1);
+      }, 1150);
+    }
+  }
+
+  const GRADES = {
+    S: { dM: 2, xp: 1.5, gold: 1.5, srsH: 12, color: "var(--gold)" },
+    A: { dM: 1, xp: 1.25, gold: 1.25, srsH: 8, color: "var(--mana)" },
+    B: { dM: 1, xp: 1.0, gold: 1.0, srsH: 5, color: "var(--violet)" },
+    C: { dM: 0, xp: 0.8, gold: 0.8, srsH: 2, color: "var(--rose)" },
+  };
+  const gradeFor = (acc) => acc >= 1 ? "S" : acc >= 0.85 ? "A" : acc >= 0.7 ? "B" : "C";
+
+  function collectRewards(g) {
+    const codex = { ...save.codex };
+    const srs = { ...save.srs };
+    (node.teach || []).forEach(t => {
+      const key = t.jp;
+      const prev = codex[key];
+      codex[key] = { jp: t.jp, reading: t.reading, romaji: t.romaji, meaning: t.meaning,
+        mastery: clamp((prev?.mastery || 0) + g.dM, 0, 5) };
+      srs[key] = { due: Date.now() + 1000 * 60 * 60 * g.srsH, ease: (srs[key]?.ease || 0) + (g.dM > 0 ? 1 : 0) };
+    });
+    return { codex, srs };
+  }
+
+  function finishWin() {
+    const acc = coresTotal / Math.max(coresTotal, attemptsRef.current);
+    const grade = gradeFor(acc);
+    const g = GRADES[grade];
+    const xpGain = Math.round((isBoss ? 120 : 45) * g.xp);
+    const goldGain = Math.round((isBoss ? 80 : 25) * g.gold);
+    let lv = save.lv, xp = save.xp + xpGain, maxHp = save.maxHp, maxMp = save.maxMp, leveled = 0;
+    while (xp >= xpToNext(lv)) { xp -= xpToNext(lv); lv++; maxHp += 12; maxMp += 6; leveled++; }
+    const { codex, srs } = collectRewards(g);
+    const done = { ...save.done, [node.id]: true };
+    const next = {
+      ...save, lv, xp, maxHp, maxMp,
+      hp: leveled ? maxHp : Math.max(hp, 1),
+      mp: clamp(save.mp + 8, 0, maxMp),
+      gold: save.gold + goldGain, done, codex, srs,
+    };
+    persist(next);
+    const wasMastered = regionMastered(save, node.region);
+    const nowMastered = regionMastered(next, node.region);
+    let breakthrough = null;
+    if (!wasMastered && nowMastered) {
+      const idx = REGIONS.findIndex(r => r.id === node.region);
+      breakthrough = REGIONS[idx + 1] || null;
+    }
+    onWin({ win: true, xp: xpGain, gold: goldGain, leveled, lv, isBoss, grade, color: g.color,
+      accuracy: Math.round(acc * 100), attempts: attemptsRef.current, cores: coresTotal, breakthrough });
+  }
+
+  function finishLose() {
+    const next = { ...save, hp: Math.max(20, Math.round(save.maxHp * 0.4)) };
+    persist(next);
+    onWin({ win: false, isBoss });
+  }
+
+  return (
+    <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", padding: 16, position: "relative" }}>
+      {/* foe */}
+      <div className="kw-card" style={{ padding: 14, position: "relative", overflow: "hidden" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontWeight: 700 }}>{foeName}</span>
+          <button className="kw-tap" onClick={onFlee} style={{ background: "none", border: "none", color: "var(--muted)", fontSize: 12, fontFamily: "var(--ui)", cursor: "pointer" }}>逃げる ✕</button>
+        </div>
+        <div className="kw-bar bar-foe" style={{ marginTop: 8 }}><i style={{ width: `${foePct}%` }} /></div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 6 }}>
+          <span className="kw-chip" style={{ borderColor: "var(--line)" }}>残り核 <span className="kw-num" style={{ color: "var(--violet)" }}>{coresLeft}/{coresTotal}</span></span>
+          <span style={{ fontFamily: "var(--ui)", fontSize: 10, color: "var(--muted)", letterSpacing: ".04em" }}>全問正解で撃破 · 誤答は再出題</span>
+        </div>
+        <div className={`${shakeFoe ? "kw-shake" : ""}`} style={{ textAlign: "center", marginTop: 10, position: "relative" }}>
+          <div className={isBoss ? "kw-bob" : ""} style={{ fontSize: isBoss ? 76 : 60, filter: flash === "crit" ? "drop-shadow(0 0 18px #f5c451)" : "none" }}>
+            {foeEmoji}
+          </div>
+          {dmg && (
+            <div className="kw-dmg" style={{ left: "50%", top: 0, transform: "translateX(-50%)", fontSize: dmg.crit ? 26 : 20, color: dmg.crit ? "var(--gold)" : "var(--leaf)" }}>
+              {dmg.crit && <span style={{ fontSize: 12, display: "block", color: "var(--gold)" }}>クリティカル！</span>}✦ 命中！
+            </div>
+          )}
+        </div>
+        {combo >= 2 && <div className="kw-num kw-pop" style={{ position: "absolute", top: 12, left: 14, color: "var(--gold)", fontWeight: 700, fontSize: 13 }}>
+          {combo} コンボ 🔥
+        </div>}
+      </div>
+
+      {/* hero hp */}
+      <div className={`${shakeHero ? "kw-shake" : ""}`} style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 8, position: "relative" }}>
+        <Heart size={16} color="#f0524f" />
+        <div className="kw-bar bar-hp" style={{ flex: 1 }}><i style={{ width: `${hp / save.maxHp * 100}%` }} /></div>
+        <span className="kw-num" style={{ fontSize: 12, color: "var(--muted)", width: 56, textAlign: "right" }}>{hp}/{save.maxHp}</span>
+        {heroDmg && <div className="kw-dmg" style={{ left: 24, top: -8, color: "var(--rose)", fontSize: 20 }}>-{heroDmg}</div>}
+      </div>
+
+      {/* question */}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", marginTop: 12 }}>
+        <QuestionBlock key={turn} q={q} save={save} locked={locked} picked={picked}
+          onAnswer={(ok, p) => { setPicked(p); resolve(ok); }} />
+      </div>
+    </div>
+  );
+}
+
+function QuestionBlock({ q, save, locked, picked, onAnswer }) {
+  const isListen = q.kind === "listen";
+  const isKana = q.kind === "kana";
+  const choices = q.choices || [];
+
+  useEffect(() => { if (isListen) setTimeout(() => speak(q.jp), 350); }, [q]);
+
+  // build-a-sentence uses a dedicated component
+  if (q.kind === "build") return <BuildQuestion q={q} locked={locked} onAnswer={onAnswer} />;
+
+  return (
+    <div>
+      <div style={{ textAlign: "center", marginBottom: 18, minHeight: 90, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+        {isListen ? (
+          <button className="kw-btn kw-btn-mana" style={{ width: "auto", padding: "16px 22px" }} onClick={() => speak(q.jp)}>
+            <Volume2 size={22} /> もう一度聞く
+          </button>
+        ) : isKana ? (
+          <>
+            {q.showRomajiPrompt ? (
+              <div className="kw-num" style={{ fontSize: 22, color: "var(--mana)" }}>{q.prompt}</div>
+            ) : (
+              <>
+                <div className="kw-rune kw-glow" style={{ fontSize: 80, fontWeight: 700, color: "var(--gold)" }}>{q.jp}</div>
+                <div style={{ fontSize: 14, color: "var(--muted)", marginTop: 6 }}>{q.prompt}</div>
+              </>
+            )}
+          </>
+        ) : (
+          <div style={{ fontSize: 20, fontWeight: 700, lineHeight: 1.6 }}>{q.prompt}</div>
+        )}
+        {isListen && <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 12 }}>聞こえた言葉の意味は？</div>}
+        {isKana && q.showRomajiPrompt && <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 8 }}>{q.prompt}</div>}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: choices.length > 4 ? "1fr 1fr" : "1fr", gap: 10 }}>
+        {choices.map((c, idx) => {
+          const isAns = c === q.answer;
+          let cls = "kw-opt";
+          if (locked) {
+            if (isAns) cls += " good";
+            else if (picked === c) cls += " bad";
+            else cls += " dim";
+          }
+          return (
+            <button key={c} className={cls} disabled={locked}
+              onClick={() => onAnswer(isAns, c)}>
+              <span className="kw-optkey">{String.fromCharCode(65 + idx)}</span>
+              <span style={{ flex: 1 }}>{c}</span>
+              {locked && isAns && <Check size={18} color="var(--leaf)" />}
+              {locked && picked === c && !isAns && <X size={18} color="var(--rose)" />}
+            </button>
+          );
+        })}
+      </div>
+      {locked && picked !== q.answer && (
+        <div className="kw-fade" style={{ marginTop: 14, textAlign: "center", color: "var(--rose)", fontSize: 14 }}>
+          正解は <b style={{ color: "var(--gold)" }}>{q.answer}</b> ！次は決めろ。
+        </div>
+      )}
+    </div>
+  );
+}
+
+function BuildQuestion({ q, locked, onAnswer }) {
+  const [chosen, setChosen] = useState([]);
+  const [poolOrder] = useState(() => shuffle(q.pool.map((w, i) => ({ w, i }))));
+  const [usedIdx, setUsedIdx] = useState([]);
+
+  const reset = () => { setChosen([]); setUsedIdx([]); };
+  const submit = () => {
+    const ok = chosen.join("") === q.target.join("");
+    onAnswer(ok, chosen.join(""));
+  };
+
+  return (
+    <div>
+      <div style={{ textAlign: "center", marginBottom: 16, fontSize: 17, fontWeight: 700 }}>{q.prompt}</div>
+      {/* answer line */}
+      <div className="kw-card" style={{ minHeight: 60, padding: 12, display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", justifyContent: "center" }}>
+        {chosen.length === 0 && <span style={{ color: "var(--muted)", fontSize: 14 }}>下の言霊をタップして文を作れ</span>}
+        {chosen.map((c, k) => (
+          <span key={k} className="kw-token" onClick={() => { if (locked) return; const ni = [...usedIdx]; ni.splice(k, 1); setUsedIdx(ni); const nc = [...chosen]; nc.splice(k, 1); setChosen(nc); }}>{c}</span>
+        ))}
+      </div>
+      {/* pool */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginTop: 16 }}>
+        {poolOrder.map(({ w, i }) => (
+          <button key={i} className={`kw-token ${usedIdx.includes(i) ? "used" : ""}`}
+            disabled={locked || usedIdx.includes(i)}
+            onClick={() => { setUsedIdx([...usedIdx, i]); setChosen([...chosen, w]); }}>{w}</button>
+        ))}
+      </div>
+      <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
+        <button className="kw-btn kw-btn-ghost" style={{ flex: "none", width: 56 }} disabled={locked} onClick={reset}><RotateCcw size={18} /></button>
+        <button className="kw-btn kw-btn-gold" style={{ flex: 1 }} disabled={locked || chosen.length === 0} onClick={submit}>
+          詠唱する <Sparkles size={18} />
+        </button>
+      </div>
+      {locked && (
+        <div className="kw-fade" style={{ marginTop: 14, textAlign: "center", fontSize: 14, color: chosen.join("") === q.target.join("") ? "var(--leaf)" : "var(--rose)" }}>
+          {chosen.join("") === q.target.join("") ? "見事な詠唱だ！" : <>正解：<b style={{ color: "var(--gold)" }}>{q.target.join("")}</b></>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ============================================================
+   RESULT
+   ============================================================ */
+function ResultScreen({ result, node, onHome }) {
+  if (!result) return null;
+  if (!result.win) {
+    return (
+      <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 24, textAlign: "center" }}>
+        <div style={{ fontSize: 64 }}>💫</div>
+        <div className="kw-brush" style={{ fontSize: 30, color: "var(--rose)", marginTop: 8 }}>力尽きた…</div>
+        <div className="kw-mincho" style={{ color: "var(--muted)", marginTop: 12, fontSize: 15, lineHeight: 1.9 }}>
+          だが転生者は何度でも蘇る。<br />言霊を復習し、もう一度挑め。
+        </div>
+        <button className="kw-btn kw-btn-gold" style={{ marginTop: 28, minWidth: 200 }} onClick={onHome}>
+          <RotateCcw size={18} /> 拠点へ戻る
+        </button>
+      </div>
+    );
+  }
+  return (
+    <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 24, textAlign: "center" }}>
+      <div className="kw-pop" style={{ fontSize: 60 }}>{result.isBoss ? "👑" : "✨"}</div>
+      <div className="kw-eyebrow" style={{ marginTop: 4 }}>{result.isBoss ? "BOSS 撃破" : "クエスト達成"}</div>
+      <div className="kw-brush kw-title-glint" style={{ fontSize: 32, marginTop: 2 }}>{result.isBoss ? "勝利！" : "言霊を得た"}</div>
+
+      {/* grade badge */}
+      <div className="kw-pop kw-card" style={{ marginTop: 16, width: 132, padding: "12px 0", borderColor: result.color }}>
+        <div className="kw-num" style={{ fontSize: 11, color: "var(--muted)", letterSpacing: ".2em" }}>RANK</div>
+        <div className="kw-num kw-glow" style={{ fontSize: 52, fontWeight: 700, lineHeight: 1, color: result.color }}>{result.grade}</div>
+        <div className="kw-num" style={{ fontSize: 12, color: "var(--muted)" }}>正解率 {result.accuracy}%</div>
+      </div>
+      <div className="kw-mincho" style={{ fontSize: 12, color: "var(--muted)", marginTop: 8 }}>
+        {result.grade === "S" ? "完璧だ。熟練度 ＋2、最速で強くなる。"
+          : result.grade === "C" ? "撃破したが甘い。熟練度は上がらず、すぐ復習に回る。"
+            : "良い戦いだ。熟練度 ＋1。"}
+      </div>
+
+      <div className="kw-card" style={{ width: "100%", maxWidth: 320, padding: 16, marginTop: 16 }}>
+        <Row label="獲得 EXP" val={`+${result.xp}`} color="var(--gold)" icon={<Star size={16} color="var(--gold)" />} />
+        <div style={{ height: 1, background: "var(--line)", margin: "9px 0" }} />
+        <Row label="獲得ゴールド" val={`+${result.gold} G`} color="var(--mana)" icon={<Sparkles size={16} color="var(--mana)" />} />
+        {result.leveled > 0 && (<>
+          <div style={{ height: 1, background: "var(--line)", margin: "9px 0" }} />
+          <div className="kw-pop" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, color: "var(--gold)", fontWeight: 700 }}>
+            <Trophy size={18} /> レベルアップ！ → Lv.{result.lv}
+          </div>
+        </>)}
+      </div>
+
+      {result.breakthrough && (
+        <div className="kw-pop kw-card" style={{ width: "100%", maxWidth: 320, padding: 14, marginTop: 12,
+          borderColor: result.breakthrough.color, background: "linear-gradient(180deg,#2a2150,#241b48)" }}>
+          <div className="kw-eyebrow" style={{ color: result.breakthrough.color }}>領域突破！</div>
+          <div className="kw-mincho" style={{ fontSize: 13, marginTop: 4, lineHeight: 1.6 }}>
+            全言霊を ★{MASTERY_GATE} 以上に極めた。<br />
+            <b className="kw-brush" style={{ color: result.breakthrough.color, fontSize: 17 }}>{result.breakthrough.name}</b> が解放された。
+          </div>
+        </div>
+      )}
+
+      <button className="kw-btn kw-btn-gold" style={{ marginTop: 22, minWidth: 220 }} onClick={onHome}>
+        <Crown size={18} /> 拠点へ戻る
+      </button>
+    </div>
+  );
+}
+function Row({ label, val, color, icon }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <span style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--muted)", fontSize: 14 }}>{icon}{label}</span>
+      <span className="kw-num" style={{ fontWeight: 700, color }}>{val}</span>
+    </div>
+  );
+}
+
+/* ============================================================
+   REVIEW (SRS / 修行)
+   ============================================================ */
+function Review({ save, persist, onBack }) {
+  const dueKeys = Object.keys(save.srs).filter(k => save.srs[k].due <= Date.now() && save.codex[k]);
+  const [queue] = useState(() => shuffle(dueKeys));
+  const [i, setI] = useState(0);
+  const [done, setDone] = useState(false);
+  const [picked, setPicked] = useState(null);
+  const [locked, setLocked] = useState(false);
+  const gainedRef = useRef(0);
+
+  if (dueKeys.length === 0 && !done) {
+    return (
+      <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", padding: 16 }}>
+        <TopBar title="修行の間" sub="Spaced Review" onBack={onBack} />
+        <div className="kw-card" style={{ padding: 30, textAlign: "center", marginTop: 20 }}>
+          <Shield size={32} color="var(--muted)" style={{ margin: "0 auto 10px" }} />
+          <div className="kw-mincho" style={{ color: "var(--muted)" }}>今は復習すべき言霊がない。<br />クエストを進めて言葉を集めよう。</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (done || i >= queue.length) {
+    return (
+      <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 24, textAlign: "center" }}>
+        <div className="kw-pop" style={{ fontSize: 60 }}>🧘</div>
+        <div className="kw-brush kw-title-glint" style={{ fontSize: 30, marginTop: 8 }}>修行 完了</div>
+        <div className="kw-mincho" style={{ color: "var(--muted)", marginTop: 12 }}>言霊が記憶に刻まれた。<br />MP が <span className="kw-num" style={{ color: "var(--mana)" }}>+{gainedRef.current}</span> 回復。</div>
+        <button className="kw-btn kw-btn-gold" style={{ marginTop: 26, minWidth: 200 }} onClick={onBack}>拠点へ戻る</button>
+      </div>
+    );
+  }
+
+  const key = queue[i];
+  const item = save.codex[key];
+  // build a meaning MC from codex distractors
+  const others = shuffle(Object.values(save.codex).filter(x => x.jp !== item.jp)).slice(0, 3).map(x => x.meaning);
+  const choices = shuffle([item.meaning, ...others]).slice(0, 4);
+  if (!choices.includes(item.meaning)) choices[0] = item.meaning;
+
+  function answer(c) {
+    setPicked(c); setLocked(true);
+    const ok = c === item.meaning;
+    const srs = { ...save.srs };
+    const ease = ok ? (srs[key].ease || 0) + 1 : Math.max(0, (srs[key].ease || 0) - 1);
+    const hours = ok ? Math.min(72, 8 * Math.pow(2, ease)) : 4;
+    srs[key] = { ease, due: Date.now() + 1000 * 60 * 60 * hours };
+    const codex = { ...save.codex };
+    codex[key] = { ...item, mastery: clamp((item.mastery || 0) + (ok ? 1 : -1), 0, 5) };
+    if (ok) gainedRef.current += 3;
+    persist({ ...save, srs, codex, mp: clamp(save.mp + (ok ? 3 : 0), 0, save.maxMp) });
+    setTimeout(() => { setPicked(null); setLocked(false); if (i + 1 >= queue.length) setDone(true); else setI(i + 1); }, 1000);
+  }
+
+  return (
+    <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", padding: 16 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
+        <button className="kw-tap" onClick={onBack} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer", display: "flex" }}><X size={22} /></button>
+        <div className="kw-bar bar-mp" style={{ flex: 1 }}><i style={{ width: `${(i) / queue.length * 100}%` }} /></div>
+        <span className="kw-num" style={{ fontSize: 12, color: "var(--muted)" }}>{i + 1}/{queue.length}</span>
+      </div>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <div className="kw-card" style={{ padding: "30px 20px", textAlign: "center" }}>
+          <div className="kw-rune" style={{ fontSize: 46, fontWeight: 700 }}>{item.jp}</div>
+          <button className="kw-btn kw-btn-mana" style={{ width: "auto", margin: "14px auto 0", padding: "8px 14px", fontSize: 13 }} onClick={() => speak(item.reading || item.jp)}>
+            <Volume2 size={15} /> 聞く
+          </button>
+        </div>
+        <div style={{ fontSize: 14, color: "var(--muted)", textAlign: "center", margin: "18px 0 12px" }}>この言霊の意味は？</div>
+        <div style={{ display: "grid", gap: 10 }}>
+          {choices.map((c, idx) => {
+            const isAns = c === item.meaning;
+            let cls = "kw-opt";
+            if (locked) { if (isAns) cls += " good"; else if (picked === c) cls += " bad"; else cls += " dim"; }
+            return (
+              <button key={idx} className={cls} disabled={locked} onClick={() => answer(c)}>
+                <span className="kw-optkey">{String.fromCharCode(65 + idx)}</span>
+                <span style={{ flex: 1 }}>{c}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ----------------------- shared TopBar ----------------------- */
+function TopBar({ title, sub, onBack }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
+      <button className="kw-tap" onClick={onBack}
+        style={{ width: 40, height: 40, borderRadius: 12, border: "1.5px solid var(--line)", background: "var(--panel)", color: "var(--ink)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flex: "none" }}>
+        <ChevronRight size={20} style={{ transform: "rotate(180deg)" }} />
+      </button>
+      <div>
+        <div style={{ fontWeight: 700, fontSize: 19 }}>{title}</div>
+        {sub && <div className="kw-mincho" style={{ fontSize: 12, color: "var(--muted)" }}>{sub}</div>}
+      </div>
+    </div>
+  );
+}
+
+
+createRoot(document.getElementById("root")).render(<App />);
+
+</script>
+</body>
+</html>
