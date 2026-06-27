@@ -172,18 +172,20 @@ async function writeSave(obj) {
 
 /* ----------------------- world / CEFR map ----------------------- */
 const REGIONS = [
+  { id: "P0", name: "音ノ章", romaji: "Chapter of Sound", rank: "序", color: "#f0a8d0",
+    desc: "轉生的第一刻，你連這個世界的聲音都還聽不清。發音、假名、片假名——先找回語言的根。", content: true },
   { id: "A1", name: "木漏れ陽の村", romaji: "Komorebi Village", rank: "F", color: "#7ee0a0",
-    desc: "転生したばかり。文字（かな）すら読めぬ。挨拶と名乗りから始めよ。", content: true },
+    desc: "唯有取回聲音的人，才能進入村莊。從問候與自我介紹開始。", content: true },
   { id: "A2", name: "隊商の街道", romaji: "Caravan Road", rank: "E", color: "#5fd3c4",
-    desc: "市場で買い物、数え方、過去形、形容詞、在処。旅人として街道を歩め。", content: true },
+    desc: "市集購物、數量詞、過去式、形容詞、存在句。以旅人的身分走上街道。", content: true },
   { id: "B1", name: "王都ことのは", romaji: "Royal Capital", rank: "D–C", color: "#8ab4ff",
-    desc: "過去形・て形・日常会話。王都で名を上げよ。", content: false },
+    desc: "て形、普通形、過去式、原因理由、願望、可能形、比較。在王都打響名號。", content: true },
   { id: "B2", name: "大迷宮", romaji: "Great Labyrinth", rank: "B", color: "#a78bfa",
-    desc: "複雑な文法・敬語の入口。迷宮の深層へ。", content: false },
+    desc: "複雜文法、條件句、被動使役、敬語入口。深入迷宮的底層。", content: false },
   { id: "C1", name: "魔王城", romaji: "Demon Castle", rank: "A", color: "#f0a06b",
-    desc: "ニュアンス・慣用句・含意。魔王と言葉を交わす。", content: false },
+    desc: "語感、慣用語、言外之意、細膩的語氣差異。與魔王交鋒言談。", content: false },
   { id: "C2", name: "賢者の塔", romaji: "Sage's Tower", rank: "S", color: "#f5c451",
-    desc: "文学・抽象・完全なる熟達。賢者として頂へ。", content: false },
+    desc: "文學、抽象論述、完全的精通。以賢者之姿登上頂峰。", content: false },
 ];
 
 /* ----------------------- A1 lessons ----------------------- */
@@ -192,7 +194,7 @@ const REGIONS = [
 const LESSONS = [
   {
     id: "a1-1", region: "A1", title: "始まりの言ノ葉", romaji: "First Words", icon: "scroll",
-    intro: "目を覚ますと見知らぬ森。村人が君に話しかける。まず「挨拶（あいさつ）」の言霊を覚えよ。",
+    intro: "你醒在一片陌生的森林，一名村民朝你走來搭話。先學會「問候（あいさつ）」的言靈，才能踏出第一步。",
     teach: [
       { jp: "こんにちは", reading: "こんにちは", romaji: "konnichiwa", meaning: "你好（白天的問候）" },
       { jp: "おはよう", reading: "おはよう", romaji: "ohayō", meaning: "早安（口語）", note: "丁寧形は「おはようございます」" },
@@ -212,7 +214,7 @@ const LESSONS = [
   },
   {
     id: "a1-2", region: "A1", title: "名乗りの儀", romaji: "The Naming Rite", icon: "sparkles",
-    intro: "村長が問う——「お前は何者だ？」。自分の名を名乗る言霊「〜は〜です」を授かる。",
+    intro: "村長盯著你問：「你是何人？」你獲得了報上名號的言靈——「〜は〜です（……是……）」。",
     teach: [
       { jp: "わたし", reading: "わたし", romaji: "watashi", meaning: "我" },
       { jp: "〜は〜です", reading: "〜は〜です", romaji: "～wa ～desu", meaning: "（主題）是（～）。", note: "は唸作 wa。です＝是（禮貌斷定）" },
@@ -232,7 +234,7 @@ const LESSONS = [
   },
   {
     id: "a1-3", region: "A1", title: "母音の石碑", romaji: "Vowel Steles", icon: "flame",
-    intro: "石碑に五つの原初の符文が光る。これを読めねば、いかなる魔法も唱えられぬ。あ・い・う・え・お。",
+    intro: "石碑上浮現五個最原初的符文。讀不出它們，就施展不了任何魔法。あ・い・う・え・お。",
     teach: [
       { jp: "あ", reading: "あ", romaji: "a", meaning: "符文「a」", note: "如「ありがとう」的開頭" },
       { jp: "い", reading: "い", romaji: "i", meaning: "符文「i」", note: "如「いいえ」(不)" },
@@ -251,7 +253,7 @@ const LESSONS = [
   },
   {
     id: "a1-4", region: "A1", title: "数の魔法", romaji: "Number Magic", icon: "zap",
-    intro: "商人が指を折って数える。1から10まで——数の言霊は、あらゆる取引と呪文の土台だ。",
+    intro: "商人扳著手指數數。從 1 到 10——數字的言靈，是一切交易與咒語的地基。",
     teach: [
       { jp: "いち", reading: "いち", romaji: "ichi", meaning: "1" },
       { jp: "に", reading: "に", romaji: "ni", meaning: "2" },
@@ -275,7 +277,7 @@ const LESSONS = [
   },
   {
     id: "a1-5", region: "A1", title: "助詞の門", romaji: "Gate of Particles", icon: "scroll",
-    intro: "森を抜けると石の門。刻まれた助詞「の」「も」を理解せねば、門は開かぬ。まずは身の回りの名を覚えよ。",
+    intro: "穿過森林，一道石門擋路。看不懂門上刻的助詞「の」「も」，門就不會開。先記住身邊事物的名字。",
     teach: [
       { jp: "ほん", reading: "ほん", romaji: "hon", meaning: "書／書本" },
       { jp: "みず", reading: "みず", romaji: "mizu", meaning: "水" },
@@ -295,7 +297,7 @@ const LESSONS = [
   },
   {
     id: "a1-6", region: "A1", title: "指し示す言葉", romaji: "Words That Point", icon: "sparkles",
-    intro: "市場で商人が品を指す——「これは？それは？」。距離で変わる指示の言霊と、疑問の「か」を授かろう。",
+    intro: "市場裡，商人指著貨物問：「這是？那是？」學會隨距離變化的指示詞，還有表示疑問的「か」。",
     teach: [
       { jp: "これ", reading: "これ", romaji: "kore", meaning: "這個（靠近我）" },
       { jp: "それ", reading: "それ", romaji: "sore", meaning: "那個（靠近你）" },
@@ -315,7 +317,7 @@ const LESSONS = [
   },
   {
     id: "a1-7", region: "A1", title: "動詞の息吹", romaji: "Breath of Verbs", icon: "zap",
-    intro: "言霊に「動き」が宿る。ます形の動詞と、対象を示す「を」を得れば、ついに行動を語れる。",
+    intro: "言靈裡注入了「動作」。掌握 ます形 動詞和標示對象的「を」，你終於能說出自己要做什麼。",
     teach: [
       { jp: "たべます", reading: "たべます", romaji: "tabemasu", meaning: "吃", note: "ます形＝禮貌的現在／未來式" },
       { jp: "のみます", reading: "のみます", romaji: "nomimasu", meaning: "喝" },
@@ -337,7 +339,7 @@ const LESSONS = [
 
 const BOSS = {
   id: "a1-boss", region: "A1", title: "スライム王", romaji: "The Slime King", icon: "crown",
-  intro: "村の泉に巨大なスライムが現れた。今まで集めた全ての言霊で立ち向かえ！正しい言霊だけが、その核を打ち砕く。",
+  intro: "村子的泉水裡冒出一隻巨大的史萊姆！用你至今收集的所有言靈迎戰——只有正確的言靈，才能擊碎牠的核心。",
   hp: 220, atk: 16,
   quiz: [
     { kind: "mc", prompt: "「ありがとう」の意味は？", answer: "謝謝", choices: ["謝謝", "再見", "早安", "對不起"] },
@@ -359,7 +361,7 @@ const BOSS = {
 const A2_LESSONS = [
   {
     id: "a2-1", region: "A2", title: "市場の声", romaji: "Market Voices", icon: "scroll",
-    intro: "街道の市場に着いた。物を買うには「ください」と値の言霊が要る。商人に話しかけよう。",
+    intro: "你抵達街道上的市集。想買東西，就需要「ください（請給）」和表示價格的言靈。去跟商人交談吧。",
     teach: [
       { jp: "パン", reading: "パン", romaji: "pan", meaning: "麵包" },
       { jp: "コーヒー", reading: "コーヒー", romaji: "kōhī", meaning: "咖啡" },
@@ -379,7 +381,7 @@ const A2_LESSONS = [
   },
   {
     id: "a2-2", region: "A2", title: "数えの呪文", romaji: "Counting Spell", icon: "zap",
-    intro: "物の数を数える固有の言霊——和語の数え方。これを誤れば取引で損をする。",
+    intro: "數東西有專屬的言靈——和語的數法。數錯了，交易就會吃虧。",
     teach: [
       { jp: "ひとつ", reading: "ひとつ", romaji: "hitotsu", meaning: "一個" },
       { jp: "ふたつ", reading: "ふたつ", romaji: "futatsu", meaning: "兩個" },
@@ -399,7 +401,7 @@ const A2_LESSONS = [
   },
   {
     id: "a2-3", region: "A2", title: "過去の記憶", romaji: "Past Memory", icon: "sparkles",
-    intro: "旅の記録を綴れ。ます形が過去へ姿を変える——「ました／ませんでした」。",
+    intro: "把旅途記錄下來。ます形 變身為過去式——「ました／ませんでした」。",
     teach: [
       { jp: "たべました", reading: "たべました", romaji: "tabemashita", meaning: "吃了", note: "ます→ました（過去）" },
       { jp: "のみました", reading: "のみました", romaji: "nomimashita", meaning: "喝了" },
@@ -419,7 +421,7 @@ const A2_LESSONS = [
   },
   {
     id: "a2-4", region: "A2", title: "形容詞の彩り", romaji: "Color of Adjectives", icon: "flame",
-    intro: "世界に色と形を与える言霊——い形容詞。物の様子を語れるようになる。",
+    intro: "為世界添上色彩與形狀的言靈——い形容詞。從此你能描述事物的樣子。",
     teach: [
       { jp: "おおきい", reading: "おおきい", romaji: "ōkii", meaning: "大的" },
       { jp: "ちいさい", reading: "ちいさい", romaji: "chiisai", meaning: "小的" },
@@ -439,7 +441,7 @@ const A2_LESSONS = [
   },
   {
     id: "a2-5", region: "A2", title: "在処の地図", romaji: "Map of Whereabouts", icon: "scroll",
-    intro: "物と者の在り処を示せ——無生物は「あります」、生物は「います」。場所の言霊と共に。",
+    intro: "指出人與物的所在——無生物用「あります」，生物用「います」，再配上表示地點的言靈。",
     teach: [
       { jp: "あります", reading: "あります", romaji: "arimasu", meaning: "有／在（無生物）", note: "物・植物に使う" },
       { jp: "います", reading: "います", romaji: "imasu", meaning: "有／在（生物）", note: "人・動物に使う" },
@@ -461,7 +463,7 @@ const A2_LESSONS = [
 
 const BOSS_A2 = {
   id: "a2-boss", region: "A2", title: "砂漠の大サソリ", romaji: "Giant Desert Scorpion", icon: "crown",
-  intro: "隊商を狙う巨大なサソリが砂を割って現れた！A2 で得た全ての言霊で迎え撃て。一つの油断が命取りだ。",
+  intro: "一隻巨大的沙蠍劈開沙地、撲向隊商！用你在 A2 學到的所有言靈迎擊——一個閃神，就會喪命。",
   hp: 260, atk: 18,
   quiz: [
     { kind: "mc", prompt: "「請給我麵包」怎麼說？", answer: "パンをください", choices: ["パンをください", "パンですか", "パンはいくら", "コーヒーです"] },
@@ -479,29 +481,471 @@ const BOSS_A2 = {
   ],
 };
 
-const ALL_NODES = [...LESSONS, BOSS, ...A2_LESSONS, BOSS_A2];
+/* ----------------------- Prologue: 音ノ章 (Pre-A1) ----------------------- */
+const PROLOGUE = [
+  {
+    id: "p0-1", region: "P0", title: "五つの母音", romaji: "Five Vowels", icon: "flame",
+    intro: "你睜開眼，發現自己倒在陌生森林裡——而且，世界的聲音全是扭曲的。要重新聽懂這個世界，得先找回所有音的根：五個母音。あ・い・う・え・お。",
+    teach: [
+      { jp: "あ", reading: "あ", romaji: "a", meaning: "母音 a", note: "口を大きく、「啊」" },
+      { jp: "い", reading: "い", romaji: "i", meaning: "母音 i", note: "「衣」のように" },
+      { jp: "う", reading: "う", romaji: "u", meaning: "母音 u", note: "唇を丸めすぎない [ɯ]" },
+      { jp: "え", reading: "え", romaji: "e", meaning: "母音 e", note: "注音の ㄟ に近い" },
+      { jp: "お", reading: "お", romaji: "o", meaning: "母音 o", note: "「喔」のように" },
+    ],
+    quiz: [
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "あ", answer: "a", choices: ["a", "o", "u", "e"] },
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "う", answer: "u", choices: ["u", "o", "a", "i"] },
+      { kind: "listen", jp: "え", answer: "e", choices: ["e", "i", "a", "o"], sub: "聞こえた音は？" },
+      { kind: "kana", prompt: "「o」是哪個符文？", jp: "お", answer: "お", choices: ["お", "あ", "う", "え"], showRomajiPrompt: true },
+      { kind: "listen", jp: "い", answer: "i", choices: ["i", "e", "u", "a"], sub: "聞こえた音は？" },
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "お", answer: "o", choices: ["o", "a", "e", "u"] },
+    ],
+  },
+  {
+    id: "p0-2", region: "P0", title: "か行・さ行の石碑", romaji: "K & S Rows", icon: "scroll",
+    intro: "子音與母音結合，聲音開始增加。先掌握 か行 與 さ行——不過要小心，「し」唸 shi，不是 si。",
+    teach: [
+      { jp: "か", reading: "か", romaji: "ka", meaning: "ka" }, { jp: "き", reading: "き", romaji: "ki", meaning: "ki" },
+      { jp: "く", reading: "く", romaji: "ku", meaning: "ku" }, { jp: "け", reading: "け", romaji: "ke", meaning: "ke" },
+      { jp: "こ", reading: "こ", romaji: "ko", meaning: "ko" },
+      { jp: "さ", reading: "さ", romaji: "sa", meaning: "sa" },
+      { jp: "し", reading: "し", romaji: "shi", meaning: "shi", note: "是 shi，不是 si" },
+      { jp: "す", reading: "す", romaji: "su", meaning: "su", note: "夾在無聲子音間常清化，近「s」" },
+      { jp: "せ", reading: "せ", romaji: "se", meaning: "se" }, { jp: "そ", reading: "そ", romaji: "so", meaning: "so" },
+    ],
+    quiz: [
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "か", answer: "ka", choices: ["ka", "sa", "ko", "ki"] },
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "し", answer: "shi", choices: ["shi", "si", "chi", "hi"] },
+      { kind: "listen", jp: "こ", answer: "ko", choices: ["ko", "go", "to", "no"], sub: "聞こえた音は？" },
+      { kind: "kana", prompt: "「su」是哪個符文？", jp: "す", answer: "す", choices: ["す", "さ", "せ", "そ"], showRomajiPrompt: true },
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "そ", answer: "so", choices: ["so", "su", "ro", "ko"] },
+      { kind: "listen", jp: "き", answer: "ki", choices: ["ki", "ke", "chi", "shi"], sub: "聞こえた音は？" },
+    ],
+  },
+  {
+    id: "p0-3", region: "P0", title: "た行・な行の石碑", romaji: "T & N Rows", icon: "scroll",
+    intro: "た行 藏著陷阱：「ち」是 chi、「つ」是 tsu。拋開母語的習慣，聽見聲音原本的樣子。",
+    teach: [
+      { jp: "た", reading: "た", romaji: "ta", meaning: "ta" },
+      { jp: "ち", reading: "ち", romaji: "chi", meaning: "chi", note: "是 chi，不是 ti" },
+      { jp: "つ", reading: "つ", romaji: "tsu", meaning: "tsu", note: "是 tsu，舌尖送氣" },
+      { jp: "て", reading: "て", romaji: "te", meaning: "te" }, { jp: "と", reading: "と", romaji: "to", meaning: "to" },
+      { jp: "な", reading: "な", romaji: "na", meaning: "na" }, { jp: "に", reading: "に", romaji: "ni", meaning: "ni" },
+      { jp: "ぬ", reading: "ぬ", romaji: "nu", meaning: "nu" }, { jp: "ね", reading: "ね", romaji: "ne", meaning: "ne" },
+      { jp: "の", reading: "の", romaji: "no", meaning: "no" },
+    ],
+    quiz: [
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "ち", answer: "chi", choices: ["chi", "ti", "shi", "tsu"] },
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "つ", answer: "tsu", choices: ["tsu", "tu", "su", "chi"] },
+      { kind: "listen", jp: "な", answer: "na", choices: ["na", "ma", "ta", "no"], sub: "聞こえた音は？" },
+      { kind: "kana", prompt: "「no」是哪個符文？", jp: "の", answer: "の", choices: ["の", "ぬ", "な", "ね"], showRomajiPrompt: true },
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "て", answer: "te", choices: ["te", "ta", "ne", "to"] },
+      { kind: "listen", jp: "ぬ", answer: "nu", choices: ["nu", "mu", "ne", "no"], sub: "聞こえた音は？" },
+    ],
+  },
+  {
+    id: "p0-4", region: "P0", title: "は行・ま行の石碑", romaji: "H & M Rows", icon: "sparkles",
+    intro: "は行 的「ふ」是用雙唇摩擦出來的音 [ɸ]，跟英文的 f 不一樣。靜下心，仔細聽。",
+    teach: [
+      { jp: "は", reading: "は", romaji: "ha", meaning: "ha", note: "當助詞時唸 wa（之後會學）" },
+      { jp: "ひ", reading: "ひ", romaji: "hi", meaning: "hi" },
+      { jp: "ふ", reading: "ふ", romaji: "fu", meaning: "fu", note: "雙唇摩擦 [ɸ]，介於 f 與 h" },
+      { jp: "へ", reading: "へ", romaji: "he", meaning: "he" }, { jp: "ほ", reading: "ほ", romaji: "ho", meaning: "ho" },
+      { jp: "ま", reading: "ま", romaji: "ma", meaning: "ma" }, { jp: "み", reading: "み", romaji: "mi", meaning: "mi" },
+      { jp: "む", reading: "む", romaji: "mu", meaning: "mu" }, { jp: "め", reading: "め", romaji: "me", meaning: "me" },
+      { jp: "も", reading: "も", romaji: "mo", meaning: "mo" },
+    ],
+    quiz: [
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "ふ", answer: "fu", choices: ["fu", "hu", "bu", "pu"] },
+      { kind: "listen", jp: "ほ", answer: "ho", choices: ["ho", "bo", "mo", "ko"], sub: "聞こえた音は？" },
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "み", answer: "mi", choices: ["mi", "ma", "ni", "me"] },
+      { kind: "kana", prompt: "「ma」是哪個符文？", jp: "ま", answer: "ま", choices: ["ま", "み", "む", "も"], showRomajiPrompt: true },
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "へ", answer: "he", choices: ["he", "ha", "ho", "me"] },
+      { kind: "listen", jp: "む", answer: "mu", choices: ["mu", "nu", "mo", "ma"], sub: "聞こえた音は？" },
+    ],
+  },
+  {
+    id: "p0-5", region: "P0", title: "や・ら・わ行と「ん」", romaji: "Y, R, W & N", icon: "zap",
+    intro: "最後幾行假名。「ら行」是彈舌音 [ɾ]（不是英文的 r 或 l）；而「ん」——它本身就佔一整拍。",
+    teach: [
+      { jp: "や", reading: "や", romaji: "ya", meaning: "ya" }, { jp: "ゆ", reading: "ゆ", romaji: "yu", meaning: "yu" },
+      { jp: "よ", reading: "よ", romaji: "yo", meaning: "yo" },
+      { jp: "ら", reading: "ら", romaji: "ra", meaning: "ra", note: "彈舌音 [ɾ]，不是 r/l" },
+      { jp: "り", reading: "り", romaji: "ri", meaning: "ri" }, { jp: "る", reading: "る", romaji: "ru", meaning: "ru" },
+      { jp: "れ", reading: "れ", romaji: "re", meaning: "re" }, { jp: "ろ", reading: "ろ", romaji: "ro", meaning: "ro" },
+      { jp: "わ", reading: "わ", romaji: "wa", meaning: "wa" },
+      { jp: "を", reading: "を", romaji: "o", meaning: "o", note: "只當助詞用，唸 o" },
+      { jp: "ん", reading: "ん", romaji: "n", meaning: "n", note: "鼻音，自成一拍" },
+    ],
+    quiz: [
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "ら", answer: "ra", choices: ["ra", "la", "da", "na"] },
+      { kind: "listen", jp: "よ", answer: "yo", choices: ["yo", "ya", "yu", "ro"], sub: "聞こえた音は？" },
+      { kind: "kana", prompt: "助詞「を」唸作？", jp: "を", answer: "o", choices: ["o", "wo", "wa", "ro"] },
+      { kind: "kana", prompt: "「ru」是哪個符文？", jp: "る", answer: "る", choices: ["る", "ら", "ろ", "れ"], showRomajiPrompt: true },
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "ん", answer: "n", choices: ["n", "m", "nu", "no"] },
+      { kind: "listen", jp: "り", answer: "ri", choices: ["ri", "re", "ru", "ni"], sub: "聞こえた音は？" },
+    ],
+  },
+  {
+    id: "p0-6", region: "P0", title: "濁りの印", romaji: "Dakuten & Handakuten", icon: "sparkles",
+    intro: "在符文上刻下「゛」「゜」兩種印記，聲音就會變濁：か→が、は→ぱ。一整層新的聲音為你開啟。",
+    teach: [
+      { jp: "か→が", reading: "か。が", romaji: "ka → ga", meaning: "加「゛」變濁音", note: "さ→ざ、た→だ 也同理" },
+      { jp: "が", reading: "が", romaji: "ga", meaning: "ga" },
+      { jp: "ざ", reading: "ざ", romaji: "za", meaning: "za" },
+      { jp: "だ", reading: "だ", romaji: "da", meaning: "da" },
+      { jp: "ば", reading: "ば", romaji: "ba", meaning: "ba" },
+      { jp: "じ", reading: "じ", romaji: "ji", meaning: "ji", note: "し＋゛＝ji" },
+      { jp: "ぱ", reading: "ぱ", romaji: "pa", meaning: "pa（半濁）", note: "は行＋「゜」＝ぱ行 (p)" },
+      { jp: "きゃ", reading: "きゃ", romaji: "kya", meaning: "拗音 kya", note: "い段＋小さな ゃゅょ：きゃ/きゅ/きょ" },
+    ],
+    quiz: [
+      { kind: "listen", jp: "が", answer: "ga", choices: ["ga", "ka", "na", "da"], sub: "聞こえた音は？" },
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "ぱ", answer: "pa", choices: ["pa", "ba", "ha", "fa"] },
+      { kind: "mc", prompt: "は行加上「゜」會變成？", answer: "p 的音（ぱ行）", choices: ["p 的音（ぱ行）", "b 的音", "g 的音", "z 的音"] },
+      { kind: "listen", jp: "ば", answer: "ba", choices: ["ba", "pa", "ha", "ma"], sub: "聞こえた音は？" },
+      { kind: "kana", prompt: "這個符文怎麼讀？", jp: "じ", answer: "ji", choices: ["ji", "shi", "chi", "zi"] },
+      { kind: "mc", prompt: "「きゃ」怎麼唸？", answer: "kya", choices: ["kya", "kiya", "ka", "ki-ya"] },
+    ],
+  },
+  {
+    id: "p0-7", region: "P0", title: "音の長さの秘儀", romaji: "Length Changes Meaning", icon: "flame",
+    intro: "這是最關鍵的一課。日語靠聲音的「長短」改變意思：長音、促音、撥音——一拍之差，就是另一個詞。豎起耳朵分辨它們。",
+    teach: [
+      { jp: "おばさん／おばあさん", reading: "おばさん。おばあさん", romaji: "obasan / obāsan", meaning: "阿姨／奶奶", note: "長音：多一拍「あ」就變意思" },
+      { jp: "ゆき／ゆうき", reading: "ゆき。ゆうき", romaji: "yuki / yūki", meaning: "雪／勇氣", note: "「う」把前音拉長一拍" },
+      { jp: "きて／きって", reading: "きて。きって", romaji: "kite / kitte", meaning: "來／郵票", note: "促音：小さい「っ」＝停頓一拍" },
+      { jp: "かこ／かっこ", reading: "かこ。かっこ", romaji: "kako / kakko", meaning: "過去／括號", note: "「っ」卡一拍再爆發" },
+      { jp: "ほん", reading: "ほん", romaji: "hon", meaning: "書（ほ・ん 兩拍）", note: "撥音「ん」自成一拍，別併進前音" },
+      { jp: "に・ほ・ん・ご", reading: "にほんご", romaji: "ni-ho-n-go", meaning: "日本語＝4 拍", note: "每拍等長，這就是日語節奏" },
+    ],
+    quiz: [
+      { kind: "listen", jp: "おばあさん", answer: "おばあさん（奶奶）", choices: ["おばあさん（奶奶）", "おばさん（阿姨）"], sub: "聞こえたのは？" },
+      { kind: "listen", jp: "きって", answer: "きって（郵票）", choices: ["きって（郵票）", "きて（來）"], sub: "聞こえたのは？" },
+      { kind: "mc", prompt: "小さい「っ」代表什麼？", answer: "停頓一拍（促音）", choices: ["停頓一拍（促音）", "拉長母音", "鼻音", "重音"] },
+      { kind: "listen", jp: "ゆうき", answer: "ゆうき（勇氣）", choices: ["ゆうき（勇氣）", "ゆき（雪）"], sub: "聞こえたのは？" },
+      { kind: "mc", prompt: "「ほん」有幾拍？", answer: "2 拍（ほ・ん）", choices: ["2 拍（ほ・ん）", "1 拍", "3 拍", "半拍"] },
+      { kind: "listen", jp: "かっこ", answer: "かっこ（括號）", choices: ["かっこ（括號）", "かこ（過去）"], sub: "聞こえたのは？" },
+    ],
+  },
+  {
+    id: "p0-8", region: "P0", title: "片仮名と外来語", romaji: "Katakana & Loanwords", icon: "zap",
+    intro: "還有另一套文字——片假名，專門用來寫外來語，發音和平假名相同。學會它，你連「コーヒー（咖啡）」都讀得出來。",
+    teach: [
+      { jp: "カタカナ", reading: "カタカナ", romaji: "katakana", meaning: "片假名：寫外來語用", note: "發音與平假名相同，字形不同" },
+      { jp: "ア イ ウ エ オ", reading: "アイウエオ", romaji: "a i u e o", meaning: "片假名的母音", note: "對應 あ い う え お" },
+      { jp: "ー", reading: "コーヒー", romaji: "(長音)", meaning: "長音記號：拉長前一音", note: "コーヒー 的「ー」＝把 o 拉長一拍" },
+      { jp: "コーヒー", reading: "コーヒー", romaji: "kōhī", meaning: "咖啡", note: "コ＋ー＋ヒ＋ー" },
+      { jp: "パン", reading: "パン", romaji: "pan", meaning: "麵包", note: "パ（半濁）＋ン" },
+      { jp: "テレビ", reading: "テレビ", romaji: "terebi", meaning: "電視", note: "來自 television" },
+      { jp: "ケーキ", reading: "ケーキ", romaji: "kēki", meaning: "蛋糕", note: "ケ＋ー＋キ" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "片假名主要用來寫什麼？", answer: "外來語", choices: ["外來語", "古文", "敬語", "數字"] },
+      { kind: "listen", jp: "コーヒー", answer: "咖啡", choices: ["咖啡", "麵包", "電視", "蛋糕"] },
+      { kind: "mc", prompt: "「ー」這個記號的作用？", answer: "把前一個音拉長", choices: ["把前一個音拉長", "停頓", "變濁音", "變鼻音"] },
+      { kind: "listen", jp: "パン", answer: "麵包", choices: ["麵包", "咖啡", "蛋糕", "電視"] },
+      { kind: "mc", prompt: "「テレビ」是什麼？", answer: "電視", choices: ["電視", "咖啡", "蛋糕", "麵包"] },
+      { kind: "listen", jp: "ケーキ", answer: "蛋糕", choices: ["蛋糕", "咖啡", "麵包", "電視"] },
+    ],
+  },
+];
 
-/* ----------------------- mastery gate helpers ----------------------- */
-const MASTERY_GATE = 3; // 全言霊が ★3 以上で領域突破
-function regionWords(regionId) {
-  return ALL_NODES.filter(n => n.region === regionId).flatMap(n => n.teach || []).map(t => t.jp);
+const BOSS_P0 = {
+  id: "p0-boss", region: "P0", title: "こだまの試練", romaji: "Trial of the Echo", icon: "crown",
+  intro: "洞窟深處，木靈（こだま）會把你發出的聲音原樣丟回來。唯有能正確分辨長短、清濁與假名的人，才能踏上前往村莊的路。相信你的耳朵。",
+  hp: 280, atk: 18,
+  quiz: [
+    { kind: "kana", prompt: "這個符文怎麼讀？", jp: "あ", answer: "a", choices: ["a", "o", "u", "e"] },
+    { kind: "listen", jp: "し", answer: "shi", choices: ["shi", "si", "chi", "hi"], sub: "聞こえた音は？" },
+    { kind: "kana", prompt: "這個符文怎麼讀？", jp: "つ", answer: "tsu", choices: ["tsu", "tu", "su", "chi"] },
+    { kind: "listen", jp: "おばあさん", answer: "おばあさん（奶奶）", choices: ["おばあさん（奶奶）", "おばさん（阿姨）"], sub: "聞こえたのは？" },
+    { kind: "kana", prompt: "這個符文怎麼讀？", jp: "ら", answer: "ra", choices: ["ra", "la", "da", "na"] },
+    { kind: "listen", jp: "きって", answer: "きって（郵票）", choices: ["きって（郵票）", "きて（來）"], sub: "聞こえたのは？" },
+    { kind: "kana", prompt: "這個符文怎麼讀？", jp: "ぱ", answer: "pa", choices: ["pa", "ba", "ha", "fa"] },
+    { kind: "mc", prompt: "小さい「っ」代表？", answer: "停頓一拍（促音）", choices: ["停頓一拍（促音）", "拉長母音", "鼻音", "重音"] },
+    { kind: "listen", jp: "コーヒー", answer: "咖啡", choices: ["咖啡", "麵包", "電視", "蛋糕"] },
+    { kind: "kana", prompt: "助詞「を」唸作？", jp: "を", answer: "o", choices: ["o", "wo", "wa", "ro"] },
+    { kind: "mc", prompt: "片假名用來寫？", answer: "外來語", choices: ["外來語", "古文", "數字", "敬語"] },
+    { kind: "listen", jp: "ゆうき", answer: "ゆうき（勇氣）", choices: ["ゆうき（勇氣）", "ゆき（雪）"], sub: "聞こえたのは？" },
+  ],
+};
+
+/* ----------------------- 亡魂（前章復習）の生成 ----------------------- */
+// 各章のボスに挑む前に、前の章の内容を試す「亡魂」を倒さねばならない。
+// （熟練度システムは廃止。心流を保つための復習関門として機能する。）
+function pickN(arr, n) { return shuffle(arr).slice(0, n); }
+function makeRevenant(region, prevRegion) {
+  const prevNodes = ALL_RAW.filter(n => n.region === prevRegion);
+  const prevName = (REGIONS.find(r => r.id === prevRegion) || {}).name || "前章";
+  const pool = prevNodes.flatMap(n => n.quiz || []);
+  return {
+    id: region + "-revenant", region, revenant: true, icon: "crown",
+    title: "前章の亡魂", romaji: "Revenant of the Past",
+    intro: `挑戰本章頭目之前，『${prevName}』的亡魂凝聚成形、攔在路上。重新擊敗它——證明你並未忘記上一章學過的言靈。`,
+    hp: 200, atk: 17,
+    quiz: pickN(pool, Math.min(10, pool.length)),
+  };
 }
-function regionMastered(save, regionId) {
+
+/* ----------------------- B1 lessons：王都ことのは ----------------------- */
+const B1_LESSONS = [
+  {
+    id: "b1-1", region: "B1", title: "て形の道", romaji: "The Te-Form Path", icon: "scroll",
+    intro: "你抵達王都城門，衛兵喝令「站住、出示通行證」——這些指令全都用「て形」。先學會把動詞變成 て形，這是中級文法的關鍵之鑰。",
+    teach: [
+      { jp: "〜て形", reading: "てけい", romaji: "te-form", meaning: "動詞的連接形", note: "用於連接、請求、進行式…用途極廣的關鍵變化" },
+      { jp: "たべる→たべて", reading: "たべる。たべて", romaji: "taberu → tabete", meaning: "吃（て形）", note: "る動詞：去る＋て" },
+      { jp: "のむ→のんで", reading: "のむ。のんで", romaji: "nomu → nonde", meaning: "喝（て形）", note: "む／ぶ／ぬ 結尾 → んで" },
+      { jp: "いく→いって", reading: "いく。いって", romaji: "iku → itte", meaning: "去（て形）", note: "く→いて，但「行く」例外 → いって" },
+      { jp: "する→して", reading: "する。して", romaji: "suru → shite", meaning: "做（て形）", note: "不規則：する→して、くる→きて" },
+      { jp: "かく→かいて", reading: "かく。かいて", romaji: "kaku → kaite", meaning: "寫（て形）", note: "く→いて" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「たべる」的て形是？", answer: "たべて", choices: ["たべて", "たべって", "たべで", "のんで"] },
+      { kind: "mc", prompt: "「のむ」的て形是？", answer: "のんで", choices: ["のんで", "のみて", "のむて", "のんて"] },
+      { kind: "mc", prompt: "「する」的て形是？", answer: "して", choices: ["して", "すて", "しって", "される"] },
+      { kind: "mc", prompt: "「行く（いく）」的て形（例外）是？", answer: "いって", choices: ["いって", "いいて", "いきて", "いくて"] },
+      { kind: "mc", prompt: "て形主要用來做什麼？", answer: "連接句子、請求、進行式等", choices: ["連接句子、請求、進行式等", "表示過去", "表示否定", "表示疑問"] },
+      { kind: "build", prompt: "排出：『吃完再去。』", target: ["たべて", "いきます"], pool: ["たべて", "いきます", "のんで", "たべた"] },
+    ],
+  },
+  {
+    id: "b1-2", region: "B1", title: "願いと進行", romaji: "Requests & Progressive", icon: "sparkles",
+    intro: "王都圖書館的管理員低聲說「請安靜、請等一下」，街上的人「正在做某件事」。用 て形 接出「請求」與「進行式」。",
+    teach: [
+      { jp: "〜てください", reading: "〜てください", romaji: "~te kudasai", meaning: "請（做）…", note: "て形＋ください＝禮貌請求" },
+      { jp: "まってください", reading: "まってください", romaji: "matte kudasai", meaning: "請等一下", note: "まつ→まって" },
+      { jp: "みてください", reading: "みてください", romaji: "mite kudasai", meaning: "請看", note: "みる→みて" },
+      { jp: "〜ています", reading: "〜ています", romaji: "~te imasu", meaning: "正在（做）…／狀態持續", note: "て形＋います" },
+      { jp: "たべています", reading: "たべています", romaji: "tabete imasu", meaning: "正在吃" },
+      { jp: "すんでいます", reading: "すんでいます", romaji: "sunde imasu", meaning: "住在（持續狀態）", note: "すむ→すんで" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "『請等一下』怎麼說？", answer: "まってください", choices: ["まってください", "まちてください", "まつください", "まってます"] },
+      { kind: "build", prompt: "排出：『請看這個。』", target: ["これ", "を", "みて", "ください"], pool: ["これ", "を", "みて", "ください", "みます"] },
+      { kind: "mc", prompt: "『正在吃』怎麼說？", answer: "たべています", choices: ["たべています", "たべます", "たべました", "たべてください"] },
+      { kind: "mc", prompt: "「〜ています」表示？", answer: "正在進行或狀態持續", choices: ["正在進行或狀態持續", "過去", "否定", "未來"] },
+      { kind: "listen", jp: "すんでいます", answer: "住在", choices: ["住在", "正在吃", "請等", "正在看"] },
+      { kind: "build", prompt: "排出：『我正在喝咖啡。』", target: ["わたし", "は", "コーヒー", "を", "のんでいます"], pool: ["わたし", "は", "コーヒー", "を", "のんでいます", "のみます"] },
+    ],
+  },
+  {
+    id: "b1-3", region: "B1", title: "許しと禁忌", romaji: "Permission & Prohibition", icon: "flame",
+    intro: "城內處處有規矩——「可以坐這裡，但不可以碰那把劍」。學會用 て形 說出「可以」與「不可以」。",
+    teach: [
+      { jp: "〜てもいいです", reading: "〜てもいいです", romaji: "~te mo ii desu", meaning: "可以（做）…", note: "て形＋もいい＝許可" },
+      { jp: "すわってもいいですか", reading: "すわってもいいですか", romaji: "suwatte mo ii desu ka", meaning: "可以坐嗎？", note: "すわる→すわって" },
+      { jp: "〜てはいけません", reading: "〜てはいけません", romaji: "~te wa ikemasen", meaning: "不可以（做）…", note: "て形＋はいけません＝禁止" },
+      { jp: "さわってはいけません", reading: "さわってはいけません", romaji: "sawatte wa ikemasen", meaning: "不可以碰", note: "さわる→さわって" },
+      { jp: "はいってもいいですか", reading: "はいってもいいですか", romaji: "haitte mo ii desu ka", meaning: "可以進去嗎？", note: "はいる→はいって" },
+      { jp: "〜なければなりません", reading: "〜なければなりません", romaji: "~nakereba narimasen", meaning: "必須（做）…", note: "義務的說法（ない形變化，進階預習）" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "『可以坐嗎？』怎麼說？", answer: "すわってもいいですか", choices: ["すわってもいいですか", "すわってはいけません", "すわります", "すわりたい"] },
+      { kind: "mc", prompt: "『不可以碰』怎麼說？", answer: "さわってはいけません", choices: ["さわってはいけません", "さわってもいい", "さわります", "さわりたい"] },
+      { kind: "mc", prompt: "「〜てもいい」表示？", answer: "許可（可以）", choices: ["許可（可以）", "禁止", "義務", "願望"] },
+      { kind: "build", prompt: "排出：『可以喝水嗎？』", target: ["みず", "を", "のんでも", "いいですか"], pool: ["みず", "を", "のんでも", "いいですか", "のんでは"] },
+      { kind: "mc", prompt: "「〜てはいけません」表示？", answer: "禁止（不可以）", choices: ["禁止（不可以）", "許可", "願望", "過去"] },
+      { kind: "mc", prompt: "「〜なければなりません」表示？", answer: "必須（義務）", choices: ["必須（義務）", "許可", "禁止", "可能"] },
+    ],
+  },
+  {
+    id: "b1-4", region: "B1", title: "普通形の仮面", romaji: "The Plain Form", icon: "scroll",
+    intro: "王都的酒館裡，大家不用敬體說話。學會「普通形」（辭書形、ない形），才聽得懂朋友之間的對話。",
+    teach: [
+      { jp: "辞書形", reading: "じしょけい", romaji: "dictionary form", meaning: "動詞的原形（字典形）", note: "たべます→たべる、いきます→いく" },
+      { jp: "たべる", reading: "たべる", romaji: "taberu", meaning: "吃（普通形）", note: "＝たべます的常體" },
+      { jp: "いく", reading: "いく", romaji: "iku", meaning: "去（普通形）" },
+      { jp: "〜ない", reading: "ないけい", romaji: "nai-form", meaning: "普通形的否定", note: "たべます→たべない、いきます→いかない" },
+      { jp: "たべない", reading: "たべない", romaji: "tabenai", meaning: "不吃", note: "る動詞：去る＋ない" },
+      { jp: "いかない", reading: "いかない", romaji: "ikanai", meaning: "不去", note: "う動詞：う段→あ段＋ない（く→か）" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「たべます」的辭書形是？", answer: "たべる", choices: ["たべる", "たべない", "たべた", "たべて"] },
+      { kind: "mc", prompt: "「いきます」的辭書形是？", answer: "いく", choices: ["いく", "いか", "いって", "いきる"] },
+      { kind: "mc", prompt: "「たべます」的否定普通形是？", answer: "たべない", choices: ["たべない", "たべません", "たべなく", "たべぬ"] },
+      { kind: "mc", prompt: "「いきます」的否定普通形是？", answer: "いかない", choices: ["いかない", "いきない", "いくない", "いけない"] },
+      { kind: "mc", prompt: "普通形用在什麼場合？", answer: "朋友、家人間的非正式對話", choices: ["朋友、家人間的非正式對話", "對長輩", "正式致詞", "書信開頭"] },
+      { kind: "mc", prompt: "「のみます」的否定普通形是？", answer: "のまない", choices: ["のまない", "のみない", "のむない", "のみません"] },
+    ],
+  },
+  {
+    id: "b1-5", region: "B1", title: "過ぎし日", romaji: "Days Gone By", icon: "sparkles",
+    intro: "旅人在爐火邊回憶往事。學會「た形」（過去普通形），就能講述自己「做過什麼」。",
+    teach: [
+      { jp: "〜た", reading: "たけい", romaji: "ta-form", meaning: "過去普通形", note: "把て形的て換成た：たべて→たべた" },
+      { jp: "たべた", reading: "たべた", romaji: "tabeta", meaning: "吃了（常體）" },
+      { jp: "いった", reading: "いった", romaji: "itta", meaning: "去了（常體）", note: "いって→いった" },
+      { jp: "〜だった", reading: "〜だった", romaji: "~datta", meaning: "（名詞・な形）過去", note: "です的常體過去：がくせいだった＝（曾）是學生" },
+      { jp: "〜なかった", reading: "〜なかった", romaji: "~nakatta", meaning: "過去否定（常體）", note: "たべない→たべなかった" },
+      { jp: "〜たことがある", reading: "〜たことがある", romaji: "~ta koto ga aru", meaning: "曾經（做過）…", note: "た形＋ことがある＝經驗" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「たべて」的た形（過去常體）是？", answer: "たべた", choices: ["たべた", "たべって", "たべら", "たべない"] },
+      { kind: "mc", prompt: "「行った」的意思？", answer: "去了", choices: ["去了", "去", "沒去", "想去"] },
+      { kind: "mc", prompt: "「日本へ行ったことがあります」意思？", answer: "曾經去過日本", choices: ["曾經去過日本", "正要去日本", "不去日本", "明天去日本"] },
+      { kind: "build", prompt: "排出：『我吃了麵包。』(常體)", target: ["わたし", "は", "パン", "を", "たべた"], pool: ["わたし", "は", "パン", "を", "たべた", "たべる"] },
+      { kind: "mc", prompt: "「がくせいだった」意思？", answer: "（曾）是學生", choices: ["（曾）是學生", "是學生", "不是學生", "想當學生"] },
+      { kind: "mc", prompt: "「たべなかった」意思？", answer: "（那時）沒吃", choices: ["（那時）沒吃", "吃了", "正在吃", "不吃（現在）"] },
+    ],
+  },
+  {
+    id: "b1-6", region: "B1", title: "理由の架け橋", romaji: "Bridge of Reasons", icon: "scroll",
+    intro: "在王都申訴，需要清楚「講出理由」。用「から」和「ので」把原因與結果連起來。",
+    teach: [
+      { jp: "〜から", reading: "〜から", romaji: "~kara", meaning: "因為…（理由）", note: "句子＋から，較直接、主觀" },
+      { jp: "〜ので", reading: "〜ので", romaji: "~node", meaning: "因為…（理由）", note: "較委婉、客觀、禮貌" },
+      { jp: "あついから", reading: "あついから", romaji: "atsui kara", meaning: "因為很熱", note: "い形容詞＋から" },
+      { jp: "たかいので", reading: "たかいので", romaji: "takai node", meaning: "因為很貴" },
+      { jp: "やすいから、かいます", reading: "やすいから、かいます", romaji: "yasui kara, kaimasu", meaning: "因為便宜，所以買", note: "理由＋から＋結果" },
+      { jp: "びょうきなので", reading: "びょうきなので", romaji: "byōki nanode", meaning: "因為生病", note: "名詞・な形＋なので" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「から」和「ので」都表示？", answer: "原因、理由", choices: ["原因、理由", "時間", "地點", "條件"] },
+      { kind: "mc", prompt: "比較委婉、禮貌的理由用哪個？", answer: "ので", choices: ["ので", "から", "とき", "より"] },
+      { kind: "build", prompt: "排出：『因為便宜，（我）買。』", target: ["やすい", "から", "かいます"], pool: ["やすい", "から", "かいます", "ので", "たかい"] },
+      { kind: "mc", prompt: "「あついから、みずをのみます」意思？", answer: "因為熱，所以喝水", choices: ["因為熱，所以喝水", "喝水所以熱", "熱的時候喝水", "想喝水"] },
+      { kind: "mc", prompt: "名詞接「ので」中間要加什麼？", answer: "な（〜なので）", choices: ["な（〜なので）", "だ", "の", "を"] },
+      { kind: "listen", jp: "あついから", answer: "因為很熱", choices: ["因為很熱", "因為很貴", "因為便宜", "因為生病"] },
+    ],
+  },
+  {
+    id: "b1-7", region: "B1", title: "望みの言霊", romaji: "Words of Desire", icon: "sparkles",
+    intro: "在許願池前，你必須說出「想做什麼、想要什麼」。學會「〜たい」與「〜がほしい」。",
+    teach: [
+      { jp: "〜たいです", reading: "〜たいです", romaji: "~tai desu", meaning: "想（做）…", note: "ます形去ます＋たい：たべたい" },
+      { jp: "たべたいです", reading: "たべたいです", romaji: "tabetai desu", meaning: "想吃" },
+      { jp: "いきたいです", reading: "いきたいです", romaji: "ikitai desu", meaning: "想去" },
+      { jp: "〜がほしいです", reading: "〜がほしいです", romaji: "~ga hoshii desu", meaning: "想要（某物）…", note: "名詞＋がほしい" },
+      { jp: "みずがほしいです", reading: "みずがほしいです", romaji: "mizu ga hoshii desu", meaning: "想要水" },
+      { jp: "なにがしたいですか", reading: "なにがしたいですか", romaji: "nani ga shitai desu ka", meaning: "（你）想做什麼？", note: "疑問時對象常用が" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "『想吃』怎麼說？", answer: "たべたいです", choices: ["たべたいです", "たべほしい", "たべます", "たべない"] },
+      { kind: "mc", prompt: "「想要水」用哪個？", answer: "みずがほしいです", choices: ["みずがほしいです", "みずをほしい", "みずがたい", "みずをのみたい"] },
+      { kind: "build", prompt: "排出：『（我）想去日本。』", target: ["にほん", "へ", "いきたい", "です"], pool: ["にほん", "へ", "いきたい", "です", "いきます"] },
+      { kind: "mc", prompt: "「〜たい」是怎麼來的？", answer: "ます形去ます＋たい", choices: ["ます形去ます＋たい", "辭書形＋たい", "て形＋たい", "ない形＋たい"] },
+      { kind: "mc", prompt: "「ほしい」前面的助詞通常是？", answer: "が", choices: ["が", "を", "に", "で"] },
+      { kind: "listen", jp: "いきたいです", answer: "想去", choices: ["想去", "想吃", "想要水", "不去"] },
+    ],
+  },
+  {
+    id: "b1-8", region: "B1", title: "刻の助詞", romaji: "Particles of Time", icon: "zap",
+    intro: "在王都鐘塔下，學會描述「什麼時候、之前、之後」做事的時間順序。",
+    teach: [
+      { jp: "〜とき", reading: "〜とき", romaji: "~toki", meaning: "…的時候", note: "動詞普通形／名詞の＋とき" },
+      { jp: "たべるとき", reading: "たべるとき", romaji: "taberu toki", meaning: "吃的時候", note: "辭書形＋とき" },
+      { jp: "〜まえに", reading: "〜まえに", romaji: "~mae ni", meaning: "在…之前", note: "辭書形／名詞の＋まえに" },
+      { jp: "ねるまえに", reading: "ねるまえに", romaji: "neru mae ni", meaning: "睡覺前", note: "ねる＝睡覺" },
+      { jp: "〜てから", reading: "〜てから", romaji: "~te kara", meaning: "做完…之後（再）", note: "て形＋から＝先後順序" },
+      { jp: "たべてから", reading: "たべてから", romaji: "tabete kara", meaning: "吃完之後" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「ねるまえに」意思？", answer: "睡覺前", choices: ["睡覺前", "睡覺後", "睡覺的時候", "不睡"] },
+      { kind: "mc", prompt: "「たべてから」意思？", answer: "吃完之後（再）", choices: ["吃完之後（再）", "吃之前", "邊吃", "想吃"] },
+      { kind: "build", prompt: "排出：『睡前喝水。』", target: ["ねる", "まえに", "みず", "を", "のみます"], pool: ["ねる", "まえに", "みず", "を", "のみます", "てから"] },
+      { kind: "mc", prompt: "「とき」前面的動詞用什麼形？", answer: "普通形（如辭書形）", choices: ["普通形（如辭書形）", "只能ます形", "只能て形", "只能命令形"] },
+      { kind: "mc", prompt: "想表達「A 做完再做 B」用哪個？", answer: "Aてから、B", choices: ["Aてから、B", "Aまえに、B", "Aとき、B", "Aたい、B"] },
+      { kind: "listen", jp: "たべるとき", answer: "吃的時候", choices: ["吃的時候", "吃之前", "吃之後", "想吃"] },
+    ],
+  },
+  {
+    id: "b1-9", region: "B1", title: "可能の力", romaji: "The Power of Potential", icon: "flame",
+    intro: "王都的試煉要你證明自己「做得到」。學會動詞的「可能形」，表達能力與可能性。",
+    teach: [
+      { jp: "〜ができます", reading: "〜ができます", romaji: "~ga dekimasu", meaning: "會／能夠…", note: "名詞＋が＋できる：にほんごができる" },
+      { jp: "可能形", reading: "かのうけい", romaji: "potential form", meaning: "把動詞變成「能夠做」", note: "る動詞：たべる→たべられる" },
+      { jp: "たべられる", reading: "たべられる", romaji: "taberareru", meaning: "能吃／可以吃", note: "る動詞：去る＋られる" },
+      { jp: "のめる", reading: "のめる", romaji: "nomeru", meaning: "能喝", note: "う動詞：う段→え段＋る（のむ→のめる）" },
+      { jp: "いける", reading: "いける", romaji: "ikeru", meaning: "能去", note: "いく→いける" },
+      { jp: "できる", reading: "できる", romaji: "dekiru", meaning: "會、能（する的可能形）", note: "する→できる（不規則）" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「たべる」的可能形是？", answer: "たべられる", choices: ["たべられる", "たべれる", "たべできる", "たべます"] },
+      { kind: "mc", prompt: "「のむ」的可能形是？", answer: "のめる", choices: ["のめる", "のみられる", "のまれる", "のめられる"] },
+      { kind: "mc", prompt: "「日本語ができます」意思？", answer: "會日語", choices: ["會日語", "學日語", "不會日語", "想學日語"] },
+      { kind: "build", prompt: "排出：『（我）能喝咖啡。』", target: ["コーヒー", "が", "のめます"], pool: ["コーヒー", "が", "のめます", "を", "のみます"] },
+      { kind: "mc", prompt: "「する」的可能形（不規則）是？", answer: "できる", choices: ["できる", "すられる", "しれる", "される"] },
+      { kind: "listen", jp: "たべられる", answer: "能吃", choices: ["能吃", "吃了", "想吃", "不吃"] },
+    ],
+  },
+  {
+    id: "b1-10", region: "B1", title: "比べの天秤", romaji: "Scales of Comparison", icon: "zap",
+    intro: "王都市集要你比較商品的好壞貴賤。學會「より」「いちばん」「〜ほうがいい」來權衡。",
+    teach: [
+      { jp: "AはBより〜", reading: "AはBより", romaji: "A wa B yori ~", meaning: "A 比 B 更…", note: "AはBより＋形容詞" },
+      { jp: "〜のほうが", reading: "〜のほうが", romaji: "~no hō ga", meaning: "…這邊比較…", note: "比較時強調某一方" },
+      { jp: "いちばん", reading: "いちばん", romaji: "ichiban", meaning: "最…", note: "〜の中でいちばん＝在…之中最…" },
+      { jp: "AはBよりたかいです", reading: "AはBよりたかいです", romaji: "~yori takai", meaning: "A 比 B 貴（範例）" },
+      { jp: "〜ほうがいいです", reading: "〜ほうがいいです", romaji: "~hō ga ii", meaning: "（做）…比較好", note: "建議：た形／辭書形＋ほうがいい" },
+      { jp: "どちらがすきですか", reading: "どちらがすきですか", romaji: "dochira ga suki desu ka", meaning: "（兩者中）你喜歡哪個？", note: "二選一比較" },
+    ],
+    quiz: [
+      { kind: "mc", prompt: "「AはBよりたかい」意思？", answer: "A 比 B 貴", choices: ["A 比 B 貴", "B 比 A 貴", "A 和 B 一樣貴", "A 最貴"] },
+      { kind: "mc", prompt: "「いちばん」意思？", answer: "最…", choices: ["最…", "比較…", "一樣", "第二"] },
+      { kind: "build", prompt: "排出：『咖啡比水貴。』", target: ["コーヒー", "は", "みず", "より", "たかいです"], pool: ["コーヒー", "は", "みず", "より", "たかいです", "いちばん"] },
+      { kind: "mc", prompt: "想建議「最好早點睡」怎麼說？", answer: "はやくねたほうがいいです", choices: ["はやくねたほうがいいです", "はやくねるより", "はやくねたい", "はやくねません"] },
+      { kind: "mc", prompt: "「この中でいちばんやすいです」意思？", answer: "這之中最便宜", choices: ["這之中最便宜", "這之中最貴", "比這個便宜", "一樣便宜"] },
+      { kind: "listen", jp: "いちばん", answer: "最…", choices: ["最…", "比較", "一樣", "全部"] },
+    ],
+  },
+];
+
+const BOSS_B1 = {
+  id: "b1-boss", region: "B1", title: "王都の石巨人", romaji: "Golem of the Capital", icon: "crown",
+  intro: "王都內城門前，一尊巨大的石之守護者甦醒。牠以王都的全部語言試煉考驗你——用你在 B1 學到的所有文法，擊碎牠的核心。",
+  hp: 320, atk: 20,
+  quiz: [
+    { kind: "mc", prompt: "「たべる」的て形是？", answer: "たべて", choices: ["たべて", "たべって", "たべで", "のんで"] },
+    { kind: "mc", prompt: "『請等一下』怎麼說？", answer: "まってください", choices: ["まってください", "まちてください", "まつください", "まってます"] },
+    { kind: "mc", prompt: "『可以坐嗎？』怎麼說？", answer: "すわってもいいですか", choices: ["すわってもいいですか", "すわってはいけません", "すわります", "すわりたい"] },
+    { kind: "mc", prompt: "「たべます」的辭書形是？", answer: "たべる", choices: ["たべる", "たべない", "たべた", "たべて"] },
+    { kind: "mc", prompt: "「たべて」的た形是？", answer: "たべた", choices: ["たべた", "たべって", "たべら", "たべない"] },
+    { kind: "mc", prompt: "比較委婉、禮貌的理由用哪個？", answer: "ので", choices: ["ので", "から", "とき", "より"] },
+    { kind: "mc", prompt: "『想吃』怎麼說？", answer: "たべたいです", choices: ["たべたいです", "たべほしい", "たべます", "たべない"] },
+    { kind: "mc", prompt: "「ねるまえに」意思？", answer: "睡覺前", choices: ["睡覺前", "睡覺後", "睡覺的時候", "不睡"] },
+    { kind: "mc", prompt: "「たべる」的可能形是？", answer: "たべられる", choices: ["たべられる", "たべれる", "たべできる", "たべます"] },
+    { kind: "mc", prompt: "「AはBよりたかい」意思？", answer: "A 比 B 貴", choices: ["A 比 B 貴", "B 比 A 貴", "一樣貴", "A 最貴"] },
+    { kind: "build", prompt: "排出：『因為便宜，（我）買。』", target: ["やすい", "から", "かいます"], pool: ["やすい", "から", "かいます", "ので"] },
+    { kind: "build", prompt: "排出：『（我）想去日本。』", target: ["にほん", "へ", "いきたい", "です"], pool: ["にほん", "へ", "いきたい", "です", "いきます"] },
+    { kind: "mc", prompt: "『不可以碰』怎麼說？", answer: "さわってはいけません", choices: ["さわってはいけません", "さわってもいい", "さわります", "さわりたい"] },
+    { kind: "listen", jp: "たべられる", answer: "能吃", choices: ["能吃", "吃了", "想吃", "不吃"] },
+  ],
+};
+
+// 章ごとの素のノード（亡魂生成のために先に並べる）
+const ALL_RAW = [...PROLOGUE, BOSS_P0, ...LESSONS, BOSS, ...A2_LESSONS, BOSS_A2, ...B1_LESSONS, BOSS_B1];
+
+// 各コンテンツ章のボス直前に亡魂を挿し込む（最初の章 P0 を除く）
+const REV_A1 = makeRevenant("A1", "P0");
+const REV_A2 = makeRevenant("A2", "A1");
+const REV_B1 = makeRevenant("B1", "A2");
+const ALL_NODES = [
+  ...PROLOGUE, BOSS_P0,
+  ...LESSONS, REV_A1, BOSS,
+  ...A2_LESSONS, REV_A2, BOSS_A2,
+  ...B1_LESSONS, REV_B1, BOSS_B1,
+];
+
+/* ----------------------- 進行ヘルパー（熟練度ゲート廃止） ----------------------- */
+function regionNodes(regionId) { return ALL_NODES.filter(n => n.region === regionId); }
+function regionCleared(save, regionId) {
   const boss = ALL_NODES.find(n => n.region === regionId && n.id.endsWith("boss"));
-  if (boss && !save.done[boss.id]) return false;
-  const words = regionWords(regionId);
-  if (words.length === 0) return false;
-  return words.every(w => (save.codex[w]?.mastery || 0) >= MASTERY_GATE);
+  return !!(boss && save.done[boss.id]);
 }
+// 後方互換：以前 regionMastered を参照していた箇所のため
+const regionMastered = regionCleared;
 function regionUnlocked(save, regionId) {
   const idx = REGIONS.findIndex(r => r.id === regionId);
   if (idx <= 0) return true;
-  return regionMastered(save, REGIONS[idx - 1].id);
+  return regionCleared(save, REGIONS[idx - 1].id);
 }
-function regionMasteryStats(save, regionId) {
-  const words = regionWords(regionId);
-  const mastered = words.filter(w => (save.codex[w]?.mastery || 0) >= MASTERY_GATE).length;
-  return { mastered, total: words.length };
+function regionQuestStats(save, regionId) {
+  const nodes = regionNodes(regionId);
+  const done = nodes.filter(n => save.done[n.id]).length;
+  return { done, total: nodes.length };
 }
 
 /* ----------------------- helpers ----------------------- */
@@ -509,7 +953,7 @@ const xpToNext = (lv) => 60 + lv * 50;
 function freshSave() {
   return {
     name: "転生者", lv: 1, xp: 0, hp: 100, maxHp: 100, mp: 30, maxMp: 30,
-    gold: 0, region: "A1", done: {}, codex: {}, srs: {},
+    gold: 0, region: "P0", done: {}, codex: {}, srs: {},
     furigana: true, created: Date.now(),
   };
 }
@@ -624,9 +1068,8 @@ function Hub({ save, persist, onMap, onCodex, onReview, onLesson }) {
   const nextIdx = nodes.findIndex(n => !save.done[n.id]);
   const codexCount = Object.keys(save.codex).length;
   const dueCount = Object.values(save.srs).filter(s => s.due <= Date.now()).length;
-  const mstat = regionMasteryStats(save, save.region);
-  const mastered = regionMastered(save, save.region);
-  const allCleared = nextIdx === -1;
+  const qstat = regionQuestStats(save, save.region);
+  const cleared = regionCleared(save, save.region);
 
   return (
     <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", padding: 16, paddingBottom: 86 }}>
@@ -655,30 +1098,15 @@ function Hub({ save, persist, onMap, onCodex, onReview, onLesson }) {
             ふりがな {save.furigana ? "ON" : "OFF"}
           </button>
         </div>
-        {/* region mastery gate */}
+        {/* chapter quest progress */}
         <div style={{ marginTop: 14 }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--muted)", marginBottom: 5 }}>
-            <span>領域踏破 — 言霊 ★{MASTERY_GATE}+ {mastered && <span style={{ color: "var(--leaf)" }}>· 達成！</span>}</span>
-            <span className="kw-num">{mstat.mastered}/{mstat.total}</span>
+            <span>本章進度 {cleared && <span style={{ color: "var(--leaf)" }}>· 踏破！</span>}</span>
+            <span className="kw-num">{qstat.done}/{qstat.total}</span>
           </div>
-          <div className="kw-bar bar-xp"><i style={{ width: `${mstat.total ? mstat.mastered / mstat.total * 100 : 0}%`, background: mastered ? "linear-gradient(90deg,#7ee0a0,#37b3a3)" : undefined }} /></div>
+          <div className="kw-bar bar-xp"><i style={{ width: `${qstat.total ? clamp(qstat.done / qstat.total * 100, 0, 100) : 0}%`, background: cleared ? "linear-gradient(90deg,#7ee0a0,#37b3a3)" : undefined }} /></div>
         </div>
       </div>
-
-      {/* breakthrough nudge */}
-      {allCleared && !mastered && (
-        <button className="kw-card kw-tap" onClick={onReview}
-          style={{ padding: 13, marginTop: 12, display: "flex", alignItems: "center", gap: 12, borderColor: "var(--violet)" }}>
-          <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(167,139,250,.16)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Shield size={20} color="var(--violet)" />
-          </div>
-          <div style={{ textAlign: "left", flex: 1 }}>
-            <div style={{ fontWeight: 700 }}>全クエスト攻略済み</div>
-            <div style={{ fontSize: 12, color: "var(--muted)" }}>あと <span className="kw-num" style={{ color: "var(--violet)" }}>{mstat.total - mstat.mastered}</span> 語を ★{MASTERY_GATE} へ。修行かクエスト再挑戦で磨け。</div>
-          </div>
-          <ChevronRight size={18} color="var(--muted)" />
-        </button>
-      )}
 
       {/* review banner */}
       {dueCount > 0 && (
@@ -704,6 +1132,8 @@ function Hub({ save, persist, onMap, onCodex, onReview, onLesson }) {
           const isNext = i === nextIdx;
           const Ico = ICONS[n.icon] || Scroll;
           const isBoss = n.id.endsWith("boss");
+          const isRev = !!n.revenant;
+          const special = isBoss || isRev;
           return (
             <button key={n.id} disabled={locked}
               className="kw-card kw-tap"
@@ -711,22 +1141,24 @@ function Hub({ save, persist, onMap, onCodex, onReview, onLesson }) {
               style={{
                 padding: 14, display: "flex", alignItems: "center", gap: 13, textAlign: "left",
                 opacity: locked ? .5 : 1, cursor: locked ? "not-allowed" : "pointer",
-                borderColor: isBoss ? "#7a3f8f" : isNext ? "var(--gold-dim)" : "var(--line)",
-                background: isBoss ? "linear-gradient(180deg,#33203f,#2a1b3a)" : undefined,
+                borderColor: isBoss ? "#7a3f8f" : isRev ? "#5a6a8f" : isNext ? "var(--gold-dim)" : "var(--line)",
+                background: isBoss ? "linear-gradient(180deg,#33203f,#2a1b3a)" : isRev ? "linear-gradient(180deg,#23304a,#1e2740)" : undefined,
               }}>
               <div style={{
                 width: 44, height: 44, borderRadius: 12, flex: "none",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                background: done ? "rgba(126,224,160,.16)" : isBoss ? "rgba(167,139,250,.18)" : "rgba(245,196,81,.12)",
+                background: done ? "rgba(126,224,160,.16)" : isBoss ? "rgba(167,139,250,.18)" : isRev ? "rgba(138,180,255,.16)" : "rgba(245,196,81,.12)",
               }}>
                 {locked ? <Lock size={20} color="var(--muted)" /> :
                   done ? <Check size={22} color="var(--leaf)" /> :
-                    <Ico size={22} color={isBoss ? "var(--violet)" : "var(--gold)"} />}
+                    isRev ? <span style={{ fontSize: 22 }}>👻</span> :
+                      <Ico size={22} color={isBoss ? "var(--violet)" : "var(--gold)"} />}
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
                   <span style={{ fontWeight: 700, fontSize: 16 }}>{n.title}</span>
                   {isBoss && <span className="kw-chip" style={{ color: "var(--violet)", borderColor: "#7a3f8f" }}>BOSS</span>}
+                  {isRev && <span className="kw-chip" style={{ color: "#8ab4ff", borderColor: "#5a6a8f" }}>復習関門</span>}
                 </div>
                 <div className="kw-mincho" style={{ fontSize: 12, color: "var(--muted)" }}>{n.romaji}{done ? " · 攻略済み" : isNext ? " · 挑戦せよ" : ""}</div>
               </div>
@@ -766,15 +1198,15 @@ function WorldMap({ save, onBack, onEnter }) {
     <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", padding: 16 }}>
       <TopBar title="世界地図" sub="CEFR · A1 → C2" onBack={onBack} />
       <div className="kw-mincho" style={{ color: "var(--muted)", fontSize: 13, lineHeight: 1.8, margin: "4px 2px 16px" }}>
-        六つの領域を踏破し、賢者の塔の頂を目指せ。各領域が欧州言語参照枠の一段に対応する。前の領域を極めねば、次へは進めぬ。
+        踏破六大領域，登上賢者之塔的頂端。每個領域對應歐洲共同語言參考標準（CEFR）的一階。沒打倒前一章的頭目，就無法前進下一章。
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 12, position: "relative" }}>
         {REGIONS.map((r, i) => {
           const here = r.id === save.region;
           const unlocked = regionUnlocked(save, r.id);
           const open = r.content && unlocked;
-          const stats = regionMasteryStats(save, r.id);
-          const mastered = r.content && regionMastered(save, r.id);
+          const stats = regionQuestStats(save, r.id);
+          const mastered = r.content && regionCleared(save, r.id);
           const prev = REGIONS[i - 1];
           return (
             <div key={r.id} className="kw-card" style={{ padding: 15, opacity: open || mastered ? 1 : .6, position: "relative",
@@ -796,14 +1228,14 @@ function WorldMap({ save, onBack, onEnter }) {
                 {!open && <Lock size={18} color="var(--muted)" />}
               </div>
 
-              {/* mastery progress for content regions */}
+              {/* quest progress for content regions */}
               {r.content && (open || mastered) && (
                 <div style={{ marginTop: 11 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>
-                    <span>言霊 熟練度 ★{MASTERY_GATE}+</span>
-                    <span className="kw-num">{stats.mastered}/{stats.total}</span>
+                    <span>クエスト進度</span>
+                    <span className="kw-num">{stats.done}/{stats.total}</span>
                   </div>
-                  <div className="kw-bar bar-xp"><i style={{ width: `${stats.total ? stats.mastered / stats.total * 100 : 0}%` }} /></div>
+                  <div className="kw-bar bar-xp"><i style={{ width: `${stats.total ? clamp(stats.done / stats.total * 100, 0, 100) : 0}%` }} /></div>
                 </div>
               )}
 
@@ -811,7 +1243,7 @@ function WorldMap({ save, onBack, onEnter }) {
               {r.content && !unlocked && (
                 <div style={{ marginTop: 11, padding: "9px 11px", borderRadius: 10, background: "rgba(240,107,107,.08)", border: "1px solid #5a3050" }}>
                   <div style={{ fontSize: 11.5, color: "var(--muted)", lineHeight: 1.6 }}>
-                    🔒 突破条件：<b style={{ color: "var(--ink)" }}>{prev?.name}</b> のボス撃破 ＋ 全言霊 ★{MASTERY_GATE} 以上
+                    🔒 解鎖條件：先擊敗 <b style={{ color: "var(--ink)" }}>{prev?.name}</b> 的頭目
                   </div>
                 </div>
               )}
@@ -827,7 +1259,7 @@ function WorldMap({ save, onBack, onEnter }) {
         })}
       </div>
       <div className="kw-mincho" style={{ textAlign: "center", color: "var(--line)", fontSize: 12, marginTop: 18, marginBottom: 8 }}>
-        B1 以降は続編で解放。今は A1・A2 を完全踏破せよ。
+        B1 之後的領域將在續篇開放。目前先把 音ノ章・A1・A2 完整踏破。
       </div>
     </div>
   );
@@ -891,6 +1323,11 @@ function Lesson({ node, save, onExit, onBattle }) {
 
   const Ico = ICONS[node.icon] || Scroll;
   const isBoss = node.id.endsWith("boss");
+  const isRev = !!node.revenant;
+  const big = isBoss || isRev;
+  const accent = isRev ? "#8ab4ff" : isBoss ? "var(--violet)" : "var(--gold)";
+  const accentBg = isRev ? "rgba(138,180,255,.16)" : isBoss ? "rgba(167,139,250,.16)" : "rgba(245,196,81,.13)";
+  const accentBorder = isRev ? "#5a6a8f" : isBoss ? "#7a3f8f" : "var(--gold-dim)";
 
   if (phase === "intro") {
     return (
@@ -899,16 +1336,16 @@ function Lesson({ node, save, onExit, onBattle }) {
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <div className="kw-pop" style={{ width: 76, height: 76, borderRadius: 20, margin: "0 auto 18px",
             display: "flex", alignItems: "center", justifyContent: "center",
-            background: isBoss ? "rgba(167,139,250,.16)" : "rgba(245,196,81,.13)", border: `1.5px solid ${isBoss ? "#7a3f8f" : "var(--gold-dim)"}` }}>
-            <Ico size={38} color={isBoss ? "var(--violet)" : "var(--gold)"} />
+            background: accentBg, border: `1.5px solid ${accentBorder}` }}>
+            {isRev ? <span style={{ fontSize: 38 }}>👻</span> : <Ico size={38} color={accent} />}
           </div>
           <div className="kw-scroll kw-mincho" style={{ padding: "22px 20px", fontSize: 16, lineHeight: 2 }}>
             {node.intro}
           </div>
         </div>
         <button className="kw-btn kw-btn-gold" style={{ marginTop: 16 }}
-          onClick={() => isBoss ? onBattle() : setPhase("cards")}>
-          {isBoss ? <>戦いを始める <Swords size={18} /></> : <>言霊を授かる <ChevronRight size={18} /></>}
+          onClick={() => big ? onBattle() : setPhase("cards")}>
+          {big ? <>戦いを始める <Swords size={18} /></> : <>言霊を授かる <ChevronRight size={18} /></>}
         </button>
       </div>
     );
@@ -954,10 +1391,12 @@ function Lesson({ node, save, onExit, onBattle }) {
    ============================================================ */
 function Battle({ node, save, persist, onWin, onFlee }) {
   const isBoss = node.id.endsWith("boss");
+  const isRev = !!node.revenant;
+  const big = isBoss || isRev;
   const quiz = node.quiz || [];
-  const foeAtk = isBoss ? (node.atk || 16) : 14;
-  const foeName = isBoss ? node.title : "言ノ葉の魔物";
-  const foeEmoji = node.id === "a2-boss" ? "🦂" : isBoss ? "👑🫧" : "🫧";
+  const foeAtk = big ? (node.atk || 16) : 14;
+  const foeName = isRev ? "前章の亡魂" : isBoss ? node.title : "言ノ葉の魔物";
+  const foeEmoji = isRev ? "👻" : node.id === "a2-boss" ? "🦂" : isBoss ? "👑🫧" : "🫧";
 
   const coresTotal = quiz.length;
   const [remaining, setRemaining] = useState(() => shuffle(quiz));
@@ -1043,8 +1482,8 @@ function Battle({ node, save, persist, onWin, onFlee }) {
     const acc = coresTotal / Math.max(coresTotal, attemptsRef.current);
     const grade = gradeFor(acc);
     const g = GRADES[grade];
-    const xpGain = Math.round((isBoss ? 120 : 45) * g.xp);
-    const goldGain = Math.round((isBoss ? 80 : 25) * g.gold);
+    const xpGain = Math.round((big ? 110 : 45) * g.xp);
+    const goldGain = Math.round((big ? 70 : 25) * g.gold);
     let lv = save.lv, xp = save.xp + xpGain, maxHp = save.maxHp, maxMp = save.maxMp, leveled = 0;
     while (xp >= xpToNext(lv)) { xp -= xpToNext(lv); lv++; maxHp += 12; maxMp += 6; leveled++; }
     const { codex, srs } = collectRewards(g);
@@ -1063,7 +1502,7 @@ function Battle({ node, save, persist, onWin, onFlee }) {
       const idx = REGIONS.findIndex(r => r.id === node.region);
       breakthrough = REGIONS[idx + 1] || null;
     }
-    onWin({ win: true, xp: xpGain, gold: goldGain, leveled, lv, isBoss, grade, color: g.color,
+    onWin({ win: true, xp: xpGain, gold: goldGain, leveled, lv, isBoss, isRev, grade, color: g.color,
       accuracy: Math.round(acc * 100), attempts: attemptsRef.current, cores: coresTotal, breakthrough });
   }
 
@@ -1087,7 +1526,7 @@ function Battle({ node, save, persist, onWin, onFlee }) {
           <span style={{ fontFamily: "var(--ui)", fontSize: 10, color: "var(--muted)", letterSpacing: ".04em" }}>全問正解で撃破 · 誤答は再出題</span>
         </div>
         <div className={`${shakeFoe ? "kw-shake" : ""}`} style={{ textAlign: "center", marginTop: 10, position: "relative" }}>
-          <div className={isBoss ? "kw-bob" : ""} style={{ fontSize: isBoss ? 76 : 60, filter: flash === "crit" ? "drop-shadow(0 0 18px #f5c451)" : "none" }}>
+          <div className={big ? "kw-bob" : ""} style={{ fontSize: big ? 76 : 60, filter: flash === "crit" ? "drop-shadow(0 0 18px #f5c451)" : "none" }}>
             {foeEmoji}
           </div>
           {dmg && (
@@ -1248,8 +1687,8 @@ function ResultScreen({ result, node, onHome }) {
   return (
     <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: 24, textAlign: "center" }}>
       <div className="kw-pop" style={{ fontSize: 60 }}>{result.isBoss ? "👑" : "✨"}</div>
-      <div className="kw-eyebrow" style={{ marginTop: 4 }}>{result.isBoss ? "BOSS 撃破" : "クエスト達成"}</div>
-      <div className="kw-brush kw-title-glint" style={{ fontSize: 32, marginTop: 2 }}>{result.isBoss ? "勝利！" : "言霊を得た"}</div>
+      <div className="kw-eyebrow" style={{ marginTop: 4 }}>{result.isBoss ? "BOSS 撃破" : result.isRev ? "亡魂を退けた" : "クエスト達成"}</div>
+      <div className="kw-brush kw-title-glint" style={{ fontSize: 32, marginTop: 2 }}>{result.isBoss ? "勝利！" : result.isRev ? "記憶は健在" : "言霊を得た"}</div>
 
       {/* grade badge */}
       <div className="kw-pop kw-card" style={{ marginTop: 16, width: 132, padding: "12px 0", borderColor: result.color }}>
@@ -1258,9 +1697,9 @@ function ResultScreen({ result, node, onHome }) {
         <div className="kw-num" style={{ fontSize: 12, color: "var(--muted)" }}>正解率 {result.accuracy}%</div>
       </div>
       <div className="kw-mincho" style={{ fontSize: 12, color: "var(--muted)", marginTop: 8 }}>
-        {result.grade === "S" ? "完璧だ。熟練度 ＋2、最速で強くなる。"
-          : result.grade === "C" ? "撃破したが甘い。熟練度は上がらず、すぐ復習に回る。"
-            : "良い戦いだ。熟練度 ＋1。"}
+        {result.grade === "S" ? "完美！經驗值最高，記憶刻得最深。"
+          : result.grade === "C" ? "雖然過關，但失誤不少——這些詞會很快回到復習。"
+            : "打得不錯。經驗值與記憶都有提升。"}
       </div>
 
       <div className="kw-card" style={{ width: "100%", maxWidth: 320, padding: 16, marginTop: 16 }}>
@@ -1280,8 +1719,8 @@ function ResultScreen({ result, node, onHome }) {
           borderColor: result.breakthrough.color, background: "linear-gradient(180deg,#2a2150,#241b48)" }}>
           <div className="kw-eyebrow" style={{ color: result.breakthrough.color }}>領域突破！</div>
           <div className="kw-mincho" style={{ fontSize: 13, marginTop: 4, lineHeight: 1.6 }}>
-            全言霊を ★{MASTERY_GATE} 以上に極めた。<br />
-            <b className="kw-brush" style={{ color: result.breakthrough.color, fontSize: 17 }}>{result.breakthrough.name}</b> が解放された。
+            你擊敗了本章的頭目，新的領域已解放：<br />
+            <b className="kw-brush" style={{ color: result.breakthrough.color, fontSize: 17 }}>{result.breakthrough.name}</b>
           </div>
         </div>
       )}
