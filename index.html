@@ -246,7 +246,7 @@ const LESSONS = [
       { kind: "kana", prompt: "「u」是哪個符文？", jp: "う", answer: "う", choices: ["う", "あ", "え", "お"], showRomajiPrompt: true },
       { kind: "kana", prompt: "這個符文怎麼讀？", jp: "え", answer: "e", choices: ["e", "i", "a", "o"] },
       { kind: "kana", prompt: "「i」是哪個符文？", jp: "い", answer: "い", choices: ["い", "う", "え", "あ"], showRomajiPrompt: true },
-      { kind: "listen", jp: "あおい", answer: "聽到的順序：a-o-i", choices: ["a-o-i", "a-i-o", "o-a-i", "i-o-a"] },
+      { kind: "listen", jp: "あおい", answer: "a-o-i", choices: ["a-o-i", "a-i-o", "o-a-i", "i-o-a"], sub: "聞こえた順番は？" },
     ],
   },
   {
@@ -1149,7 +1149,7 @@ function QuestionBlock({ q, save, locked, picked, onAnswer }) {
         ) : (
           <div style={{ fontSize: 20, fontWeight: 700, lineHeight: 1.6 }}>{q.prompt}</div>
         )}
-        {isListen && <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 12 }}>聞こえた言葉の意味は？</div>}
+        {isListen && <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 12 }}>{q.sub || "聞こえた言葉の意味は？"}</div>}
         {isKana && q.showRomajiPrompt && <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 8 }}>{q.prompt}</div>}
       </div>
 
