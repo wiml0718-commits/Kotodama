@@ -31,7 +31,8 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import {
   Swords, Sparkles, BookOpen, Map, Heart, Star, Volume2, ChevronRight,
-  Scroll, Crown, Flame, Shield, RotateCcw, Lock, Check, X, Zap, Trophy, Droplet
+  Scroll, Crown, Flame, Shield, RotateCcw, Lock, Check, X, Zap, Trophy, Droplet,
+  ShoppingBag, Coins, FlaskConical, Gem, Backpack
 } from "lucide-react";
 
 /* ============================================================
@@ -1695,14 +1696,66 @@ function regionQuestStats(save, regionId) {
   return { done, total: nodes.length };
 }
 
+/* ----------------------- 装備・道具（店）データ ----------------------- */
+// slot: 'weapon' | 'armor' | 'accessory' | 'potion'
+const ITEMS = [
+  { id: "w0", slot: "weapon", name: "木の枝", romaji: "Wooden Branch", emoji: "🪵", atk: 0, crit: 0, cost: 0, starter: true, desc: "轉生時撿到的樹枝。聊勝於無。" },
+  { id: "w1", slot: "weapon", name: "言ノ葉の短剣", romaji: "Kotodama Dagger", emoji: "🗡️", atk: 8, crit: 5, cost: 120, desc: "刻有符文的短劍。正解時的傷害提升。" },
+  { id: "w2", slot: "weapon", name: "響きの杖", romaji: "Staff of Echoes", emoji: "🪄", atk: 16, crit: 12, cost: 340, desc: "詠唱會產生共鳴，暴擊率上升。" },
+  { id: "w3", slot: "weapon", name: "賢者の筆", romaji: "Sage's Brush", emoji: "🖌️", atk: 28, crit: 20, cost: 780, desc: "傳說賢者所用之筆，言靈之力凝聚其中。" },
+
+  { id: "a0", slot: "armor", name: "旅人の服", romaji: "Traveler's Clothes", emoji: "👕", def: 0, hp: 0, cost: 0, starter: true, desc: "普通的旅行服。" },
+  { id: "a1", slot: "armor", name: "革の鎧", romaji: "Leather Armor", emoji: "🦺", def: 5, hp: 0, cost: 110, desc: "答錯時受到的反擊傷害減少。" },
+  { id: "a2", slot: "armor", name: "騎士の盾", romaji: "Knight's Shield", emoji: "🛡️", def: 10, hp: 20, cost: 330, desc: "王都騎士之盾，防禦與體力俱增。" },
+  { id: "a3", slot: "armor", name: "竜鱗の鎧", romaji: "Dragon-Scale Mail", emoji: "🐉", def: 18, hp: 40, cost: 740, desc: "以龍鱗鍛造，堅不可摧。" },
+
+  { id: "c1", slot: "accessory", name: "守りの護符", romaji: "Charm of Warding", emoji: "🧿", hp: 25, cost: 150, desc: "最大體力 +25。" },
+  { id: "c2", slot: "accessory", name: "魔力の指輪", romaji: "Ring of Mana", emoji: "💍", mp: 20, cost: 150, desc: "最大魔力 +20（提示用）。" },
+  { id: "c3", slot: "accessory", name: "不屈のお守り", romaji: "Unbroken Talisman", emoji: "🪬", revive: true, cost: 420, desc: "每場戰鬥一次，受致命傷時以 1 HP 留存。" },
+
+  { id: "hp1", slot: "potion", name: "傷薬", romaji: "Salve", emoji: "🧴", heal: 40, cost: 30, desc: "戰鬥中回復 40 點體力。" },
+  { id: "hp2", slot: "potion", name: "上薬", romaji: "Greater Salve", emoji: "🍶", heal: 100, cost: 75, desc: "戰鬥中回復 100 點體力。" },
+  { id: "mp1", slot: "potion", name: "マナの雫", romaji: "Mana Drop", emoji: "💧", mp: 25, cost: 35, desc: "回復 25 點魔力（提示用）。" },
+  { id: "bar", slot: "potion", name: "護りの薬", romaji: "Barrier Draught", emoji: "🫧", barrier: true, cost: 55, desc: "擋下敵人下一次攻擊。" },
+  { id: "foc", slot: "potion", name: "集中の薬", romaji: "Focus Tonic", emoji: "✨", focus: 3, cost: 65, desc: "接下來 3 次正解必定暴擊。" },
+];
+function itemById(id) { return ITEMS.find(it => it.id === id) || null; }
+function effStats(save) {
+  const w = itemById(save && save.equip && save.equip.weapon) || {};
+  const a = itemById(save && save.equip && save.equip.armor) || {};
+  const c = itemById(save && save.equip && save.equip.accessory) || {};
+  const atk = (10 + ((save && save.lv) || 1) * 2) + (w.atk || 0);
+  const def = (a.def || 0) + (c.def || 0);
+  const crit = (w.crit || 0);
+  const bonusMaxHp = (a.hp || 0) + (c.hp || 0);
+  const bonusMaxMp = (c.mp || 0);
+  return { atk, def, crit, bonusMaxHp, bonusMaxMp, revive: !!c.revive };
+}
+function maxHpOf(save) { return save.maxHp + effStats(save).bonusMaxHp; }
+function maxMpOf(save) { return save.maxMp + effStats(save).bonusMaxMp; }
+
 /* ----------------------- helpers ----------------------- */
 const xpToNext = (lv) => 60 + lv * 50;
 function freshSave() {
   return {
     name: "転生者", lv: 1, xp: 0, hp: 100, maxHp: 100, mp: 30, maxMp: 30,
-    gold: 0, region: "P0", done: {}, codex: {}, srs: {},
+    gold: 60, region: "P0", done: {}, codex: {}, srs: {},
+    equip: { weapon: "w0", armor: "a0", accessory: null }, inv: {}, owned: ["w0", "a0"],
     furigana: true, created: Date.now(),
   };
+}
+function normalizeSave(s) {
+  if (!s) return s;
+  s.equip = s.equip || {};
+  if (!s.equip.weapon) s.equip.weapon = "w0";
+  if (!s.equip.armor) s.equip.armor = "a0";
+  if (!("accessory" in s.equip)) s.equip.accessory = null;
+  s.inv = s.inv || {};
+  s.owned = Array.isArray(s.owned) ? s.owned : [];
+  ["w0", "a0"].forEach(id => { if (!s.owned.includes(id)) s.owned.push(id); });
+  [s.equip.weapon, s.equip.armor, s.equip.accessory].forEach(id => { if (id && !s.owned.includes(id)) s.owned.push(id); });
+  if (typeof s.gold !== "number") s.gold = 0;
+  return s;
 }
 function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
 function shuffle(a) { const r = [...a]; for (let i = r.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0;[r[i], r[j]] = [r[j], r[i]]; } return r; }
@@ -1720,7 +1773,7 @@ export default function App() {
 
   useEffect(() => {
     let on = true;
-    loadSave().then(s => { if (!on) return; setSave(s); setLoaded(true); });
+    loadSave().then(s => { if (!on) return; setSave(normalizeSave(s)); setLoaded(true); });
     return () => { on = false; };
   }, []);
 
@@ -1744,6 +1797,7 @@ export default function App() {
         {view === "title" && <Title save={save} onNew={startNew} onContinue={continueGame} />}
         {view === "hub" && <Hub save={save} persist={persist}
           onMap={() => setView("map")} onCodex={() => setView("codex")} onReview={() => setView("review")}
+          onShop={() => setView("shop")}
           onLesson={(node) => { setActiveNode(node); setView("lesson"); }} />}
         {view === "map" && <WorldMap save={save} onBack={() => setView("hub")}
           onEnter={(regionId) => {
@@ -1753,6 +1807,7 @@ export default function App() {
             setActiveNode(next); setView("lesson");
           }} />}
         {view === "codex" && <Codex save={save} onBack={() => setView("hub")} />}
+        {view === "shop" && <Shop save={save} persist={persist} onBack={() => setView("hub")} />}
         {view === "review" && <Review save={save} persist={persist} onBack={() => setView("hub")} />}
         {view === "lesson" && <Lesson node={activeNode} save={save}
           onExit={() => setView("hub")}
@@ -1835,7 +1890,7 @@ function VoicePicker() {
   );
 }
 
-function Hub({ save, persist, onMap, onCodex, onReview, onLesson }) {
+function Hub({ save, persist, onMap, onCodex, onReview, onShop, onLesson }) {
   const region = REGIONS.find(r => r.id === save.region);
   const nodes = ALL_NODES.filter(n => n.region === save.region);
   const nextIdx = nodes.findIndex(n => !save.done[n.id]);
@@ -1859,8 +1914,8 @@ function Hub({ save, persist, onMap, onCodex, onReview, onLesson }) {
           </div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 7, marginTop: 14 }}>
-          <StatBar icon={<Heart size={15} color="#f0524f" />} cls="bar-hp" val={save.hp} max={save.maxHp} />
-          <StatBar icon={<Droplet size={15} color="#37b3a3" />} cls="bar-mp" val={save.mp} max={save.maxMp} />
+          <StatBar icon={<Heart size={15} color="#f0524f" />} cls="bar-hp" val={save.hp} max={maxHpOf(save)} />
+          <StatBar icon={<Droplet size={15} color="#37b3a3" />} cls="bar-mp" val={save.mp} max={maxMpOf(save)} />
           <StatBar icon={<Star size={15} color="#f0b53e" />} cls="bar-xp" val={save.xp} max={xpToNext(save.lv)} />
         </div>
         <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
@@ -1872,6 +1927,19 @@ function Hub({ save, persist, onMap, onCodex, onReview, onLesson }) {
           </button>
         </div>
         <VoicePicker />
+        {/* 装備・店への近道 */}
+        <button className="kw-card kw-tap" onClick={onShop}
+          style={{ marginTop: 12, padding: "10px 12px", display: "flex", alignItems: "center", gap: 8, width: "100%", background: "var(--panel)" }}>
+          {[save.equip.weapon, save.equip.armor, save.equip.accessory].map((id, i) => {
+            const it = itemById(id);
+            return <span key={i} className="kw-chip" style={{ display: "flex", alignItems: "center", gap: 4, maxWidth: 92, overflow: "hidden" }}>
+              <span>{it ? it.emoji : "—"}</span><span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{it ? it.name : "なし"}</span>
+            </span>;
+          })}
+          <span className="kw-chip" style={{ marginLeft: "auto", color: "var(--gold)", borderColor: "var(--gold-dim)", display: "flex", alignItems: "center", gap: 4, flex: "none" }}>
+            <ShoppingBag size={13} /> 店
+          </span>
+        </button>
         {/* chapter quest progress */}
         <div style={{ marginTop: 14 }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--muted)", marginBottom: 5 }}>
@@ -1943,12 +2011,12 @@ function Hub({ save, persist, onMap, onCodex, onReview, onLesson }) {
       </div>
 
       {/* bottom nav */}
-      <BottomNav active="home" onMap={onMap} onCodex={onCodex} onReview={onReview} dueCount={dueCount} />
+      <BottomNav active="home" onMap={onMap} onCodex={onCodex} onReview={onReview} onShop={onShop} dueCount={dueCount} />
     </div>
   );
 }
 
-function BottomNav({ active, onMap, onCodex, onReview, dueCount }) {
+function BottomNav({ active, onMap, onCodex, onReview, onShop, dueCount }) {
   return (
     <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, maxWidth: 520, margin: "0 auto",
       background: "linear-gradient(180deg,rgba(20,15,40,.4),#15102b 40%)", backdropFilter: "blur(8px)",
@@ -1959,6 +2027,7 @@ function BottomNav({ active, onMap, onCodex, onReview, dueCount }) {
         <RotateCcw size={20} /><span>修行</span>
         {dueCount > 0 && <span className="kw-num" style={{ position: "absolute", top: 2, right: "30%", background: "var(--rose)", color: "#fff", fontSize: 9, borderRadius: 999, padding: "0 5px", fontWeight: 700 }}>{dueCount}</span>}
       </button>
+      <button className="kw-tab" onClick={onShop}><ShoppingBag size={20} /><span>店</span></button>
       <button className="kw-tab" onClick={onCodex}><BookOpen size={20} /><span>図鑑</span></button>
     </div>
   );
@@ -2033,7 +2102,7 @@ function WorldMap({ save, onBack, onEnter }) {
         })}
       </div>
       <div className="kw-mincho" style={{ textAlign: "center", color: "var(--line)", fontSize: 12, marginTop: 18, marginBottom: 8 }}>
-        B1 之後的領域將在續篇開放。目前先把 音ノ章・A1・A2 完整踏破。
+        擊敗每章頭目即可解鎖下一片領域。一路踏破，登上賢者之塔。
       </div>
     </div>
   );
@@ -2070,6 +2139,113 @@ function Codex({ save, onBack }) {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+/* ============================================================
+   SHOP（道具屋・鍛冶屋）
+   ============================================================ */
+function Shop({ save, persist, onBack }) {
+  const [tab, setTab] = useState("weapon");
+  const list = ITEMS.filter(it => it.slot === tab);
+
+  function buy(it) {
+    if (save.gold < it.cost) return;
+    if (it.slot === "potion") {
+      const inv = { ...save.inv, [it.id]: (save.inv[it.id] || 0) + 1 };
+      persist({ ...save, gold: save.gold - it.cost, inv });
+    } else {
+      const owned = save.owned.includes(it.id) ? save.owned : [...save.owned, it.id];
+      const equip = { ...save.equip, [it.slot]: it.id };
+      persist({ ...save, gold: save.gold - it.cost, owned, equip });
+    }
+  }
+  function equip(it) { persist({ ...save, equip: { ...save.equip, [it.slot]: it.id } }); }
+
+  const TABS = [
+    { id: "weapon", label: "武器", icon: <Swords size={16} /> },
+    { id: "armor", label: "防具", icon: <Shield size={16} /> },
+    { id: "accessory", label: "装飾", icon: <Gem size={16} /> },
+    { id: "potion", label: "道具", icon: <FlaskConical size={16} /> },
+  ];
+
+  return (
+    <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", padding: 16, paddingBottom: 24 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+        <button className="kw-tap" onClick={onBack}
+          style={{ width: 40, height: 40, borderRadius: 12, border: "1.5px solid var(--line)", background: "var(--panel)", color: "var(--ink)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flex: "none" }}>
+          <ChevronRight size={20} style={{ transform: "rotate(180deg)" }} />
+        </button>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontWeight: 700, fontSize: 19 }}>道具屋・鍛冶屋</div>
+          <div className="kw-mincho" style={{ fontSize: 12, color: "var(--muted)" }}>Shop · 言ノ葉の市場</div>
+        </div>
+        <div className="kw-chip" style={{ borderColor: "var(--gold-dim)", color: "var(--gold)", display: "flex", alignItems: "center", gap: 5 }}>
+          <Coins size={14} /> <span className="kw-num">{save.gold}</span> G
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+        {TABS.map(t => (
+          <button key={t.id} className="kw-tap" onClick={() => setTab(t.id)}
+            style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3, padding: "9px 0", borderRadius: 12,
+              border: `1.5px solid ${tab === t.id ? "var(--gold-dim)" : "var(--line)"}`,
+              background: tab === t.id ? "rgba(245,196,81,.12)" : "var(--panel)",
+              color: tab === t.id ? "var(--gold)" : "var(--muted)", cursor: "pointer", fontFamily: "var(--ui)", fontSize: 11, fontWeight: 600 }}>
+            {t.icon}{t.label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {list.map(it => {
+          const owned = save.owned.includes(it.id);
+          const equipped = it.slot !== "potion" && save.equip[it.slot] === it.id;
+          const count = it.slot === "potion" ? (save.inv[it.id] || 0) : 0;
+          const canBuy = save.gold >= it.cost;
+          return (
+            <div key={it.id} className="kw-card" style={{ padding: 13, display: "flex", gap: 12, alignItems: "center",
+              borderColor: equipped ? "var(--gold-dim)" : "var(--line)" }}>
+              <div style={{ width: 46, height: 46, borderRadius: 12, flex: "none", display: "flex", alignItems: "center", justifyContent: "center",
+                background: "rgba(255,255,255,.05)", border: "1px solid var(--line)", fontSize: 24 }}>{it.emoji}</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
+                  <span style={{ fontWeight: 700, fontSize: 15 }}>{it.name}</span>
+                  {equipped && <span className="kw-chip" style={{ color: "var(--gold)", borderColor: "var(--gold-dim)" }}>装備中</span>}
+                  {count > 0 && <span className="kw-chip kw-num" style={{ color: "var(--mana)" }}>×{count}</span>}
+                </div>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 4 }}>
+                  {it.atk ? <span className="kw-chip kw-num">攻 +{it.atk}</span> : null}
+                  {it.def ? <span className="kw-chip kw-num">守 +{it.def}</span> : null}
+                  {it.crit ? <span className="kw-chip kw-num">会心 +{it.crit}%</span> : null}
+                  {it.hp ? <span className="kw-chip kw-num">HP +{it.hp}</span> : null}
+                  {it.mp ? <span className="kw-chip kw-num">MP +{it.mp}</span> : null}
+                </div>
+                <div className="kw-mincho" style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 4, lineHeight: 1.5 }}>{it.desc}</div>
+              </div>
+              <div style={{ flex: "none", display: "flex", flexDirection: "column", gap: 6, width: 92 }}>
+                {it.slot === "potion" ? (
+                  <button className="kw-btn kw-btn-gold" disabled={!canBuy} style={{ padding: "9px 6px", fontSize: 12 }} onClick={() => buy(it)}>
+                    <Coins size={13} /> {it.cost}
+                  </button>
+                ) : equipped ? (
+                  <button className="kw-btn kw-btn-ghost" disabled style={{ padding: "9px 6px", fontSize: 12 }}>装備中</button>
+                ) : (owned || it.cost === 0) ? (
+                  <button className="kw-btn kw-btn-mana" style={{ padding: "9px 6px", fontSize: 12 }} onClick={() => equip(it)}>装備する</button>
+                ) : (
+                  <button className="kw-btn kw-btn-gold" disabled={!canBuy} style={{ padding: "9px 6px", fontSize: 12 }} onClick={() => buy(it)}>
+                    <Coins size={13} /> {it.cost}
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="kw-mincho" style={{ textAlign: "center", color: "var(--line)", fontSize: 12, marginTop: 16, lineHeight: 1.7 }}>
+        金幣由戰鬥中擊敗魔物取得。武器提升傷害與會心、防具與裝飾提升存活，道具可在戰鬥中即時使用。
+      </div>
     </div>
   );
 }
@@ -2161,72 +2337,140 @@ function Lesson({ node, save, onExit, onBattle }) {
 }
 
 /* ============================================================
-   BATTLE  (quiz combat)
+   BATTLE  (quiz combat · 敵が行動する／道具・装備)
    ============================================================ */
 function Battle({ node, save, persist, onWin, onFlee }) {
   const isBoss = node.id.endsWith("boss");
   const isRev = !!node.revenant;
   const big = isBoss || isRev;
   const quiz = node.quiz || [];
-  const foeAtk = big ? (node.atk || 16) : 14;
+  const eff = effStats(save);
+  const maxHp = save.maxHp + eff.bonusMaxHp;
+  const maxMp = save.maxMp + eff.bonusMaxMp;
+
+  const foeAtk = big ? (node.atk || 18) : 14;
   const foeName = isRev ? "前章の亡魂" : isBoss ? node.title : "言ノ葉の魔物";
   const foeEmoji = isRev ? "👻" : node.id === "a2-boss" ? "🦂" : isBoss ? "👑🫧" : "🫧";
 
   const coresTotal = quiz.length;
+  const enemyMaxHp = big ? (node.hp || 320) : coresTotal * 22;
+
+  const STAGGER = { type: "stagger", label: "よろめいている（攻撃不能）", icon: "💫", color: "#8ab4ff" };
+  const rollIntent = (afterCharge) => {
+    if (afterCharge) return { type: "heavy", dmg: Math.round(foeAtk * 2), label: "渾身の一撃を放とうとしている！", icon: "💥", color: "var(--rose)" };
+    const r = Math.random();
+    if (big && r < 0.20) return { type: "charge", label: "力を溜めている…（次は強攻撃）", icon: "🔋", color: "var(--gold)" };
+    if (big && r < 0.33) return { type: "guard", label: "身構えている（防御態勢）", icon: "🛡️", color: "#8ab4ff" };
+    return { type: "attack", dmg: foeAtk, label: "襲いかかろうとしている", icon: "⚔️", color: "var(--muted)" };
+  };
+
   const [remaining, setRemaining] = useState(() => shuffle(quiz));
   const [turn, setTurn] = useState(0);
-  const [hp, setHp] = useState(save.hp);
+  const [hp, setHp] = useState(() => clamp(save.hp, 1, maxHp));
+  const [mp, setMp] = useState(() => clamp(save.mp, 0, maxMp));
+  const [enemyHp, setEnemyHp] = useState(enemyMaxHp);
   const [combo, setCombo] = useState(0);
   const [picked, setPicked] = useState(null);
   const [locked, setLocked] = useState(false);
-  const [dmg, setDmg] = useState(null);        // foe-hit popup
-  const [heroDmg, setHeroDmg] = useState(null); // hero-hit popup
+  const [dmg, setDmg] = useState(null);
+  const [heroDmg, setHeroDmg] = useState(null);
   const [shakeFoe, setShakeFoe] = useState(false);
   const [shakeHero, setShakeHero] = useState(false);
   const [flash, setFlash] = useState(null);
+  const [intent, setIntent] = useState(() => rollIntent(false));
+  const [staggered, setStaggered] = useState(false);
+  const [barrier, setBarrier] = useState(false);
+  const [focus, setFocus] = useState(0);
+  const [usedRevive, setUsedRevive] = useState(false);
+  const [bag, setBag] = useState(() => ({ ...save.inv }));
+  const [showBag, setShowBag] = useState(false);
+  const [hidden, setHidden] = useState([]);
+  const [hintThisTurn, setHintThisTurn] = useState(false);
+
   const attemptsRef = useRef(0);
   const startRef = useRef(Date.now());
 
   const q = remaining[0];
   const coresLeft = remaining.length;
-  const foePct = (coresLeft / coresTotal) * 100;
+  const hpPct = (enemyHp / enemyMaxHp) * 100;
+  const sealPct = ((coresTotal - coresLeft) / coresTotal) * 100;
 
   useEffect(() => { startRef.current = Date.now(); }, [turn]);
 
-  // STRICT: a question only leaves the queue once answered correctly.
-  // Wrong answers re-queue the same item a couple of slots later.
+  function playerHit(isGuard) {
+    const comboMult = 1 + Math.min(combo, 5) * 0.12;
+    const isCrit = focus > 0 || (Math.random() * 100 < eff.crit);
+    let d = eff.atk * comboMult * (isCrit ? 2 : 1);
+    if (isGuard) d *= 0.5;
+    return { dmg: Math.max(1, Math.round(d)), isCrit };
+  }
+
+  function useItem(it) {
+    if (locked) return;
+    if (!bag[it.id]) return;
+    setBag(b => ({ ...b, [it.id]: b[it.id] - 1 }));
+    if (it.heal) setHp(h => clamp(h + it.heal, 0, maxHp));
+    if (it.mp) setMp(m => clamp(m + it.mp, 0, maxMp));
+    if (it.barrier) setBarrier(true);
+    if (it.focus) setFocus(f => f + it.focus);
+    setShowBag(false);
+  }
+
+  function useHint() {
+    if (locked || hintThisTurn) return;
+    if (!q || q.kind === "build" || !q.choices) return;
+    if (mp < 8) return;
+    const wrongs = shuffle(q.choices.filter(c => c !== q.answer)).slice(0, 2);
+    setHidden(wrongs);
+    setMp(m => m - 8);
+    setHintThisTurn(true);
+  }
+
   function resolve(correct) {
     setLocked(true);
     attemptsRef.current += 1;
+    const it = intent;
     if (correct) {
-      const fast = Date.now() - startRef.current < 4500;
-      const crit = fast && combo >= 2;
+      const { dmg: hitDmg, isCrit } = playerHit(it.type === "guard");
+      if (focus > 0) setFocus(f => f - 1);
+      const newEHp = Math.max(0, enemyHp - hitDmg);
       const rest = remaining.slice(1);
       setCombo(c => c + 1);
-      setFlash(crit ? "crit" : "hit");
+      setFlash(isCrit ? "crit" : "hit");
       setShakeFoe(true);
-      setDmg({ crit, left: rest.length });
+      setDmg({ n: hitDmg, crit: isCrit, interrupt: it.type === "charge", guard: it.type === "guard" });
       setTimeout(() => setShakeFoe(false), 360);
+      setTimeout(() => setEnemyHp(newEHp), 120);
       setTimeout(() => {
-        setDmg(null); setFlash(null);
+        setDmg(null); setFlash(null); setHidden([]); setHintThisTurn(false);
         if (rest.length === 0) { finishWin(); return; }
         setRemaining(rest); setPicked(null); setLocked(false); setTurn(t => t + 1);
-      }, 1000);
+        if (newEHp === 0) { setStaggered(true); setIntent(STAGGER); }
+        else setIntent(rollIntent(false)); // 正解＝詠唱が敵の動きを断つ
+      }, 1050);
     } else {
-      const nh = clamp(hp - foeAtk, 0, save.maxHp);
+      let incoming = 0;
+      if (it.type === "attack" || it.type === "heavy") incoming = Math.max(1, it.dmg - eff.def);
+      let barrierUsed = false, reviveUsed = false;
+      if (incoming > 0 && barrier) { incoming = 0; barrierUsed = true; }
+      let nh = clamp(hp - incoming, 0, maxHp);
+      if (nh <= 0 && eff.revive && !usedRevive) { nh = 1; reviveUsed = true; }
       const rest = remaining.slice(1);
       const pos = Math.min(2, rest.length);
       const requeued = [...rest.slice(0, pos), remaining[0], ...rest.slice(pos)];
+      const wasCharging = it.type === "charge";
       setCombo(0);
-      setFlash("miss");
-      setShakeHero(true);
-      setHeroDmg(foeAtk);
+      if (incoming > 0) { setFlash("miss"); setShakeHero(true); setHeroDmg(incoming); }
+      if (barrierUsed) setBarrier(false);
+      if (reviveUsed) setUsedRevive(true);
       setTimeout(() => setShakeHero(false), 360);
       setTimeout(() => setHp(nh), 120);
       setTimeout(() => {
-        setHeroDmg(null); setFlash(null);
+        setHeroDmg(null); setFlash(null); setHidden([]); setHintThisTurn(false);
         if (nh <= 0) { finishLose(); return; }
         setRemaining(requeued); setPicked(null); setLocked(false); setTurn(t => t + 1);
+        if (staggered) setIntent(STAGGER);
+        else setIntent(rollIntent(wasCharging));
       }, 1150);
     }
   }
@@ -2258,15 +2502,16 @@ function Battle({ node, save, persist, onWin, onFlee }) {
     const g = GRADES[grade];
     const xpGain = Math.round((big ? 110 : 45) * g.xp);
     const goldGain = Math.round((big ? 70 : 25) * g.gold);
-    let lv = save.lv, xp = save.xp + xpGain, maxHp = save.maxHp, maxMp = save.maxMp, leveled = 0;
-    while (xp >= xpToNext(lv)) { xp -= xpToNext(lv); lv++; maxHp += 12; maxMp += 6; leveled++; }
+    let lv = save.lv, xp = save.xp + xpGain, baseMaxHp = save.maxHp, baseMaxMp = save.maxMp, leveled = 0;
+    while (xp >= xpToNext(lv)) { xp -= xpToNext(lv); lv++; baseMaxHp += 12; baseMaxMp += 6; leveled++; }
     const { codex, srs } = collectRewards(g);
     const done = { ...save.done, [node.id]: true };
+    const nextEffMaxHp = baseMaxHp + eff.bonusMaxHp;
     const next = {
-      ...save, lv, xp, maxHp, maxMp,
-      hp: leveled ? maxHp : Math.max(hp, 1),
-      mp: clamp(save.mp + 8, 0, maxMp),
-      gold: save.gold + goldGain, done, codex, srs,
+      ...save, lv, xp, maxHp: baseMaxHp, maxMp: baseMaxMp,
+      hp: leveled ? nextEffMaxHp : Math.max(hp, 1),
+      mp: clamp(mp + 8, 0, baseMaxMp + eff.bonusMaxMp),
+      gold: save.gold + goldGain, done, codex, srs, inv: bag,
     };
     persist(next);
     const wasMastered = regionMastered(save, node.region);
@@ -2282,10 +2527,15 @@ function Battle({ node, save, persist, onWin, onFlee }) {
   }
 
   function finishLose() {
-    const next = { ...save, hp: Math.max(20, Math.round(save.maxHp * 0.4)) };
+    const next = { ...save, hp: Math.max(20, Math.round(save.maxHp * 0.4)), mp, inv: bag };
     persist(next);
     onWin({ win: false, isBoss });
   }
+
+  function flee() { persist({ ...save, inv: bag, mp }); onFlee(); }
+
+  const ownedPotions = ITEMS.filter(it => it.slot === "potion" && (bag[it.id] || 0) > 0);
+  const potionCount = ownedPotions.reduce((a, it) => a + (bag[it.id] || 0), 0);
 
   return (
     <div className="kw-fade" style={{ flex: 1, display: "flex", flexDirection: "column", padding: 16, position: "relative" }}>
@@ -2293,46 +2543,100 @@ function Battle({ node, save, persist, onWin, onFlee }) {
       <div className="kw-card" style={{ padding: 14, position: "relative", overflow: "hidden" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontWeight: 700 }}>{foeName}</span>
-          <button className="kw-tap" onClick={onFlee} style={{ background: "none", border: "none", color: "var(--muted)", fontSize: 12, fontFamily: "var(--ui)", cursor: "pointer" }}>逃げる ✕</button>
+          <button className="kw-tap" onClick={flee} style={{ background: "none", border: "none", color: "var(--muted)", fontSize: 12, fontFamily: "var(--ui)", cursor: "pointer" }}>逃げる ✕</button>
         </div>
-        <div className="kw-bar bar-foe" style={{ marginTop: 8 }}><i style={{ width: `${foePct}%` }} /></div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 6 }}>
-          <span className="kw-chip" style={{ borderColor: "var(--line)" }}>残り核 <span className="kw-num" style={{ color: "var(--violet)" }}>{coresLeft}/{coresTotal}</span></span>
-          <span style={{ fontFamily: "var(--ui)", fontSize: 10, color: "var(--muted)", letterSpacing: ".04em" }}>全問正解で撃破 · 誤答は再出題</span>
+        <div className="kw-bar bar-foe" style={{ marginTop: 8 }}><i style={{ width: `${hpPct}%` }} /></div>
+        {/* seal (learning) progress */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 6 }}>
+          <span style={{ fontSize: 10, color: "var(--muted)", fontFamily: "var(--ui)", flex: "none" }}>封印</span>
+          <div className="kw-bar bar-xp" style={{ flex: 1, height: 7 }}><i style={{ width: `${sealPct}%` }} /></div>
+          <span className="kw-chip kw-num" style={{ flex: "none" }}>核 {coresTotal - coresLeft}/{coresTotal}</span>
         </div>
-        <div className={`${shakeFoe ? "kw-shake" : ""}`} style={{ textAlign: "center", marginTop: 10, position: "relative" }}>
-          <div className={big ? "kw-bob" : ""} style={{ fontSize: big ? 76 : 60, filter: flash === "crit" ? "drop-shadow(0 0 18px #f5c451)" : "none" }}>
+        {/* intent banner */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 9, padding: "7px 10px", borderRadius: 10,
+          background: "rgba(0,0,0,.22)", border: `1px solid ${intent.color === "var(--muted)" ? "var(--line)" : intent.color}` }}>
+          <span style={{ fontSize: 17 }}>{intent.icon}</span>
+          <span style={{ fontSize: 12.5, color: intent.color === "var(--muted)" ? "var(--muted)" : intent.color, fontWeight: 600, flex: 1 }}>{intent.label}</span>
+          {(intent.type === "attack" || intent.type === "heavy") &&
+            <span className="kw-num" style={{ fontSize: 12, color: "var(--rose)" }}>{Math.max(1, intent.dmg - eff.def)} DMG</span>}
+        </div>
+        <div className={`${shakeFoe ? "kw-shake" : ""}`} style={{ textAlign: "center", marginTop: 8, position: "relative" }}>
+          <div className={big ? "kw-bob" : ""} style={{ fontSize: big ? 70 : 56, filter: flash === "crit" ? "drop-shadow(0 0 18px #f5c451)" : staggered ? "grayscale(.5) opacity(.65)" : "none" }}>
             {foeEmoji}
           </div>
           {dmg && (
-            <div className="kw-dmg" style={{ left: "50%", top: 0, transform: "translateX(-50%)", fontSize: dmg.crit ? 26 : 20, color: dmg.crit ? "var(--gold)" : "var(--leaf)" }}>
-              {dmg.crit && <span style={{ fontSize: 12, display: "block", color: "var(--gold)" }}>クリティカル！</span>}✦ 命中！
+            <div className="kw-dmg" style={{ left: "50%", top: 0, transform: "translateX(-50%)", fontSize: dmg.crit ? 26 : 21, color: dmg.crit ? "var(--gold)" : "var(--leaf)" }}>
+              {dmg.crit && <span style={{ fontSize: 12, display: "block", color: "var(--gold)" }}>会心の一撃！</span>}
+              {dmg.interrupt && <span style={{ fontSize: 11, display: "block", color: "var(--mana)" }}>詠唱で阻止！</span>}
+              −{dmg.n}
             </div>
           )}
         </div>
-        {combo >= 2 && <div className="kw-num kw-pop" style={{ position: "absolute", top: 12, left: 14, color: "var(--gold)", fontWeight: 700, fontSize: 13 }}>
-          {combo} コンボ 🔥
-        </div>}
+        {combo >= 2 && <div className="kw-num kw-pop" style={{ position: "absolute", top: 12, left: 14, color: "var(--gold)", fontWeight: 700, fontSize: 13 }}>{combo} コンボ 🔥</div>}
+        {barrier && <div className="kw-pop" style={{ position: "absolute", top: 12, right: 14, fontSize: 16 }}>🫧</div>}
       </div>
 
-      {/* hero hp */}
+      {/* hero hp / mp */}
       <div className={`${shakeHero ? "kw-shake" : ""}`} style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 8, position: "relative" }}>
         <Heart size={16} color="#f0524f" />
-        <div className="kw-bar bar-hp" style={{ flex: 1 }}><i style={{ width: `${hp / save.maxHp * 100}%` }} /></div>
-        <span className="kw-num" style={{ fontSize: 12, color: "var(--muted)", width: 56, textAlign: "right" }}>{hp}/{save.maxHp}</span>
+        <div className="kw-bar bar-hp" style={{ flex: 1 }}><i style={{ width: `${hp / maxHp * 100}%` }} /></div>
+        <span className="kw-num" style={{ fontSize: 12, color: "var(--muted)", width: 54, textAlign: "right" }}>{hp}/{maxHp}</span>
         {heroDmg && <div className="kw-dmg" style={{ left: 24, top: -8, color: "var(--rose)", fontSize: 20 }}>-{heroDmg}</div>}
+      </div>
+      <div style={{ marginTop: 6, display: "flex", alignItems: "center", gap: 8 }}>
+        <Droplet size={15} color="#37b3a3" />
+        <div className="kw-bar bar-mp" style={{ flex: 1 }}><i style={{ width: `${maxMp ? mp / maxMp * 100 : 0}%` }} /></div>
+        <span className="kw-num" style={{ fontSize: 12, color: "var(--muted)", width: 54, textAlign: "right" }}>{mp}/{maxMp}</span>
+      </div>
+
+      {/* action buttons */}
+      <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+        <button className="kw-btn kw-btn-ghost" style={{ flex: 1, padding: "9px", fontSize: 13 }}
+          disabled={locked || ownedPotions.length === 0} onClick={() => setShowBag(true)}>
+          <Backpack size={16} /> 道具{potionCount ? `（${potionCount}）` : ""}
+        </button>
+        <button className="kw-btn kw-btn-ghost" style={{ flex: 1, padding: "9px", fontSize: 13 }}
+          disabled={locked || hintThisTurn || mp < 8 || !q || q.kind === "build" || !q.choices} onClick={useHint}>
+          <Sparkles size={16} /> ヒント（8 MP）
+        </button>
       </div>
 
       {/* question */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", marginTop: 12 }}>
-        <QuestionBlock key={turn} q={q} save={save} locked={locked} picked={picked}
+        <QuestionBlock key={turn} q={q} save={save} locked={locked} picked={picked} hidden={hidden}
           onAnswer={(ok, p) => { setPicked(p); resolve(ok); }} />
       </div>
+
+      {/* potion sheet */}
+      {showBag && (
+        <div className="kw-fade" onClick={() => setShowBag(false)}
+          style={{ position: "absolute", inset: 0, background: "rgba(8,5,20,.6)", display: "flex", alignItems: "flex-end", zIndex: 30 }}>
+          <div onClick={e => e.stopPropagation()} className="kw-card" style={{ width: "100%", borderRadius: "18px 18px 0 0", padding: 16, maxHeight: "72%", overflowY: "auto" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <span style={{ fontWeight: 700, fontSize: 16 }}>道具を使う</span>
+              <button className="kw-tap" onClick={() => setShowBag(false)} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer", display: "flex" }}><X size={20} /></button>
+            </div>
+            {ownedPotions.length === 0 ? (
+              <div className="kw-mincho" style={{ color: "var(--muted)", textAlign: "center", padding: 16 }}>持っている道具がない。店で買おう。</div>
+            ) : ownedPotions.map(it => (
+              <button key={it.id} className="kw-tap" onClick={() => useItem(it)}
+                style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, padding: 12, marginBottom: 8, borderRadius: 12, border: "1.5px solid var(--line)", background: "var(--panel)", cursor: "pointer", textAlign: "left" }}>
+                <span style={{ fontSize: 24 }}>{it.emoji}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 700, color: "var(--ink)" }}>{it.name} <span className="kw-num" style={{ color: "var(--mana)", fontSize: 12 }}>×{bag[it.id]}</span></div>
+                  <div className="kw-mincho" style={{ fontSize: 12, color: "var(--muted)" }}>{it.desc}</div>
+                </div>
+                <ChevronRight size={18} color="var(--muted)" />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-function QuestionBlock({ q, save, locked, picked, onAnswer }) {
+function QuestionBlock({ q, save, locked, picked, hidden = [], onAnswer }) {
   const isListen = q.kind === "listen";
   const isKana = q.kind === "kana";
   // Shuffle once per appearance so the correct answer isn't always in the same slot.
@@ -2371,14 +2675,15 @@ function QuestionBlock({ q, save, locked, picked, onAnswer }) {
       <div style={{ display: "grid", gridTemplateColumns: choices.length > 4 ? "1fr 1fr" : "1fr", gap: 10 }}>
         {choices.map((c, idx) => {
           const isAns = c === q.answer;
+          const isHidden = hidden.includes(c) && !locked;
           let cls = "kw-opt";
           if (locked) {
             if (isAns) cls += " good";
             else if (picked === c) cls += " bad";
             else cls += " dim";
-          }
+          } else if (isHidden) cls += " dim";
           return (
-            <button key={c} className={cls} disabled={locked}
+            <button key={c} className={cls} disabled={locked || isHidden}
               onClick={() => onAnswer(isAns, c)}>
               <span className="kw-optkey">{String.fromCharCode(65 + idx)}</span>
               <span style={{ flex: 1 }}>{c}</span>
@@ -2580,7 +2885,7 @@ function Review({ save, persist, onBack }) {
     const codex = { ...save.codex };
     codex[key] = { ...item, mastery: clamp((item.mastery || 0) + (ok ? 1 : -1), 0, 5) };
     if (ok) gainedRef.current += 3;
-    persist({ ...save, srs, codex, mp: clamp(save.mp + (ok ? 3 : 0), 0, save.maxMp) });
+    persist({ ...save, srs, codex, mp: clamp(save.mp + (ok ? 3 : 0), 0, maxMpOf(save)) });
     setTimeout(() => { setPicked(null); setLocked(false); if (i + 1 >= queue.length) setDone(true); else setI(i + 1); }, 1000);
   }
 
