@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
 <meta name="theme-color" content="#15101f" />
-<title>言ノ葉世界 — Kotodama RPG</title>
+<title>言ノ葉日記 — Kotodama Life</title>
 <script type="importmap">
 {
   "imports": {
@@ -20,7 +20,7 @@
 :root{
   --bg:#15101f;--bg2:#1c1530;--panel:#241b3d;--panel2:#2c2150;
   --line:#3a2f5e;--ink:#ece8f7;--muted:#9b8fc0;--gold:#e8c66b;
-  --hp:#f0524f;--xp:#6ad2b4;--mana:#7aa2ff;--good:#4fd17a;--bad:#f0664f;
+  --hp:#f0524f;--xp:#6ad2b4;--mana:#7aa2ff;--good:#4fd17a;--bad:#f0664f;--aff:#f08ab8;
   --jp:"Hiragino Mincho ProN","Yu Mincho","Songti SC",serif;
   --ui:-apple-system,system-ui,"Hiragino Kaku Gothic ProN","PingFang SC",sans-serif;
 }
@@ -48,7 +48,8 @@ body{margin:0;background:radial-gradient(120% 80% at 50% -10%,#241a40,#15101f 62
 .bar>i{display:block;height:100%;border-radius:99px;transition:width .3s}
 .hpf{background:linear-gradient(90deg,#f0524f,#ff8a6a)}
 .xpf{background:linear-gradient(90deg,#6ad2b4,#9af0c8)}
-.foef{background:linear-gradient(90deg,#b14fff,#e08aff)}
+.afff{background:linear-gradient(90deg,#f08ab8,#ffc2dd)}
+.enf{background:linear-gradient(90deg,#f0b84f,#ffe08a)}
 .tok{font-family:var(--jp);font-size:18px;font-weight:700;padding:9px 13px;border-radius:11px;border:1.5px solid var(--line);background:var(--panel2);color:var(--ink);cursor:pointer}
 .tok:active{transform:scale(.95)}
 .tok.used{opacity:.22;pointer-events:none}
@@ -62,10 +63,6 @@ body{margin:0;background:radial-gradient(120% 80% at 50% -10%,#241a40,#15101f 62
 @keyframes pop{from{transform:scale(.82);opacity:0}to{transform:scale(1);opacity:1}}
 .fade{animation:fade .35s ease}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.shake{animation:shake .4s}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
-.float{animation:flt 1s ease forwards;position:absolute;font-weight:800;font-size:22px;pointer-events:none}
-@keyframes flt{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-34px)}}
 .glint{background:linear-gradient(90deg,var(--gold),#fff3cf,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
 button:focus-visible,.field:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important}}
@@ -77,7 +74,7 @@ button:focus-visible,.field:focus-visible{outline:2px solid var(--gold);outline-
 <script type="text/babel" data-type="module" data-presets="react">
 import React, { useState, useEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
-import { Sparkles, Scroll, Flame, Crown, Heart, Coins, Volume2, Check, X, ChevronRight, BookOpen, Brain, Store, Lock, Trophy, RotateCcw, Star, Swords } from "lucide-react";
+import { Sparkles, Coins, Volume2, Check, X, ChevronRight, BookOpen, Brain, Store, Lock, Star, Crown, Heart, Clock, Users, Calendar } from "lucide-react";
 
 /* ===================== speech ===================== */
 let JP_VOICE=null, TTS_UNLOCKED=false, VOICE_PREF=null;
@@ -91,11 +88,6 @@ function jaVoices(){
 }
 function pickVoice(){
   try{ const ja=jaVoices(); JP_VOICE=(VOICE_PREF&&ja.find(v=>v.voiceURI===VOICE_PREF||v.name===VOICE_PREF))||ja[0]||null; }catch(e){}
-}
-function setVoicePref(uri){
-  VOICE_PREF=uri||null;
-  try{ uri?localStorage.setItem(VOICE_KEY,uri):localStorage.removeItem(VOICE_KEY); }catch(e){}
-  pickVoice();
 }
 function unlockTTS(){
   if(TTS_UNLOCKED)return;
@@ -126,216 +118,237 @@ function speak(text){
 }
 
 /* ===================== storage ===================== */
-const SAVE_KEY="kotodama:save:v2";
+const SAVE_KEY="kotodama:life:v1";
 const mem={};
 function loadSave(){ try{ const r=localStorage.getItem(SAVE_KEY); return r?JSON.parse(r):(mem[SAVE_KEY]||null); }catch(e){ return mem[SAVE_KEY]||null; } }
 function writeSave(o){ mem[SAVE_KEY]=o; try{ localStorage.setItem(SAVE_KEY,JSON.stringify(o)); }catch(e){} }
 
-/* ===================== items / gear ===================== */
+/* ===================== consumables ===================== */
 const ITEMS=[
-  {id:"w0",slot:"weapon",name:"木の枝",emoji:"🪵",atk:0,cost:0,starter:true,desc:"転生時に拾った枝。聊勝於無。"},
-  {id:"w1",slot:"weapon",name:"言ノ葉の短剣",emoji:"🗡️",atk:8,cost:120,desc:"正解時のダメージ +8。"},
-  {id:"w2",slot:"weapon",name:"響きの杖",emoji:"🪄",atk:18,cost:360,desc:"正解時のダメージ +18。"},
-  {id:"a0",slot:"armor",name:"旅人の服",emoji:"👕",def:0,cost:0,starter:true,desc:"普通の旅装。"},
-  {id:"a1",slot:"armor",name:"革の鎧",emoji:"🦺",def:5,cost:110,desc:"被ダメージ -5。"},
-  {id:"a2",slot:"armor",name:"騎士の盾",emoji:"🛡️",def:12,cost:340,desc:"被ダメージ -12。"},
-  {id:"hp1",slot:"potion",name:"傷薬",emoji:"🧴",heal:40,cost:30,desc:"戦闘中 HP +40。"},
-  {id:"hp2",slot:"potion",name:"上薬",emoji:"🍶",heal:100,cost:75,desc:"戦闘中 HP +100。"},
+  {id:"coffee",name:"コーヒー",emoji:"\u2615",heal:30,cost:20,desc:"体力 +30。眠気覚ましの一杯。"},
+  {id:"drink",name:"栄養ドリンク",emoji:"\uD83E\uDDC3",heal:60,cost:45,desc:"体力 +60。ここぞの踏ん張り。"},
+  {id:"bento",name:"お弁当",emoji:"\uD83C\uDF71",heal:90,cost:70,desc:"体力 +90。しっかり満腹。"},
 ];
 function item(id){ return ITEMS.find(x=>x.id===id)||{}; }
 
-/* ===================== world ===================== */
-const REGIONS=["音ノ章","はじまりの街","日常の路","冒険者の谷"];
-const IC={sparkles:Sparkles,scroll:Scroll,flame:Flame,crown:Crown};
+/* ===================== world: 場面 ===================== */
+const DOMAIN_EMOJI={"食":"\uD83C\uDF71","衣":"\uD83D\uDC55","住":"\uD83C\uDFE0","行":"\uD83D\uDE83","育":"\uD83C\uDF93","楽":"\uD83C\uDFA4","職":"\uD83D\uDCBC"};
+const AFF={
+  tomo:{label:"友達",emoji:"\uD83D\uDE04"},
+  senpai:{label:"先輩",emoji:"\uD83D\uDE4B"},
+  ten:{label:"店員さん",emoji:"\uD83D\uDED2"},
+  douryou:{label:"同僚",emoji:"\uD83E\uDD1D"},
+  joushi:{label:"上司",emoji:"\uD83D\uDC54"},
+  kyaku:{label:"お客様",emoji:"\uD83C\uDFE2"},
+};
+const STUDENT_CORE=["s-train","s-class","s-lunch","s-clothes","s-home","s-fun"];
+const WORKER_CHAIN=["w-morning","w-phone","w-mail","w-nomikai","w-trip","w-meeting","w-complaint"];
 
-const CURRICULUM=[
-  /* ---------- P0 音ノ章 ---------- */
-  { id:"p0-1", cefr:"P0", region:"音ノ章", title:"五つの母音", sub:"The Five Vowels", icon:"sparkles",
-    intro:"言ノ葉世界の入口。すべての音はこの五つの母音から始まる。あ・い・う・え・お。",
+const SCENES=[
+  /* ============ 学生編 ============ */
+  { id:"s-train", stage:"学生編", domain:"行", cefr:"A1", cost:20, aff:[],
+    title:"朝の通学", sub:"Morning commute", setting:"朝。最寄り駅で改札を通り、大学行きの電車に乗る。",
     teach:[
-      {jp:"あ",reading:"あ",meaning:"a（母音）"},{jp:"い",reading:"い",meaning:"i（母音）"},
-      {jp:"う",reading:"う",meaning:"u（母音）"},{jp:"え",reading:"え",meaning:"e（母音）"},
-      {jp:"お",reading:"お",meaning:"o（母音）"},
+      {jp:"駅",reading:"えき",meaning:"車站"},{jp:"切符",reading:"きっぷ",meaning:"車票"},
+      {jp:"改札",reading:"かいさつ",meaning:"剪票口"},{jp:"IC カード",reading:"アイシーカード",meaning:"交通IC卡"},
+      {jp:"〜行き",reading:"〜ゆき",meaning:"開往〜（東京行き＝開往東京）"},{jp:"次の電車",reading:"つぎのでんしゃ",meaning:"下一班電車"},
     ],
     quiz:[
-      {kind:"mc",prompt:"「あ」の読みは？",answer:"a",choices:["a","i","u","e"]},
-      {kind:"mc",prompt:"「お」の読みは？",answer:"o",choices:["o","a","u","e"]},
-      {kind:"dictation",jp:"い",accept:["い"],hint:"母音ひとつ"},
-      {kind:"dictation",jp:"う",accept:["う"],hint:"母音ひとつ"},
-      {kind:"mc",prompt:"「e」の音はどれ？",answer:"え",choices:["え","あ","い","お"]},
-      {kind:"shadow",jp:"あいうえお",reading:"あいうえお",meaning:"五つの母音を続けて"},
+      {kind:"mc",prompt:"「駅」の意味は？",answer:"車站",choices:["車站","機場","醫院","郵局"]},
+      {kind:"mc",prompt:"改札で IC カードはどうする？",answer:"タッチする",choices:["タッチする","食べる","洗う","投げる"]},
+      {kind:"cloze",prompt:"東京＿＿の電車に乗る。（開往東京）",answer:"行き",choices:["行き","駅","切符","改札"]},
+      {kind:"dictation",jp:"えき",accept:["えき"],hint:"車站（ひらがな2字）"},
+      {kind:"mc",prompt:"「次の電車」は？",answer:"下一班電車",choices:["下一班電車","上一班電車","最後一班","沒有電車"]},
     ]},
-  { id:"p0-2", cefr:"P0", region:"音ノ章", title:"か行・さ行", sub:"K & S rows", icon:"sparkles",
-    intro:"母音に子音が宿る。か・き・く・け・こ、さ・し・す・せ・そ。",
+  { id:"s-class", stage:"学生編", domain:"育", cefr:"A2", cost:25, aff:["senpai"],
+    title:"大学の授業", sub:"At the lecture", setting:"教室。少し遅れて到着。先生に質問し、先輩に挨拶する。",
     teach:[
-      {jp:"か",reading:"か",meaning:"ka"},{jp:"き",reading:"き",meaning:"ki"},{jp:"く",reading:"く",meaning:"ku"},{jp:"け",reading:"け",meaning:"ke"},{jp:"こ",reading:"こ",meaning:"ko"},
-      {jp:"さ",reading:"さ",meaning:"sa"},{jp:"し",reading:"し",meaning:"shi"},{jp:"す",reading:"す",meaning:"su"},{jp:"せ",reading:"せ",meaning:"se"},{jp:"そ",reading:"そ",meaning:"so"},
+      {jp:"授業",reading:"じゅぎょう",meaning:"課程"},{jp:"出席",reading:"しゅっせき",meaning:"出席"},
+      {jp:"質問",reading:"しつもん",meaning:"問題／提問"},{jp:"遅れる",reading:"おくれる",meaning:"遲到"},
+      {jp:"すみません、遅れました",reading:"すみません、おくれました",meaning:"對不起，我遲到了"},
+      {jp:"お疲れさまです",reading:"おつかれさまです",meaning:"辛苦了（同儕/前輩問候）"},
     ],
     quiz:[
-      {kind:"mc",prompt:"「き」の読みは？",answer:"ki",choices:["ki","ka","ku","ke"]},
-      {kind:"mc",prompt:"「し」の読みは？",answer:"shi",choices:["shi","si","su","sa"]},
-      {kind:"mc",prompt:"「そ」の読みは？",answer:"so",choices:["so","sa","su","se"]},
-      {kind:"dictation",jp:"か",accept:["か"],hint:"か行"},
-      {kind:"dictation",jp:"す",accept:["す"],hint:"さ行"},
-      {kind:"build",prompt:"並べて『かさ』（傘）",target:["か","さ"],pool:["か","さ","き","そ"]},
+      {kind:"mc",prompt:"「授業」は？",answer:"課程",choices:["課程","午餐","社團","宿舍"]},
+      {kind:"mc",prompt:"遲到時，進教室先說？",answer:"すみません、遅れました",choices:["すみません、遅れました","いただきます","おやすみなさい","ごちそうさま"]},
+      {kind:"cloze",prompt:"先生に＿＿があります。（提問）",answer:"質問",choices:["質問","出席","授業","遅れ"]},
+      {kind:"build",prompt:"並べて：『質問してもいいですか。』",target:["質問して","も","いいですか"],pool:["質問して","も","いいですか","ました"]},
+      {kind:"translate",prompt:"用日文說：「我可以提問嗎？」",model:"質問してもいいですか。",notes:"て形＋もいいですか＝請求許可。"},
     ]},
-  { id:"p0-3", cefr:"P0", region:"音ノ章", title:"濁りと小さな「っ」", sub:"Dakuten & sokuon", icon:"flame",
-    intro:"点々（゛）で音が濁る：か→が。丸（゜）で半濁る：は→ぱ。小さい「っ」は音を一拍止める。",
+  { id:"s-lunch", stage:"学生編", domain:"食", cefr:"A2", cost:20, aff:["ten"],
+    title:"学食とコンビニ", sub:"Lunch run", setting:"お昼。学食で定食を頼み、帰りにコンビニで買い物。",
     teach:[
-      {jp:"が",reading:"が",meaning:"ga（か＋点々）"},{jp:"ざ",reading:"ざ",meaning:"za"},
-      {jp:"だ",reading:"だ",meaning:"da"},{jp:"ば",reading:"ば",meaning:"ba"},{jp:"ぱ",reading:"ぱ",meaning:"pa（は＋丸）"},
-      {jp:"きって",reading:"きって",meaning:"郵票（切手）— 小さい「っ」入り"},
-      {jp:"かっこ",reading:"かっこ",meaning:"括號（括弧）"},
+      {jp:"定食",reading:"ていしょく",meaning:"定食套餐"},{jp:"お弁当",reading:"おべんとう",meaning:"便當"},
+      {jp:"これください",reading:"これください",meaning:"請給我這個"},{jp:"温めますか",reading:"あたためますか",meaning:"要加熱嗎（店員問）"},
+      {jp:"お会計",reading:"おかいけい",meaning:"結帳"},{jp:"いくらですか",reading:"いくらですか",meaning:"多少錢？"},
     ],
     quiz:[
-      {kind:"mc",prompt:"「が」は何に点々をつけた音？",answer:"か",choices:["か","さ","た","は"]},
-      {kind:"mc",prompt:"小さい「っ」の働きは？",answer:"音を一拍止める",choices:["音を一拍止める","音をのばす","音を消す","点々をつける"]},
-      {kind:"dictation",jp:"ば",accept:["ば"],hint:"濁音ひとつ"},
-      {kind:"dictation",jp:"きって",accept:["きって"],hint:"小さい「っ」を忘れずに"},
-      {kind:"build",prompt:"並べて『かっこ』",target:["か","っ","こ"],pool:["か","っ","こ","き"]},
-      {kind:"shadow",jp:"きって",reading:"きって",meaning:"切手（っ で一拍止める）"},
+      {kind:"mc",prompt:"「お弁当」は？",answer:"便當",choices:["便當","飲料","筷子","菜單"]},
+      {kind:"mc",prompt:"コンビニで「温めますか」と聞かれ、温めてほしい時：",answer:"はい、お願いします",choices:["はい、お願いします","いいえ、結構です","いただきます","ごちそうさま"]},
+      {kind:"cloze",prompt:"すみません、これ＿＿。（請給我）",answer:"ください",choices:["ください","です","ました","でした"]},
+      {kind:"dictation",jp:"おべんとう",accept:["おべんとう"],hint:"便當（ひらがな）"},
+      {kind:"translate",prompt:"用日文問：「多少錢？」",model:"いくらですか。",notes:"いくら＝多少錢；丁寧形＋ですか。"},
     ]},
-  { id:"p0-boss", cefr:"P0", region:"音ノ章", boss:true, title:"音の試練・木霊", sub:"Trial of Echo", icon:"crown",
-    enemy:{name:"木霊（コダマ）",emoji:"🌳",hp:60},
-    intro:"音ノ章の番人・木霊。これまでに刻んだ音、すべてを試される。",
-    sample:["p0-1","p0-2","p0-3"] },
+  { id:"s-clothes", stage:"学生編", domain:"衣", cefr:"A2", cost:25, aff:["ten"],
+    title:"服を買う", sub:"Clothes shopping", setting:"夕方。服屋でサイズを聞き、試着する。",
+    teach:[
+      {jp:"服",reading:"ふく",meaning:"衣服"},{jp:"サイズ",reading:"サイズ",meaning:"尺寸"},
+      {jp:"試着",reading:"しちゃく",meaning:"試穿"},{jp:"もう少し大きいの",reading:"もうすこしおおきいの",meaning:"再大一點的"},
+      {jp:"色違い",reading:"いろちがい",meaning:"不同顏色（同款）"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「試着」は？",answer:"試穿",choices:["試穿","結帳","退貨","包裝"]},
+      {kind:"cloze",prompt:"これ、＿＿してもいいですか。（試穿）",answer:"試着",choices:["試着","会計","出席","質問"]},
+      {kind:"mc",prompt:"「もう少し大きいの、ありますか」は何を聞いている？",answer:"有沒有大一點的",choices:["有沒有大一點的","有沒有便宜的","可以退嗎","在哪裡結帳"]},
+      {kind:"build",prompt:"並べて：『試着してもいいですか。』",target:["試着して","も","いいですか"],pool:["試着して","も","いいですか","ください"]},
+      {kind:"translate",prompt:"用日文問：「有別的顏色嗎？」",model:"色違いはありますか。",notes:"色違い＝不同色；ありますか＝有嗎。"},
+    ]},
+  { id:"s-home", stage:"学生編", domain:"住", cefr:"A2", cost:20, aff:[],
+    title:"アパート暮らし", sub:"At the apartment", setting:"朝。大家さんに挨拶し、ゴミを分別して出す。",
+    teach:[
+      {jp:"大家さん",reading:"おおやさん",meaning:"房東"},{jp:"ゴミ",reading:"ゴミ",meaning:"垃圾"},
+      {jp:"燃えるゴミ",reading:"もえるゴミ",meaning:"可燃垃圾"},{jp:"分別",reading:"ぶんべつ",meaning:"分類"},
+      {jp:"よろしくお願いします",reading:"よろしくおねがいします",meaning:"請多指教／拜託了"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「大家さん」は？",answer:"房東",choices:["房東","鄰居","郵差","警察"]},
+      {kind:"mc",prompt:"「燃えるゴミ」は？",answer:"可燃垃圾",choices:["可燃垃圾","不可燃垃圾","資源回收","大型垃圾"]},
+      {kind:"cloze",prompt:"ゴミは＿＿してから出す。（分類）",answer:"分別",choices:["分別","出席","試着","質問"]},
+      {kind:"mc",prompt:"引っ越しの挨拶でよく言うのは？",answer:"よろしくお願いします",choices:["よろしくお願いします","おつかれさまです","いただきます","おかえりなさい"]},
+      {kind:"dictation",jp:"おおや",accept:["おおや"],hint:"房東（さん抜き、ひらがな）"},
+    ]},
+  { id:"s-fun", stage:"学生編", domain:"楽", cefr:"B1", cost:25, aff:["tomo","senpai"],
+    title:"サークルとカラオケ", sub:"Hanging out", setting:"夜。サークルの後、友達と先輩でカラオケに誘い合う。",
+    teach:[
+      {jp:"サークル",reading:"サークル",meaning:"社團"},{jp:"カラオケ",reading:"カラオケ",meaning:"卡拉OK"},
+      {jp:"一緒に",reading:"いっしょに",meaning:"一起"},{jp:"〜ない？",reading:"〜ない？",meaning:"要不要〜？（邀約）"},
+      {jp:"また今度",reading:"またこんど",meaning:"下次再說／下次吧"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「サークル」は？",answer:"社團",choices:["社團","打工","考試","宿舍"]},
+      {kind:"cloze",prompt:"今度、＿＿にカラオケ行かない？（一起）",answer:"一緒",choices:["一緒","試着","出席","分別"]},
+      {kind:"mc",prompt:"「カラオケ行かない？」のニュアンスは？",answer:"邀約（要不要去）",choices:["邀約（要不要去）","命令","拒絕","道歉"]},
+      {kind:"build",prompt:"並べて：『一緒に行かない？』",target:["一緒に","行か","ない"],pool:["一緒に","行か","ない","ました"]},
+      {kind:"translate",prompt:"用日文說：「下次再一起去吧。」",model:"また今度、一緒に行こう。",notes:"〜う／よう＝意志・邀約形。"},
+    ]},
+  { id:"s-event", stage:"学生編", domain:"楽", cefr:"B1", cost:30, aff:["tomo","senpai"], event:true,
+    title:"居酒屋で語る夜", sub:"Izakaya night（好感度イベント）", setting:"友達との好感度が深まった。居酒屋で、これまで覚えた言葉を総動員して語り合う。",
+    affGate:{key:"tomo",val:20},
+    sample:["s-class","s-lunch","s-clothes","s-fun"] },
 
-  /* ---------- A1 はじまりの街 ---------- */
-  { id:"a1-1", cefr:"A1", region:"はじまりの街", title:"あいさつ", sub:"Greetings", icon:"scroll",
-    intro:"異世界の街に着いた。まずは挨拶から。言葉は生き延びる道具だ。",
+  /* ============ 社会人編 ============ */
+  { id:"w-morning", stage:"社会人編", domain:"職", cefr:"B1", cost:25, aff:["douryou","joushi"],
+    title:"出社・報連相", sub:"Morning at work", setting:"出社。挨拶のあと、上司に「報・連・相」をする。",
     teach:[
-      {jp:"おはよう",reading:"おはよう",meaning:"早安"},{jp:"こんにちは",reading:"こんにちは",meaning:"你好（白天）"},
-      {jp:"こんばんは",reading:"こんばんは",meaning:"晚安（見面時）"},{jp:"ありがとう",reading:"ありがとう",meaning:"謝謝"},
-      {jp:"すみません",reading:"すみません",meaning:"不好意思／抱歉"},{jp:"はい",reading:"はい",meaning:"是／好"},{jp:"いいえ",reading:"いいえ",meaning:"不是"},
+      {jp:"お疲れさまです",reading:"おつかれさまです",meaning:"辛苦了（職場問候）"},{jp:"報告",reading:"ほうこく",meaning:"報告"},
+      {jp:"連絡",reading:"れんらく",meaning:"聯絡"},{jp:"相談",reading:"そうだん",meaning:"商量"},
+      {jp:"よろしくお願いいたします",reading:"よろしくおねがいいたします",meaning:"請多指教（更禮貌）"},
     ],
     quiz:[
-      {kind:"mc",prompt:"「ありがとう」の意味は？",answer:"謝謝",choices:["謝謝","你好","抱歉","再見"]},
-      {kind:"mc",prompt:"「不好意思／抱歉」は？",answer:"すみません",choices:["すみません","ありがとう","こんにちは","はい"]},
-      {kind:"cloze",prompt:"朝の挨拶：「＿＿＿、みなさん。」",answer:"おはよう",choices:["おはよう","こんばんは","すみません","ありがとう"]},
-      {kind:"dictation",jp:"ありがとう",accept:["ありがとう"],hint:"感謝のことば"},
-      {kind:"translate",prompt:"用日文說：「謝謝。」",model:"ありがとう（ございます）。",notes:"加上「ございます」會更禮貌。"},
-      {kind:"shadow",jp:"こんにちは",reading:"こんにちは",meaning:"白天的問候"},
+      {kind:"mc",prompt:"職場で同僚に会ったら？",answer:"お疲れさまです",choices:["お疲れさまです","いただきます","おやすみなさい","ただいま"]},
+      {kind:"mc",prompt:"「報連相」の「相」は？",answer:"相談",choices:["相談","掃除","散歩","写真"]},
+      {kind:"cloze",prompt:"進捗に＿＿て報告します。（關於）",answer:"ついて",choices:["ついて","よって","おいて","たいして"]},
+      {kind:"build",prompt:"並べて：『ご相談したいことがあります。』",target:["ご相談したい","ことが","あります"],pool:["ご相談したい","ことが","あります","でした"]},
+      {kind:"translate",prompt:"用日文說：「我想跟您商量一件事。」",model:"ご相談したいことがあるのですが。",notes:"ご＋名詞＋したい＝謙讓；のですが＝婉曲鋪陳。"},
     ]},
-  { id:"a1-2", cefr:"A1", region:"はじまりの街", title:"これ・それ・あれ", sub:"This / that + は", icon:"scroll",
-    intro:"指し示す言葉と、主題の助詞「は」（発音は wa）。",
+  { id:"w-phone", stage:"社会人編", domain:"職", cefr:"B2", cost:25, aff:["kyaku","joushi"],
+    title:"電話応対", sub:"Answering the phone", setting:"昼。外線が鳴る。会社名を名乗り、担当者へ取り次ぐ。",
     teach:[
-      {jp:"これ",reading:"これ",meaning:"這個（近說話者）"},{jp:"それ",reading:"それ",meaning:"那個（近聽者）"},
-      {jp:"あれ",reading:"あれ",meaning:"那個（離兩者都遠）"},{jp:"は",reading:"わ",meaning:"主題助詞（讀作 wa）"},
-      {jp:"これは本です",reading:"これはほんです",meaning:"這是書。"},
+      {jp:"お電話ありがとうございます",reading:"おでんわありがとうございます",meaning:"感謝您來電"},{jp:"少々お待ちください",reading:"しょうしょうおまちください",meaning:"請稍候"},
+      {jp:"担当の者",reading:"たんとうのもの",meaning:"負責的人（謙稱自方）"},{jp:"かしこまりました",reading:"かしこまりました",meaning:"我明白了（鄭重）"},
+      {jp:"折り返し",reading:"おりかえし",meaning:"回撥"},
     ],
     quiz:[
-      {kind:"mc",prompt:"近くの物を指すのは？",answer:"これ",choices:["これ","それ","あれ","どれ"]},
-      {kind:"mc",prompt:"主題の助詞「は」の発音は？",answer:"wa",choices:["wa","ha","ba","pa"]},
-      {kind:"build",prompt:"並べて：『これは本です。』",target:["これ","は","本","です"],pool:["これ","は","本","です","それ"]},
-      {kind:"cloze",prompt:"「＿＿＿ はペンです。」（離自己遠、離對方也遠）",answer:"あれ",choices:["あれ","これ","です","は"]},
-      {kind:"find_error",prompt:"找出錯誤的詞：",parts:["これ","を","本","です"],wrongIndex:1,correct:"は",explain:"主題要用「は」，不是「を」。→ これは本です。"},
-      {kind:"dictation",jp:"これ",accept:["これ"],hint:"指示詞ひとつ"},
+      {kind:"mc",prompt:"会社で電話を取ったら、まず？",answer:"お電話ありがとうございます",choices:["お電話ありがとうございます","もしもし、どなた？","はい、なに？","いま忙しいです"]},
+      {kind:"mc",prompt:"「少々お待ちください」は？",answer:"請稍候",choices:["請稍候","請掛斷","請再打","我不在"]},
+      {kind:"mc",prompt:"「かしこまりました」の意味は？",answer:"我明白了（鄭重）",choices:["我明白了（鄭重）","我不知道","請等等","謝謝"]},
+      {kind:"cloze",prompt:"担当の＿＿におつなぎします。（自方謙稱）",answer:"者",choices:["者","方","様","君"]},
+      {kind:"find_error",prompt:"自社の人について丁寧に。誤りを探せ：",parts:["ただいま","担当者は","席に","います"],wrongIndex:3,correct:"おりません／おります",explain:"自分側には謙譲語。「います」→「おります（おりません）」。"},
     ]},
-  { id:"a1-3", cefr:"A1", region:"はじまりの街", title:"数の魔法 1〜10", sub:"Numbers 1–10", icon:"sparkles",
-    intro:"買い物にも冒険にも、数は必須の呪文。",
-    teach:[
-      {jp:"いち",reading:"いち",meaning:"1"},{jp:"に",reading:"に",meaning:"2"},{jp:"さん",reading:"さん",meaning:"3"},{jp:"よん",reading:"よん",meaning:"4（し とも）"},{jp:"ご",reading:"ご",meaning:"5"},
-      {jp:"ろく",reading:"ろく",meaning:"6"},{jp:"なな",reading:"なな",meaning:"7（しち とも）"},{jp:"はち",reading:"はち",meaning:"8"},{jp:"きゅう",reading:"きゅう",meaning:"9（く とも）"},{jp:"じゅう",reading:"じゅう",meaning:"10"},
-    ],
-    quiz:[
-      {kind:"mc",prompt:"「さん」はいくつ？",answer:"3",choices:["3","2","4","1"]},
-      {kind:"mc",prompt:"「7」は？",answer:"なな",choices:["なな","はち","ろく","きゅう"]},
-      {kind:"mc",prompt:"「じゅう」はいくつ？",answer:"10",choices:["10","1","9","5"]},
-      {kind:"dictation",jp:"ご",accept:["ご"],hint:"数字ひとつ"},
-      {kind:"dictation",jp:"はち",accept:["はち"],hint:"数字ひとつ"},
-      {kind:"build",prompt:"小さい順に：『いち に さん』",target:["いち","に","さん"],pool:["いち","に","さん","ご"]},
-    ]},
-  { id:"a1-boss", cefr:"A1", region:"はじまりの街", boss:true, title:"街の門番・スライム長", sub:"Slime Captain", icon:"crown",
-    enemy:{name:"スライム長",emoji:"🟢",hp:90},
-    intro:"街の門を守るスライム長。挨拶・指示詞・数で挑め。",
-    sample:["a1-1","a1-2","a1-3"] },
-
-  /* ---------- A2 日常の路 ---------- */
-  { id:"a2-1", cefr:"A2", region:"日常の路", title:"て形の道", sub:"The te-form", icon:"flame",
-    intro:"動詞をつなぐ「て形」。依頼・連続・進行、すべての土台になる。",
-    teach:[
-      {jp:"たべて",reading:"たべて",meaning:"吃（て形：食べる→食べて）"},{jp:"みて",reading:"みて",meaning:"看（見る→見て）"},
-      {jp:"いって",reading:"いって",meaning:"去／說（行く→行って・言う→言って）"},
-      {jp:"〜てください",reading:"〜てください",meaning:"請（做）…"},{jp:"みてください",reading:"みてください",meaning:"請看。"},
-    ],
-    quiz:[
-      {kind:"mc",prompt:"「食べる」のて形は？",answer:"たべて",choices:["たべて","たべって","たべた","たべない"]},
-      {kind:"mc",prompt:"「請看」を日本語で：",answer:"みてください",choices:["みてください","みます","みない","みた"]},
-      {kind:"build",prompt:"並べて：『見てください。』",target:["見て","ください"],pool:["見て","ください","ます","ない"]},
-      {kind:"find_error",prompt:"找出錯誤：",parts:["たべて","くたさい"],wrongIndex:1,correct:"ください",explain:"是「ください」，不是「くたさい」。"},
-      {kind:"dictation",jp:"みて",accept:["みて"],hint:"見る的て形"},
-      {kind:"translate",prompt:"用日文說：「請吃。」",model:"食べてください。",notes:"て形＋ください＝禮貌請求。"},
-    ]},
-  { id:"a2-2", cefr:"A2", region:"日常の路", title:"丁寧と過去", sub:"Polite & past", icon:"scroll",
-    intro:"ます形と過去「ました」。旅の記録を語ろう。",
-    teach:[
-      {jp:"たべます",reading:"たべます",meaning:"吃（禮貌・現在/未來）"},{jp:"たべました",reading:"たべました",meaning:"吃了（禮貌・過去）"},
-      {jp:"いきます",reading:"いきます",meaning:"去"},{jp:"いきました",reading:"いきました",meaning:"去了"},
-      {jp:"でした",reading:"でした",meaning:"（名詞）過去：是…了"},
-    ],
-    quiz:[
-      {kind:"mc",prompt:"「食べました」の意味は？",answer:"吃了（過去）",choices:["吃了（過去）","吃（現在）","不吃","想吃"]},
-      {kind:"cloze",prompt:"昨日、すしを＿＿＿。（吃了）",answer:"たべました",choices:["たべました","たべます","たべて","たべない"]},
-      {kind:"mc",prompt:"「行きます」を過去に：",answer:"いきました",choices:["いきました","いきます","いって","いかない"]},
-      {kind:"build",prompt:"並べて：『学校へ行きました。』",target:["学校","へ","行きました"],pool:["学校","へ","行きました","です"]},
-      {kind:"dictation",jp:"いきました",accept:["いきました"],hint:"行く的禮貌過去"},
-      {kind:"translate",prompt:"用日文說：「我吃了壽司。」",model:"すしを食べました。",notes:"を＝受詞助詞；ました＝禮貌過去。"},
-    ]},
-  { id:"a2-boss", cefr:"A2", region:"日常の路", boss:true, title:"砂の大蠍", sub:"Sand Scorpion", icon:"crown",
-    enemy:{name:"大サソリ",emoji:"🦂",hp:120},
-    intro:"砂漠の路を塞ぐ大サソリ。て形と過去で打ち破れ。",
-    sample:["a2-1","a2-2"] },
-
-  /* ---------- B1 冒険者の谷 ---------- */
-  { id:"b1-1", cefr:"B1", region:"冒険者の谷", title:"条件「と・ば」", sub:"Conditionals", icon:"flame",
-    intro:"「もし…なら」を表す条件形。自然法則や仮定を語れるようになる。",
-    teach:[
-      {jp:"〜と",reading:"〜と",meaning:"一…就…（必然・自然な結果）"},{jp:"〜ば",reading:"〜ば",meaning:"如果…（一般的條件）"},
-      {jp:"おすと",reading:"おすと",meaning:"一按（押すと）"},{jp:"あめがふると",reading:"あめがふると",meaning:"一下雨（雨が降ると）"},
-      {jp:"やすければ",reading:"やすければ",meaning:"如果便宜（安ければ）"},
-    ],
-    quiz:[
-      {kind:"mc",prompt:"必然の結果『一…就…』を表すのは？",answer:"〜と",choices:["〜と","〜ば","〜て","〜た"]},
-      {kind:"cloze",prompt:"ボタンを押す＿＿、ドアが開く。",answer:"と",choices:["と","て","た","を"]},
-      {kind:"mc",prompt:"「安ければ」の意味は？",answer:"如果便宜",choices:["如果便宜","很便宜","便宜了","不便宜"]},
-      {kind:"build",prompt:"並べて：『春になると、花が咲く。』",target:["春","に","なる","と","花が咲く"],pool:["春","に","なる","と","花が咲く","ば"]},
-      {kind:"find_error",prompt:"找出錯誤：",parts:["おす","で","ドアが開く"],wrongIndex:1,correct:"と",explain:"必然的結果用「と」：押すとドアが開く。"},
-      {kind:"translate",prompt:"用日文說：「一下雨，路就會濕。」",model:"雨が降ると、道が濡れる。",notes:"自然必然的因果用「と」。"},
-    ]},
-  { id:"b1-2", cefr:"B1", region:"冒険者の谷", reading:true, title:"石碑の物語", sub:"Reading: The Stele", icon:"scroll",
-    intro:"谷の奥で古い石碑を見つけた。声に出して読んでみよう。",
-    passage:"むかし、この谷に小さな村がありました。村人は毎朝、山へ行って、水をくみました。ある日、雨が降らなくなって、川の水が少なくなりました。村の若者は「水を探しに行く」と言って、山の奥へ進みました。三日後、若者は新しい泉を見つけて、村に戻りました。村人はとても喜びました。",
+  { id:"w-mail", stage:"社会人編", domain:"職", cefr:"B2", cost:25, aff:["kyaku"], reading:true,
+    title:"ビジネスメール", sub:"Reading: a work email", setting:"夕方。取引先からのメールを読み、内容を把握する。",
+    passage:"お世話になっております。株式会社さくらの田中です。先日はお打ち合わせのお時間をいただき、ありがとうございました。さて、ご依頼いただいた見積書につきまして、添付ファイルにてお送りいたします。ご確認のうえ、ご不明な点がございましたら、お気軽にお問い合わせください。何卒よろしくお願いいたします。",
     gloss:[
-      {jp:"村（むら）",meaning:"村莊"},{jp:"くむ",meaning:"打（水）"},
-      {jp:"泉（いずみ）",meaning:"泉水"},{jp:"喜ぶ（よろこぶ）",meaning:"高興"},
+      {jp:"お世話になっております",meaning:"承蒙關照（商務開頭語）"},{jp:"見積書（みつもりしょ）",meaning:"報價單"},
+      {jp:"添付（てんぷ）",meaning:"附件"},{jp:"ご確認のうえ",meaning:"確認之後"},
     ],
     quiz:[
-      {kind:"mc",prompt:"村人は毎朝、何をしましたか。",answer:"山へ行って水をくんだ",choices:["山へ行って水をくんだ","町で買い物をした","泉で泳いだ","石碑を作った"]},
-      {kind:"mc",prompt:"なぜ川の水が少なくなりましたか。",answer:"雨が降らなくなったから",choices:["雨が降らなくなったから","村人が飲んだから","若者が止めたから","泉ができたから"]},
-      {kind:"cloze",prompt:"若者は三日後、新しい＿＿を見つけた。",answer:"泉",choices:["泉","村","川","山"]},
-      {kind:"mc",prompt:"物語の最後、村人はどんな気持ちでしたか。",answer:"とても喜んだ",choices:["とても喜んだ","とても怒った","とても悲しんだ","とても疲れた"]},
-      {kind:"find_error",prompt:"找出與內文不符的部分：",parts:["若者","は","泉","を作った"],wrongIndex:3,correct:"を見つけた",explain:"内文是「見つけた（找到）」，不是「作った（製作）」。"},
-      {kind:"translate",prompt:"用日文說：「年輕人去找水。」",model:"若者は水を探しに行きました。",notes:"動詞ます形＋に行く＝去做某事。"},
+      {kind:"mc",prompt:"このメールの主な目的は？",answer:"見積書を送ること",choices:["見積書を送ること","会議を断ること","苦情を言うこと","求人に応募すること"]},
+      {kind:"mc",prompt:"「添付ファイルにて」送るものは？",answer:"見積書",choices:["見積書","請求書","履歴書","名刺"]},
+      {kind:"cloze",prompt:"ご確認の＿＿、お問い合わせください。",answer:"うえ",choices:["うえ","した","なか","あいだ"]},
+      {kind:"mc",prompt:"「お世話になっております」を使う場面は？",answer:"ビジネスの挨拶",choices:["ビジネスの挨拶","謝罪","別れ際","食事の前"]},
+      {kind:"find_error",prompt:"取引先への文。語体の誤りを探せ：",parts:["見積書","を","送って","やりました"],wrongIndex:3,correct:"お送りいたしました",explain:"「やる」は目下向け。取引先には謙譲語「お送りいたします／いたしました」。"},
     ]},
-  { id:"b1-boss", cefr:"B1", region:"冒険者の谷", boss:true, title:"谷の守護竜", sub:"Valley Dragon", icon:"crown",
-    enemy:{name:"守護竜",emoji:"🐉",hp:160},
-    intro:"谷の最奥、守護竜が待つ。条件形と読解、これまでの力すべてを示せ。",
-    sample:["b1-1","b1-2"] },
+  { id:"w-nomikai", stage:"社会人編", domain:"食", cefr:"B2", cost:30, aff:["joushi","kyaku"],
+    title:"飲み会・接待", sub:"Business dinner", setting:"夜。取引先との会食。注ぐ・勧める・気を配る。",
+    teach:[
+      {jp:"お注ぎします",reading:"おつぎします",meaning:"我為您倒（酒）"},{jp:"お先に失礼します",reading:"おさきにしつれいします",meaning:"我先告辭了"},
+      {jp:"ご馳走になります",reading:"ごちそうになります",meaning:"承蒙招待"},{jp:"もう一杯いかがですか",reading:"もういっぱいいかがですか",meaning:"再來一杯如何？"},
+      {jp:"乾杯",reading:"かんぱい",meaning:"乾杯"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"上司にお酒を勧める時、丁寧なのは？",answer:"もう一杯いかがですか",choices:["もう一杯いかがですか","もっと飲め","いる？","自分で注いで"]},
+      {kind:"mc",prompt:"「お先に失礼します」は？",answer:"我先告辭了",choices:["我先告辭了","我遲到了","我吃飽了","請坐"]},
+      {kind:"cloze",prompt:"本日はお招きいただき、ありがとう＿＿。",answer:"ございます",choices:["ございます","です","でした","ました"]},
+      {kind:"mc",prompt:"自分が相手にお酌する時に言うのは？",answer:"お注ぎします",choices:["お注ぎします","お注ぎになります","注いでやる","注いでくれ"]},
+      {kind:"build",prompt:"並べて：『お先に失礼します。』",target:["お先に","失礼","します"],pool:["お先に","失礼","します","しました"]},
+    ]},
+  { id:"w-trip", stage:"社会人編", domain:"行", cefr:"B2", cost:25, aff:[],
+    title:"出張・新幹線", sub:"Business trip", setting:"朝。出張で新幹線に乗る。指定席を取り、乗り換える。",
+    teach:[
+      {jp:"出張",reading:"しゅっちょう",meaning:"出差"},{jp:"新幹線",reading:"しんかんせん",meaning:"新幹線"},
+      {jp:"指定席",reading:"していせき",meaning:"對號座"},{jp:"自由席",reading:"じゆうせき",meaning:"自由座"},
+      {jp:"乗り換え",reading:"のりかえ",meaning:"轉乘"},{jp:"〜番線",reading:"〜ばんせん",meaning:"〜號月台"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「指定席」は？",answer:"對號座",choices:["對號座","自由座","站票","臥鋪"]},
+      {kind:"mc",prompt:"「乗り換え」は？",answer:"轉乘",choices:["轉乘","直達","誤點","終點"]},
+      {kind:"cloze",prompt:"東京駅で＿＿があります。（轉乘）",answer:"乗り換え",choices:["乗り換え","出張","指定席","改札"]},
+      {kind:"dictation",jp:"しんかんせん",accept:["しんかんせん"],hint:"新幹線（ひらがな）"},
+      {kind:"mc",prompt:"「3番線」が指すのは？",answer:"月台號",choices:["月台號","車廂號","座位號","班次號"]},
+    ]},
+  { id:"w-meeting", stage:"社会人編", domain:"職", cefr:"C1", cost:30, aff:["joushi"], contact:true, minLv:5,
+    title:"会議で意見を述べる", sub:"Disagreeing softly（上級接觸）", setting:"会議。上司の案に、角を立てずに別の見方を添える。※認識のみ・自由産出なし。",
+    teach:[
+      {jp:"おっしゃる通りですが",reading:"おっしゃるとおりですが",meaning:"您說得對，不過…（先肯定再轉折）"},
+      {jp:"〜という見方もあります",reading:"〜というみかたもあります",meaning:"也有〜這種看法"},
+      {jp:"一点よろしいでしょうか",reading:"いってんよろしいでしょうか",meaning:"我可以講一點嗎"},
+      {jp:"差し支えなければ",reading:"さしつかえなければ",meaning:"如果方便的話（婉曲前置）"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"上司の意見に反対する時、最も角が立たないのは？",answer:"おっしゃる通りですが、別の見方もあるかと",choices:["おっしゃる通りですが、別の見方もあるかと","それは違います","反対です","意味がわかりません"]},
+      {kind:"mc",prompt:"「差し支えなければ」の働きは？",answer:"婉曲に前置きする（如果方便）",choices:["婉曲に前置きする（如果方便）","強く命令する","謝罪する","感謝する"]},
+      {kind:"cloze",prompt:"一点、よろしい＿＿。（請求發言）",answer:"でしょうか",choices:["でしょうか","ください","ません","でした"]},
+      {kind:"find_error",prompt:"上司への異議。失礼な箇所を探せ：",parts:["部長","は","間違って","います"],wrongIndex:2,correct:"〜という見方もあるかと",explain:"直接「間違っている」は失礼。婉曲表現でやわらげる。"},
+    ]},
+  { id:"w-complaint", stage:"社会人編", domain:"職", cefr:"C1", cost:30, aff:["kyaku","joushi"], contact:true, minLv:6,
+    title:"苦情対応", sub:"Handling complaints（上級接觸）", setting:"夕方。クレームの電話。共感し、謝罪し、対応する。※認識のみ・自由産出なし。",
+    teach:[
+      {jp:"申し訳ございません",reading:"もうしわけございません",meaning:"非常抱歉（最鄭重的道歉）"},
+      {jp:"ご迷惑をおかけしました",reading:"ごめいわくをおかけしました",meaning:"給您添麻煩了"},
+      {jp:"さっそく確認いたします",reading:"さっそくかくにんいたします",meaning:"立刻為您確認"},
+      {jp:"今後このようなことがないよう",reading:"こんごこのようなことがないよう",meaning:"今後不再發生"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"最も丁寧な謝罪は？",answer:"申し訳ございません",choices:["申し訳ございません","ごめんね","すみません","悪いね"]},
+      {kind:"mc",prompt:"クレーム客にまず示すべきは？",answer:"共感と謝罪",choices:["共感と謝罪","言い訳","無視","反論"]},
+      {kind:"cloze",prompt:"ご迷惑を＿＿し、申し訳ございません。（添麻煩）",answer:"おかけ",choices:["おかけ","かけて","かかり","かかって"]},
+      {kind:"find_error",prompt:"対応として不適切な箇所を探せ：",parts:["それは","お客様","の","せいです"],wrongIndex:3,correct:"こちらの確認不足でございました",explain:"客に責任転嫁は禁物。自社の非として受け止める。"},
+    ]},
 ];
+/*DATA_END*/
 
-/* card registry: id -> card */
+/* card registry: id -> card (event scenes have no own quiz) */
 const CARD_INDEX={};
-CURRICULUM.forEach(L=>{ (L.quiz||[]).forEach((q,idx)=>{ const id=L.id+":"+idx; CARD_INDEX[id]={...q,_id:id,_lesson:L.id,_cefr:L.cefr}; }); });
+SCENES.forEach(L=>{ (L.quiz||[]).forEach((q,idx)=>{ const id=L.id+":"+idx; CARD_INDEX[id]={...q,_id:id,_lesson:L.id,_cefr:L.cefr}; }); });
 
 /* ===================== helpers ===================== */
 function clamp(n,a,b){ return Math.max(a,Math.min(b,n)); }
 function shuffle(a){ const r=[...a]; for(let i=r.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; [r[i],r[j]]=[r[j],r[i]]; } return r; }
 function normKana(s){ return (s||"").replace(/\s/g,"").replace(/。/g,"").trim(); }
 function xpToNext(lv){ return 40+lv*40; }
-function maxHpOf(s){ return 80+s.lv*20; }
-function atkOf(s){ return 8+s.lv*2+(item(s.equip.weapon).atk||0); }
-function defOf(s){ return item(s.equip.armor).def||0; }
 function gainXP(s,amt){ let lv=s.lv,xp=s.xp,ups=0; xp+=amt; while(xp>=xpToNext(lv)){ xp-=xpToNext(lv); lv++; ups++; } return {lv,xp,ups}; }
+function sceneById(id){ return SCENES.find(s=>s.id===id); }
 
 /* SM-2 lite scheduler */
 const MIN=60000, HOUR=3600000, DAY=86400000;
@@ -368,39 +381,39 @@ function sampleCards(lessonIds,n){
   const pool=Object.keys(CARD_INDEX).filter(id=>lessonIds.includes(CARD_INDEX[id]._lesson));
   return shuffle(pool).slice(0,n).map(id=>({...CARD_INDEX[id],_id:id}));
 }
-function nodeStatus(s){
-  const st={}; let prevBossDone=true;
-  for(const r of REGIONS){
-    const nodes=CURRICULUM.filter(n=>n.region===r);
-    const lessons=nodes.filter(n=>!n.boss);
-    const boss=nodes.find(n=>n.boss);
-    const regionUnlocked=prevBossDone;
-    let prevDone=true;
-    for(const n of lessons){
-      const done=!!s.done[n.id];
-      st[n.id]={done,locked:!regionUnlocked||!prevDone};
-      prevDone=done;
-    }
-    if(boss){
-      const allDone=lessons.every(n=>s.done[n.id]);
-      st[boss.id]={done:!!s.done[boss.id],locked:!regionUnlocked||!allDone};
-    }
-    prevBossDone = boss ? !!s.done[boss.id] : prevDone;
-  }
+function sceneStatus(s){
+  const st={}; const done=s.done||{}; const lv=s.lv||1;
+  STUDENT_CORE.forEach((id,i)=>{
+    const locked = i===0 ? false : !done[STUDENT_CORE[i-1]];
+    st[id]={done:!!done[id],locked};
+  });
+  const ev=sceneById("s-event");
+  const affVal=(s.aff&&s.aff[ev.affGate.key])||0;
+  st["s-event"]={done:!!done["s-event"],locked: affVal<ev.affGate.val};
+  const studentDone=STUDENT_CORE.every(id=>done[id]);
+  WORKER_CHAIN.forEach((id,i)=>{
+    const sc=sceneById(id);
+    let locked = !studentDone || (i>0 && !done[WORKER_CHAIN[i-1]]);
+    if(sc.minLv && lv<sc.minLv) locked=true;
+    st[id]={done:!!done[id],locked,needLv: (sc.minLv&&lv<sc.minLv)?sc.minLv:0};
+  });
   return st;
 }
 function freshSave(){
-  return { name:"転生者", lv:1, xp:0, gold:60, done:{}, srs:{}, codex:{},
-    equip:{weapon:"w0",armor:"a0"}, owned:["w0","a0"], inv:{}, created:Date.now() };
+  return { name:"あなた", lv:1, xp:0, gold:60, day:1, slot:0, energy:100,
+    done:{}, srs:{}, codex:{}, aff:{}, inv:{}, created:Date.now() };
 }
 function normalize(s){
   if(!s) return s;
-  s.equip=s.equip||{}; if(!s.equip.weapon)s.equip.weapon="w0"; if(!s.equip.armor)s.equip.armor="a0";
-  s.owned=Array.isArray(s.owned)?s.owned:[]; ["w0","a0"].forEach(id=>{ if(!s.owned.includes(id))s.owned.push(id); });
-  s.inv=s.inv||{}; s.done=s.done||{}; s.srs=s.srs||{}; s.codex=s.codex||{};
+  s.done=s.done||{}; s.srs=s.srs||{}; s.codex=s.codex||{}; s.aff=s.aff||{}; s.inv=s.inv||{};
   if(typeof s.gold!=="number")s.gold=0; if(typeof s.lv!=="number")s.lv=1; if(typeof s.xp!=="number")s.xp=0;
+  if(typeof s.day!=="number")s.day=1; if(typeof s.slot!=="number")s.slot=0;
+  if(typeof s.energy!=="number")s.energy=100;
+  if(!s.name)s.name="あなた";
   return s;
 }
+const SLOTS=["朝","昼","夕","夜"];
+function slotLabel(slot){ return SLOTS[(slot||0)%4]; }
 
 /* ===================== shared UI ===================== */
 function TopBar({title,sub,onBack}){
@@ -610,28 +623,34 @@ function Footer({done,ok,onNext,onHint,hintUsed}){
   );
 }
 
-/* ===================== Lesson ===================== */
-function Lesson({node,update,onDone,onBack}){
-  const cards=(node.quiz||[]).map((q,idx)=>({...q,_id:node.id+":"+idx}));
+/* ===================== Scene (lesson/event) ===================== */
+function Scene({node,save,update,onDone,onBack}){
+  const [cards]=useState(()=> node.event ? sampleCards(node.sample,10) : (node.quiz||[]).map((q,idx)=>({...q,_id:node.id+":"+idx})) );
   const [phase,setPhase]=useState("teach");
   const [i,setI]=useState(0);
   const [k,setK]=useState(0);
   const right=useRef(0);
   const grades=useRef({});
   const [reward,setReward]=useState(null);
+  const tired=(save.energy||0)>0?1:0.5;
 
   function finish(){
     cards.forEach(c=>{ if(!grades.current[c._id]) grades.current[c._id]="good"; });
+    const gold=Math.round(right.current*8*tired)+(node.event?40:0);
+    const xpAmt=Math.round((cards.length*20+40)*tired);
     update(s=>{
       const srs={...s.srs};
       cards.forEach(c=>{ srs[c._id]=schedule(srs[c._id],grades.current[c._id]); });
       const codex={...s.codex};
       (node.teach||[]).forEach(t=>{ codex[t.jp]={jp:t.jp,reading:t.reading||t.jp,meaning:t.meaning,cefr:node.cefr}; });
-      const gold=right.current*8;
-      const g=gainXP(s,cards.length*12);
-      return {...s, srs, codex, done:{...s.done,[node.id]:true}, gold:s.gold+gold, lv:g.lv, xp:g.xp};
+      const aff={...(s.aff||{})};
+      (node.aff||[]).forEach(key=>{ aff[key]=clamp((aff[key]||0)+20,0,100); });
+      const g=gainXP(s,xpAmt);
+      const energy=clamp((s.energy||0)-(node.cost||25),0,100);
+      const slot=((s.slot||0)+1);
+      return {...s, srs, codex, aff, energy, slot, done:{...s.done,[node.id]:true}, gold:s.gold+gold, lv:g.lv, xp:g.xp};
     });
-    setReward({gold:right.current*8,xp:cards.length*12,right:right.current,total:cards.length});
+    setReward({gold,xp:xpAmt,right:right.current,total:cards.length});
     setPhase("done");
   }
   function onGrade(g){
@@ -642,11 +661,11 @@ function Lesson({node,update,onDone,onBack}){
   }
 
   if(phase==="done"&&reward){
-    const stars=Math.max(0,Math.round(reward.right/reward.total*3));
+    const stars=Math.max(0,Math.round(reward.right/Math.max(1,reward.total)*3));
     return (
       <div className="wrap" style={{justifyContent:"center",alignItems:"center",padding:24,textAlign:"center"}}>
-        <div className="pop" style={{fontSize:58}}>{node.reading?"📜":"✨"}</div>
-        <div className="brush glint" style={{fontSize:28,marginTop:8}}>習得完了</div>
+        <div className="pop" style={{fontSize:58}}>{DOMAIN_EMOJI[node.domain]||"\u2728"}</div>
+        <div className="brush glint" style={{fontSize:28,marginTop:8}}>一場面、クリア</div>
         <div className="mincho" style={{color:"var(--muted)",marginTop:6}}>{node.title}</div>
         <div style={{marginTop:14,fontSize:24,letterSpacing:4}}>
           {[0,1,2].map(n=><span key={n} style={{color:n<stars?"var(--gold)":"var(--line)"}}>★</span>)}
@@ -654,14 +673,17 @@ function Lesson({node,update,onDone,onBack}){
         <div className="card" style={{padding:16,marginTop:18,width:"100%",maxWidth:300}}>
           <Row icon={<Check size={16} color="var(--good)"/>} label="正解" val={reward.right+" / "+reward.total}/>
           <div style={{height:8}}/>
-          <Row icon={<Coins size={16} color="var(--gold)"/>} label="獲得ゴールド" val={"+"+reward.gold}/>
+          <Row icon={<Coins size={16} color="var(--gold)"/>} label="お金" val={"+"+reward.gold}/>
           <div style={{height:8}}/>
           <Row icon={<Star size={16} color="var(--xp)"/>} label="経験値" val={"+"+reward.xp}/>
+          {(node.aff||[]).length>0&&<><div style={{height:8}}/>
+            <Row icon={<Heart size={16} color="var(--aff)"/>} label="好感度" val={node.aff.map(a=>AFF[a].label).join("・")+" +20"}/></>}
         </div>
+        {tired<1&&<div style={{fontSize:12,color:"var(--hp)",marginTop:10}}>※ 体力切れで報酬が半分に。休んでから挑もう。</div>}
         <div className="card" style={{padding:12,marginTop:14,width:"100%",maxWidth:300,background:"var(--panel2)"}}>
-          <div style={{fontSize:12.5,color:"var(--muted)",lineHeight:1.6}}>覚えた言葉は<b style={{color:"var(--ink)"}}>記憶の間（修行）</b>に届く。忘れかけた頃に出てくるので、毎日のぞくと定着する。</div>
+          <div style={{fontSize:12.5,color:"var(--muted)",lineHeight:1.6}}>覚えた言葉は<b style={{color:"var(--ink)"}}>復習（思い出す部屋）</b>に届く。忘れかけた頃に出てくるので、毎日のぞくと定着する。</div>
         </div>
-        <button className="btn" style={{marginTop:20,minWidth:220}} onClick={onDone}><Crown size={18}/> 拠点へ戻る</button>
+        <button className="btn" style={{marginTop:20,minWidth:220}} onClick={onDone}><Calendar size={18}/> 予定表へ戻る</button>
       </div>
     );
   }
@@ -671,8 +693,11 @@ function Lesson({node,update,onDone,onBack}){
       <div className="wrap" style={{padding:16}}>
         <TopBar title={node.title} sub={node.sub} onBack={onBack}/>
         <div className="card fade" style={{padding:18,marginBottom:14}}>
-          <div className="eyebrow" style={{marginBottom:8}}>{node.cefr} · {node.region}</div>
-          <div className="mincho" style={{fontSize:14.5,lineHeight:1.8,color:"var(--ink)"}}>{node.intro}</div>
+          <div className="eyebrow" style={{marginBottom:8,display:"flex",gap:8,alignItems:"center"}}>
+            <span>{DOMAIN_EMOJI[node.domain]} {node.cefr} · {node.stage}</span>
+            {node.contact&&<span className="badge" style={{color:"var(--aff)"}}>上級接觸・認識のみ</span>}
+          </div>
+          <div className="mincho" style={{fontSize:14.5,lineHeight:1.8,color:"var(--ink)"}}>{node.setting}</div>
         </div>
         {node.reading&&node.passage&&(
           <div className="card fade" style={{padding:18,marginBottom:14}}>
@@ -682,14 +707,14 @@ function Lesson({node,update,onDone,onBack}){
             </div>
             <div className="mincho" style={{fontSize:16,lineHeight:2}}>{node.passage}</div>
             {node.gloss&&<div style={{marginTop:14,paddingTop:12,borderTop:"1px solid var(--line)",display:"grid",gap:6}}>
-              {node.gloss.map((g,n)=><div key={n} style={{display:"flex",justifyContent:"space-between",fontSize:13}}><span className="mincho">{g.jp}</span><span style={{color:"var(--muted)"}}>{g.meaning}</span></div>)}
+              {node.gloss.map((g,n)=><div key={n} style={{display:"flex",justifyContent:"space-between",fontSize:13,gap:10}}><span className="mincho">{g.jp}</span><span style={{color:"var(--muted)",textAlign:"right"}}>{g.meaning}</span></div>)}
             </div>}
           </div>
         )}
         {(node.teach||[]).length>0&&<div className="fade" style={{display:"grid",gap:8,marginBottom:16}}>
           {node.teach.map((t,n)=>(
             <div key={n} className="card" style={{padding:"12px 14px",display:"flex",alignItems:"center",gap:12}}>
-              <div style={{flex:1}}>
+              <div style={{flex:1,minWidth:0}}>
                 <div className="brush" style={{fontSize:18}}>{t.jp}</div>
                 {t.reading&&t.reading!==t.jp&&<div style={{fontSize:11,color:"var(--muted)"}}>{t.reading}</div>}
               </div>
@@ -698,7 +723,10 @@ function Lesson({node,update,onDone,onBack}){
             </div>
           ))}
         </div>}
-        <button className="btn" style={{width:"100%"}} onClick={()=>setPhase("quiz")}><Swords size={18}/> {node.reading?"読解に挑む":"クエスト開始"}（{cards.length}問）</button>
+        {node.event&&<div className="card fade" style={{padding:14,marginBottom:14,background:"var(--panel2)"}}>
+          <div style={{fontSize:13,color:"var(--muted)",lineHeight:1.6}}>このイベントは、これまでの場面から言葉をランダムに呼び出す<b style={{color:"var(--ink)"}}>振り返り</b>。記憶を交ぜて思い出すと、定着が強くなる。</div>
+        </div>}
+        <button className="btn" style={{width:"100%"}} onClick={()=>setPhase("quiz")}>{node.reading?"読解に挑む":"場面を始める"}（{cards.length}問）<ChevronRight size={18}/></button>
       </div>
     );
   }
@@ -715,130 +743,7 @@ function Lesson({node,update,onDone,onBack}){
   );
 }
 
-/* ===================== Boss ===================== */
-function Boss({node,save,update,onWin,onBack}){
-  const maxHp=maxHpOf(save), atk=atkOf(save), def=defOf(save);
-  const enemyMax=node.enemy.hp;
-  const power=Math.round(enemyMax/12)+8;
-  const [cards]=useState(()=>sampleCards(node.sample,12));
-  const [hp,setHp]=useState(maxHp);
-  const [foe,setFoe]=useState(enemyMax);
-  const [i,setI]=useState(0);
-  const [k,setK]=useState(0);
-  const [combo,setCombo]=useState(0);
-  const [bag,setBag]=useState({...save.inv});
-  const [shakeFoe,setShakeFoe]=useState(false);
-  const [shakeHero,setShakeHero]=useState(false);
-  const [fx,setFx]=useState(null);
-  const [state,setState]=useState("fight");
-  const wonRef=useRef(false);
-  const card=cards[i];
-
-  useEffect(()=>{ if(!fx)return; const t=setTimeout(()=>setFx(null),900); return ()=>clearTimeout(t); },[fx]);
-
-  function srsUpdate(id,g){ update(s=>{ const srs={...s.srs}; srs[id]=schedule(srs[id],g); return {...s,srs}; }); }
-  function win(){
-    if(wonRef.current)return; wonRef.current=true;
-    update(s=>{ const g=gainXP(s,60); return {...s, inv:bag, done:{...s.done,[node.id]:true}, gold:s.gold+enemyMax, lv:g.lv, xp:g.xp}; });
-    setState("win");
-  }
-  function resolve(g){
-    if(state!=="fight")return;
-    srsUpdate(card._id,g);
-    if(g!=="again"){
-      const mult=g==="hard"?0.5:1;
-      const dmg=Math.max(3,Math.round((atk+combo*2)*mult));
-      const nf=Math.max(0,foe-dmg);
-      setFoe(nf); setCombo(combo+1); setShakeFoe(true); setFx({d:dmg,who:"foe"});
-      setTimeout(()=>setShakeFoe(false),350);
-      if(nf<=0){ win(); return; }
-    } else {
-      const dmg=Math.max(2,power-def);
-      const nh=Math.max(0,hp-dmg);
-      setHp(nh); setCombo(0); setShakeHero(true); setFx({d:dmg,who:"hero"});
-      setTimeout(()=>setShakeHero(false),350);
-      if(nh<=0){ update(s=>({...s,inv:bag})); setState("lose"); return; }
-    }
-    if(i+1>=cards.length)setI(0); else setI(i+1);
-    setK(k+1);
-  }
-  function usePotion(it){
-    if((bag[it.id]||0)<=0||state!=="fight")return;
-    setHp(clamp(hp+(it.heal||0),0,maxHp));
-    setBag({...bag,[it.id]:(bag[it.id]||0)-1});
-    setFx({d:it.heal,who:"heal"});
-  }
-
-  if(state==="win"){
-    return (
-      <div className="wrap" style={{justifyContent:"center",alignItems:"center",padding:24,textAlign:"center"}}>
-        <div className="pop" style={{fontSize:62}}>{node.enemy.emoji}</div>
-        <div className="brush glint" style={{fontSize:30,marginTop:6}}>領域突破！</div>
-        <div className="mincho" style={{color:"var(--muted)",marginTop:8,lineHeight:1.7}}>{node.enemy.name} を倒した。<br/>新たな領域が開かれる。</div>
-        <div className="card" style={{padding:16,marginTop:18,width:"100%",maxWidth:300}}>
-          <Row icon={<Coins size={16} color="var(--gold)"/>} label="獲得ゴールド" val={"+"+enemyMax}/>
-          <div style={{height:8}}/><Row icon={<Star size={16} color="var(--xp)"/>} label="経験値" val="+60"/>
-        </div>
-        <button className="btn" style={{marginTop:22,minWidth:220}} onClick={onWin}><Crown size={18}/> 拠点へ戻る</button>
-      </div>
-    );
-  }
-  if(state==="lose"){
-    return (
-      <div className="wrap" style={{justifyContent:"center",alignItems:"center",padding:24,textAlign:"center"}}>
-        <div className="pop" style={{fontSize:54,opacity:.55}}>💫</div>
-        <div className="brush" style={{fontSize:26,marginTop:8}}>力尽きた…</div>
-        <div className="mincho" style={{color:"var(--muted)",marginTop:8,lineHeight:1.7}}>記憶の間で言葉を鍛え、<br/>装備を整えてから再挑戦しよう。</div>
-        <div style={{display:"flex",gap:10,marginTop:22}}>
-          <button className="btn btn-ghost" onClick={onBack}>拠点へ</button>
-          <button className="btn" onClick={()=>{ setHp(maxHp); setFoe(enemyMax); setI(0); setK(k+1); setCombo(0); wonRef.current=false; setState("fight"); }}><RotateCcw size={16}/> 再挑戦</button>
-        </div>
-      </div>
-    );
-  }
-
-  const ownedPotions=ITEMS.filter(it=>it.slot==="potion"&&(bag[it.id]||0)>0);
-  return (
-    <div className="wrap" style={{padding:16}}>
-      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
-        <button onClick={onBack} style={{background:"none",border:"none",color:"var(--muted)",cursor:"pointer",display:"flex"}}><X size={22}/></button>
-        <div style={{flex:1}}/>
-        <span className="badge">{node.cefr} BOSS</span>
-      </div>
-
-      <div className={"card"+(shakeFoe?" shake":"")} style={{padding:16,marginBottom:10,position:"relative"}}>
-        {fx&&fx.who==="foe"&&<div className="float" style={{right:24,top:8,color:"#ff9a6a"}}>-{fx.d}</div>}
-        <div style={{display:"flex",alignItems:"center",gap:12}}>
-          <div style={{fontSize:42}}>{node.enemy.emoji}</div>
-          <div style={{flex:1}}>
-            <div className="brush" style={{fontSize:17}}>{node.enemy.name}</div>
-            <div className="bar" style={{marginTop:6}}><i className="foef" style={{width:(foe/enemyMax*100)+"%"}}/></div>
-          </div>
-          <span style={{fontSize:12,color:"var(--muted)",fontWeight:700}}>{foe}/{enemyMax}</span>
-        </div>
-      </div>
-
-      <div className={"card"+(shakeHero?" shake":"")} style={{padding:"10px 14px",marginBottom:14,position:"relative",display:"flex",alignItems:"center",gap:10}}>
-        {fx&&fx.who==="hero"&&<div className="float" style={{left:24,top:4,color:"#ff5a5a"}}>-{fx.d}</div>}
-        {fx&&fx.who==="heal"&&<div className="float" style={{left:24,top:4,color:"#6ad2b4"}}>+{fx.d}</div>}
-        <Heart size={16} color="var(--hp)"/>
-        <div className="bar" style={{flex:1}}><i className="hpf" style={{width:(hp/maxHp*100)+"%"}}/></div>
-        <span style={{fontSize:12,color:"var(--muted)",fontWeight:700}}>{hp}/{maxHp}</span>
-        {combo>1&&<span className="badge" style={{color:"var(--gold)"}}>{combo} COMBO</span>}
-      </div>
-
-      <Question key={k} card={card} onGrade={resolve}/>
-
-      {ownedPotions.length>0&&<div style={{display:"flex",gap:8,justifyContent:"center",marginTop:16,flexWrap:"wrap"}}>
-        {ownedPotions.map(it=>(
-          <button key={it.id} className="btn btn-dark btn-sm" onClick={()=>usePotion(it)}>{it.emoji} {it.name}×{bag[it.id]}</button>
-        ))}
-      </div>}
-    </div>
-  );
-}
-
-/* ===================== Review (SRS / 記憶の間) ===================== */
+/* ===================== Review (SRS) ===================== */
 function Review({save,update,onBack}){
   const [queue,setQueue]=useState(()=>shuffle(dueCards(save)));
   const [i,setI]=useState(0);
@@ -848,7 +753,11 @@ function Review({save,update,onBack}){
 
   function onGrade(g){
     const id=queue[i];
-    update(s=>{ const srs={...s.srs}; srs[id]=schedule(srs[id],g); return {...s,srs}; });
+    update(s=>{
+      const srs={...s.srs}; srs[id]=schedule(srs[id],g);
+      const gx=g!=="again"?gainXP(s,6):{lv:s.lv,xp:s.xp};
+      return {...s,srs,lv:gx.lv,xp:gx.xp};
+    });
     setCount(count+1);
     let q=queue;
     if(g==="again"){ q=[...queue,id]; setQueue(q); }
@@ -858,12 +767,12 @@ function Review({save,update,onBack}){
   if(done){
     return (
       <div className="wrap" style={{justifyContent:"center",alignItems:"center",padding:24,textAlign:"center"}}>
-        <div className="pop" style={{fontSize:56}}>🧘</div>
-        <div className="brush glint" style={{fontSize:28,marginTop:8}}>{count>0?"修行 完了":"今は静寂"}</div>
+        <div className="pop" style={{fontSize:56}}>🧠</div>
+        <div className="brush glint" style={{fontSize:28,marginTop:8}}>{count>0?"復習 完了":"今は静か"}</div>
         {count>0
-          ? <div className="mincho" style={{color:"var(--muted)",marginTop:10,lineHeight:1.7}}>{count} 個の言霊を呼び起こした。<br/>記憶に刻まれていく。</div>
-          : <div className="mincho" style={{color:"var(--muted)",marginTop:10,lineHeight:1.7}}>今、思い出すべき言霊はない。<br/>クエストを進めて言葉を集めよう。</div>}
-        <button className="btn" style={{marginTop:22,minWidth:200}} onClick={onBack}>拠点へ戻る</button>
+          ? <div className="mincho" style={{color:"var(--muted)",marginTop:10,lineHeight:1.7}}>{count} 個の言葉を思い出した。<br/>記憶に刻まれていく。</div>
+          : <div className="mincho" style={{color:"var(--muted)",marginTop:10,lineHeight:1.7}}>今、思い出すべき言葉はない。<br/>予定をこなして言葉を集めよう。</div>}
+        <button className="btn" style={{marginTop:22,minWidth:200}} onClick={onBack}>戻る</button>
       </div>
     );
   }
@@ -875,7 +784,7 @@ function Review({save,update,onBack}){
     <div className="wrap" style={{padding:16}}>
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
         <button onClick={onBack} style={{background:"none",border:"none",color:"var(--muted)",cursor:"pointer",display:"flex"}}><X size={22}/></button>
-        <div style={{flex:1,textAlign:"center"}}><span className="eyebrow">記憶の間</span></div>
+        <div style={{flex:1,textAlign:"center"}}><span className="eyebrow">思い出す部屋</span></div>
         <span style={{fontSize:12,color:"var(--muted)",fontWeight:700}}>残り {remain}</span>
       </div>
       <div className="bar" style={{marginBottom:16}}><i className="xpf" style={{width:Math.min(100,count/(count+remain)*100)+"%"}}/></div>
@@ -886,47 +795,31 @@ function Review({save,update,onBack}){
 
 /* ===================== Shop ===================== */
 function Shop({save,update,onBack}){
-  const [tab,setTab]=useState("weapon");
-  const list=ITEMS.filter(it=>it.slot===tab);
-  const tabs=[["weapon","武器"],["armor","防具"],["potion","道具"]];
-  function buyGear(it){
-    if(save.owned.includes(it.id)||save.gold<it.cost)return;
-    update(s=>({...s, gold:s.gold-it.cost, owned:[...s.owned,it.id], equip:{...s.equip,[it.slot]:it.id}}));
-  }
-  function equip(it){ update(s=>({...s,equip:{...s.equip,[it.slot]:it.id}})); }
-  function buyPotion(it){ if(save.gold<it.cost)return; update(s=>({...s, gold:s.gold-it.cost, inv:{...s.inv,[it.id]:(s.inv[it.id]||0)+1}})); }
+  function buy(it){ if(save.gold<it.cost)return; update(s=>({...s, gold:s.gold-it.cost, inv:{...s.inv,[it.id]:(s.inv[it.id]||0)+1}})); }
   return (
     <div className="wrap" style={{padding:16}}>
-      <TopBar title="言ノ葉商店" sub="Shop" onBack={onBack}/>
+      <TopBar title="コンビニ・売店" sub="Shop" onBack={onBack}/>
       <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:14}}>
-        <Coins size={16} color="var(--gold)"/><span style={{fontWeight:800,color:"var(--gold)"}}>{save.gold}</span><span style={{color:"var(--muted)",fontSize:13}}>G</span>
+        <Coins size={16} color="var(--gold)"/><span style={{fontWeight:800,color:"var(--gold)"}}>{save.gold}</span><span style={{color:"var(--muted)",fontSize:13}}>円</span>
       </div>
-      <div style={{display:"flex",gap:8,marginBottom:14}}>
-        {tabs.map(([id,label])=>(
-          <button key={id} className={tab===id?"btn":"btn btn-dark"} style={{flex:1,padding:"9px 0",fontSize:14}} onClick={()=>setTab(id)}>{label}</button>
-        ))}
+      <div className="card" style={{padding:12,marginBottom:14,background:"var(--panel2)"}}>
+        <div style={{fontSize:12.5,color:"var(--muted)",lineHeight:1.6}}>体力が減ると報酬が半分に。アイテムは予定表から使って体力を回復できる。</div>
       </div>
       <div style={{display:"grid",gap:10}}>
-        {list.map(it=>{
-          const owned=save.owned.includes(it.id);
-          const equipped=save.equip[it.slot]===it.id;
+        {ITEMS.map(it=>{
           const cnt=save.inv[it.id]||0;
           return (
             <div key={it.id} className="card" style={{padding:14}}>
               <div style={{display:"flex",alignItems:"center",gap:12}}>
                 <div style={{fontSize:30}}>{it.emoji}</div>
                 <div style={{flex:1}}>
-                  <div style={{fontWeight:700,fontSize:15}}>{it.name} {it.slot==="potion"&&cnt>0&&<span style={{color:"var(--muted)",fontSize:12}}>×{cnt}</span>}</div>
+                  <div style={{fontWeight:700,fontSize:15}}>{it.name} {cnt>0&&<span style={{color:"var(--muted)",fontSize:12}}>×{cnt}</span>}</div>
                   <div style={{fontSize:12,color:"var(--muted)",lineHeight:1.5,marginTop:2}}>{it.desc}</div>
                 </div>
               </div>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:10}}>
-                <span style={{fontSize:13,color:"var(--gold)",fontWeight:700}}>{it.cost===0?"無料":it.cost+" G"}</span>
-                {it.slot==="potion"
-                  ? <button className="btn btn-sm" disabled={save.gold<it.cost} onClick={()=>buyPotion(it)}>購入</button>
-                  : equipped ? <span className="badge" style={{color:"var(--good)"}}>装備中</span>
-                  : owned ? <button className="btn btn-dark btn-sm" onClick={()=>equip(it)}>装備</button>
-                  : <button className="btn btn-sm" disabled={save.gold<it.cost} onClick={()=>buyGear(it)}>購入</button>}
+                <span style={{fontSize:13,color:"var(--gold)",fontWeight:700}}>{it.cost} 円</span>
+                <button className="btn btn-sm" disabled={save.gold<it.cost} onClick={()=>buy(it)}>購入</button>
               </div>
             </div>
           );
@@ -936,19 +829,19 @@ function Shop({save,update,onBack}){
   );
 }
 
-/* ===================== Codex (言ノ葉帳) ===================== */
+/* ===================== Codex ===================== */
 function Codex({save,onBack}){
   const entries=Object.values(save.codex||{});
   return (
     <div className="wrap" style={{padding:16}}>
       <TopBar title="言ノ葉帳" sub={"Glossary · "+entries.length+"語"} onBack={onBack}/>
       {entries.length===0
-        ? <div className="card" style={{padding:30,textAlign:"center",color:"var(--muted)"}}><div className="mincho">まだ言葉を集めていない。<br/>クエストを始めよう。</div></div>
+        ? <div className="card" style={{padding:30,textAlign:"center",color:"var(--muted)"}}><div className="mincho">まだ言葉を集めていない。<br/>予定をこなそう。</div></div>
         : <div style={{display:"grid",gap:8}}>
             {entries.map((e,n)=>(
               <div key={n} className="card" style={{padding:"12px 14px",display:"flex",alignItems:"center",gap:12}}>
                 <span className="badge" style={{flex:"none"}}>{e.cefr||"?"}</span>
-                <div style={{flex:1}}>
+                <div style={{flex:1,minWidth:0}}>
                   <div className="brush" style={{fontSize:17}}>{e.jp}</div>
                   {e.reading&&e.reading!==e.jp&&<div style={{fontSize:11,color:"var(--muted)"}}>{e.reading}</div>}
                 </div>
@@ -961,54 +854,93 @@ function Codex({save,onBack}){
   );
 }
 
-/* ===================== Map ===================== */
-function MapView({save,onPick}){
-  const st=nodeStatus(save);
+/* ===================== Schedule (map replacement) ===================== */
+function SceneCard({node,s,onPick}){
+  const locked=s.locked, done=s.done;
   return (
-    <div style={{padding:"4px 16px 20px"}}>
-      {REGIONS.map(r=>{
-        const nodes=CURRICULUM.filter(n=>n.region===r);
-        const cefrs=[...new Set(nodes.map(n=>n.cefr))].join("/");
-        const regionLocked=nodes.every(n=>st[n.id]&&st[n.id].locked);
-        return (
-          <div key={r} style={{marginBottom:22,opacity:regionLocked?.5:1}}>
-            <div style={{display:"flex",alignItems:"center",gap:8,margin:"0 2px 12px"}}>
-              <span className="badge">{cefrs}</span>
-              <span className="brush" style={{fontSize:16}}>{r}</span>
-              {regionLocked&&<Lock size={13} color="var(--muted)"/>}
+    <button disabled={locked} onClick={()=>onPick(node)} className="card"
+      style={{padding:14,display:"flex",alignItems:"center",gap:13,textAlign:"left",cursor:locked?"default":"pointer",width:"100%",
+        border:node.event?"1px solid rgba(240,138,184,.45)":(node.contact?"1px solid rgba(232,198,107,.4)":"1px solid var(--line)"),opacity:locked?.45:1,
+        background:done?"linear-gradient(180deg,rgba(79,209,122,.07),var(--bg2))":(node.event?"linear-gradient(180deg,rgba(240,138,184,.07),var(--bg2))":"linear-gradient(180deg,var(--panel),var(--bg2))")}}>
+      <div style={{width:42,height:42,borderRadius:12,flex:"none",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,
+        background:"var(--panel2)",border:"1px solid var(--line)"}}>
+        {locked?<Lock size={18} color="var(--muted)"/>:done?<Check size={20} color="var(--good)"/>:(DOMAIN_EMOJI[node.domain]||"✨")}
+      </div>
+      <div style={{flex:1,minWidth:0}}>
+        <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
+          <span className="badge">{node.cefr}</span>
+          {node.event&&<span className="badge" style={{color:"var(--aff)"}}>イベント</span>}
+          {node.contact&&<span className="badge" style={{color:"var(--gold)"}}>上級接觸</span>}
+          {node.reading&&<span className="badge">読解</span>}
+          <span style={{fontWeight:700,fontSize:15}} className="brush">{node.title}</span>
+        </div>
+        <div className="eyebrow" style={{marginTop:3}}>{node.sub}</div>
+        {locked&&s.needLv?<div style={{fontSize:11,color:"var(--hp)",marginTop:4}}>Lv.{s.needLv} で解放</div>:null}
+      </div>
+      {!locked&&<div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:2,flex:"none"}}>
+        <span style={{fontSize:11,color:"var(--muted)"}}>体力 -{node.cost}</span>
+        <ChevronRight size={18} color="var(--muted)"/>
+      </div>}
+    </button>
+  );
+}
+function ScheduleView({save,update,onPick}){
+  const st=sceneStatus(save);
+  const energy=save.energy||0;
+  const affKeys=Object.keys(save.aff||{}).filter(k=>AFF[k]&&(save.aff[k]||0)>0);
+  const ownedItems=ITEMS.filter(it=>(save.inv[it.id]||0)>0);
+  function useItem(it){ update(s=>({...s, energy:clamp((s.energy||0)+it.heal,0,100), inv:{...s.inv,[it.id]:(s.inv[it.id]||0)-1}})); }
+  function rest(){ update(s=>({...s, energy:clamp((s.energy||0)+40,0,100), slot:(s.slot||0)+1})); }
+  function nextDay(){ update(s=>({...s, day:(s.day||1)+1, slot:0, energy:100})); }
+  const students=[...STUDENT_CORE.map(sceneById),sceneById("s-event")];
+  const workers=WORKER_CHAIN.map(sceneById);
+
+  return (
+    <div style={{padding:"4px 16px 24px"}}>
+      <div className="card" style={{padding:14,marginBottom:14}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+          <span style={{display:"flex",alignItems:"center",gap:8}}><Calendar size={16} color="var(--gold)"/><b>{save.day||1} 日目</b><span className="badge"><Clock size={11}/> {slotLabel(save.slot)}</span></span>
+          <span style={{display:"flex",gap:4}}>{SLOTS.map((sl,n)=><span key={n} style={{width:8,height:8,borderRadius:99,background:n<((save.slot||0)%4)?"var(--gold)":"var(--line)"}}/>)}</span>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:8}}>
+          <Heart size={15} color="var(--hp)"/>
+          <div className="bar" style={{flex:1}}><i className="enf" style={{width:energy+"%"}}/></div>
+          <span style={{fontSize:12,color:"var(--muted)",fontWeight:700}}>体力 {energy}</span>
+        </div>
+        {affKeys.length>0&&<div style={{marginTop:12,display:"grid",gap:6}}>
+          {affKeys.map(kk=>(
+            <div key={kk} style={{display:"flex",alignItems:"center",gap:8}}>
+              <span style={{fontSize:13,width:88,color:"var(--muted)"}}>{AFF[kk].emoji} {AFF[kk].label}</span>
+              <div className="bar" style={{flex:1}}><i className="afff" style={{width:(save.aff[kk]||0)+"%"}}/></div>
             </div>
-            <div style={{display:"grid",gap:10}}>
-              {nodes.map(n=>{
-                const s=st[n.id]||{};
-                const Ico=IC[n.icon]||Sparkles;
-                return (
-                  <button key={n.id} disabled={s.locked} onClick={()=>onPick(n)}
-                    className="card" style={{padding:14,display:"flex",alignItems:"center",gap:13,textAlign:"left",cursor:s.locked?"default":"pointer",
-                      border:n.boss?"1px solid rgba(232,198,107,.45)":"1px solid var(--line)",opacity:s.locked?.45:1,
-                      background:s.done?"linear-gradient(180deg,rgba(79,209,122,.07),var(--bg2))":(n.boss?"linear-gradient(180deg,rgba(232,198,107,.07),var(--bg2))":"linear-gradient(180deg,var(--panel),var(--bg2))")}}>
-                    <div style={{width:42,height:42,borderRadius:12,flex:"none",display:"flex",alignItems:"center",justifyContent:"center",
-                      background:n.boss?"rgba(232,198,107,.16)":"var(--panel2)",border:"1px solid var(--line)"}}>
-                      {s.locked?<Lock size={18} color="var(--muted)"/>:s.done?<Check size={20} color="var(--good)"/>:<Ico size={20} color={n.boss?"var(--gold)":"var(--mana)"}/>}
-                    </div>
-                    <div style={{flex:1,minWidth:0}}>
-                      <div style={{display:"flex",alignItems:"center",gap:6}}>
-                        {n.boss&&<span className="badge" style={{color:"var(--gold)"}}>BOSS</span>}
-                        {n.reading&&<span className="badge">読解</span>}
-                        <span style={{fontWeight:700,fontSize:15.5}} className="brush">{n.title}</span>
-                      </div>
-                      <div className="eyebrow" style={{marginTop:3}}>{n.sub}</div>
-                    </div>
-                    {!s.locked&&<ChevronRight size={18} color="var(--muted)"/>}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        );
-      })}
-      <div className="card" style={{padding:14,marginTop:4,background:"var(--panel2)"}}>
-        <div className="eyebrow" style={{marginBottom:6}}>この旅の到達設計</div>
-        <div style={{fontSize:12.5,color:"var(--muted)",lineHeight:1.7}}>読解：B1 ／ 聴解：B1（端末の合成音声）／ 産出：A2–B1（書き取り・自己採点）。声と意味を毎日少しずつ、忘れる前に思い出すのが上達の鍵。</div>
+          ))}
+        </div>}
+        <div style={{display:"flex",gap:8,marginTop:12,flexWrap:"wrap"}}>
+          <button className="btn btn-dark btn-sm" onClick={rest}>😴 休む（体力+40）</button>
+          <button className="btn btn-dark btn-sm" onClick={nextDay}>🌅 翌日へ（全回復）</button>
+          {ownedItems.map(it=>(
+            <button key={it.id} className="btn btn-dark btn-sm" onClick={()=>useItem(it)}>{it.emoji} {it.name}×{save.inv[it.id]}</button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{marginBottom:8,display:"flex",alignItems:"center",gap:8}}>
+        <span className="badge">A1–B1</span><span className="brush" style={{fontSize:16}}>学生編  — 大学生の毎日</span>
+      </div>
+      <div style={{display:"grid",gap:10,marginBottom:22}}>
+        {students.map(n=> <SceneCard key={n.id} node={n} s={st[n.id]||{}} onPick={onPick}/>)}
+      </div>
+
+      <div style={{marginBottom:8,display:"flex",alignItems:"center",gap:8}}>
+        <span className="badge">B1–C1</span><span className="brush" style={{fontSize:16}}>社会人編 — 働く日々</span>
+      </div>
+      <div style={{display:"grid",gap:10,marginBottom:18}}>
+        {workers.map(n=> <SceneCard key={n.id} node={n} s={st[n.id]||{}} onPick={onPick}/>)}
+      </div>
+
+      <div className="card" style={{padding:14,background:"var(--panel2)"}}>
+        <div className="eyebrow" style={{marginBottom:6}}>この旅の到達設計（誠実なCEFR）</div>
+        <div style={{fontSize:12.5,color:"var(--muted)",lineHeight:1.7}}>読解：B1＋／受控産出（語体選択・活用・組句）：B1、語体選択肢はB2／上級接觸（敬語・婉曲・慣用の認識）：C1形式を含むが自由産出の認証はなし／聴解：評価には入れず（任意の読み上げあり）、各自で補強。</div>
       </div>
     </div>
   );
@@ -1025,16 +957,16 @@ function App(){
   function persist(s){ const n=normalize(s); setSave(n); writeSave(n); }
   function update(mut){ setSave(prev=>{ const n=normalize(mut(prev)); writeSave(n); return n; }); }
 
-  if(!loaded) return <div className="wrap" style={{justifyContent:"center",alignItems:"center"}}><div className="brush glint" style={{fontSize:24}}>言ノ葉世界</div></div>;
+  if(!loaded) return <div className="wrap" style={{justifyContent:"center",alignItems:"center"}}><div className="brush glint" style={{fontSize:24}}>言ノ葉日記</div></div>;
 
   if(!save||view==="title"){
     const has=!!save&&Object.keys(save.done||{}).length>0;
     return (
       <div className="wrap" style={{justifyContent:"center",alignItems:"center",padding:28,textAlign:"center"}}>
         <div className="pop" style={{fontSize:54}}>📖</div>
-        <div className="brush glint" style={{fontSize:38,marginTop:10,lineHeight:1.2}}>言ノ葉世界</div>
-        <div className="eyebrow" style={{marginTop:8}}>Kotodama RPG · 日本語の異世界</div>
-        <div className="mincho" style={{fontSize:13.5,color:"var(--muted)",marginTop:18,lineHeight:1.8,maxWidth:300}}>言葉を集め、忘れる前に思い出し、言霊の力で異世界を旅する。<br/>P0 音ノ章 から B1 冒険者の谷 まで。</div>
+        <div className="brush glint" style={{fontSize:38,marginTop:10,lineHeight:1.2}}>言ノ葉日記</div>
+        <div className="eyebrow" style={{marginTop:8}}>Kotodama Life · 日本の毎日で学ぶ</div>
+        <div className="mincho" style={{fontSize:13.5,color:"var(--muted)",marginTop:18,lineHeight:1.8,maxWidth:300}}>通学・通勤、食事、買い物、交通、仕事。<br/>日本のふつうの一日を生きながら、言葉を集めて思い出す。<br/>学生編から社会人編、敬語の世界まで。</div>
         <div style={{display:"flex",flexDirection:"column",gap:10,marginTop:26,width:"100%",maxWidth:260}}>
           {has&&<button className="btn" onClick={()=>{ if(!save)persist(freshSave()); setView("hub"); }}><ChevronRight size={18}/> 続きから</button>}
           <button className={has?"btn btn-dark":"btn"} onClick={()=>{ persist(freshSave()); setView("hub"); }}>{has?"最初から":"はじめる"}</button>
@@ -1043,8 +975,7 @@ function App(){
     );
   }
 
-  if(view==="lesson"&&node) return <Lesson node={node} update={update} onBack={()=>setView("hub")} onDone={()=>setView("hub")}/>;
-  if(view==="boss"&&node) return <Boss node={node} save={save} update={update} onBack={()=>setView("hub")} onWin={()=>setView("hub")}/>;
+  if((view==="lesson"||view==="event")&&node) return <Scene node={node} save={save} update={update} onBack={()=>setView("hub")} onDone={()=>setView("hub")}/>;
   if(view==="review") return <Review save={save} update={update} onBack={()=>setView("hub")}/>;
   if(view==="shop") return <Shop save={save} update={update} onBack={()=>setView("hub")}/>;
   if(view==="codex") return <Codex save={save} onBack={()=>setView("hub")}/>;
@@ -1056,7 +987,7 @@ function App(){
       <div style={{padding:"16px 16px 0"}}>
         <div className="card" style={{padding:14}}>
           <div style={{display:"flex",alignItems:"center",gap:12}}>
-            <div style={{width:44,height:44,borderRadius:12,background:"var(--panel2)",border:"1px solid var(--line)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flex:"none"}}>🧙</div>
+            <div style={{width:44,height:44,borderRadius:12,background:"var(--panel2)",border:"1px solid var(--line)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flex:"none"}}>🧑‍🎓</div>
             <div style={{flex:1,minWidth:0}}>
               <div style={{display:"flex",alignItems:"center",gap:8}}>
                 <span className="brush" style={{fontSize:16}}>{save.name}</span>
@@ -1070,10 +1001,10 @@ function App(){
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10,marginTop:12}}>
           <button className="card" onClick={()=>setView("review")} style={{padding:"14px 8px",display:"flex",flexDirection:"column",alignItems:"center",gap:6,cursor:"pointer",position:"relative",border:due>0?"1px solid rgba(240,82,79,.5)":"1px solid var(--line)"}}>
             {due>0&&<span className="dot">{due}</span>}
-            <Brain size={22} color={due>0?"var(--hp)":"var(--mana)"}/><span style={{fontSize:12,fontWeight:700}}>記憶の間</span>
+            <Brain size={22} color={due>0?"var(--hp)":"var(--mana)"}/><span style={{fontSize:12,fontWeight:700}}>復習</span>
           </button>
           <button className="card" onClick={()=>setView("shop")} style={{padding:"14px 8px",display:"flex",flexDirection:"column",alignItems:"center",gap:6,cursor:"pointer"}}>
-            <Store size={22} color="var(--gold)"/><span style={{fontSize:12,fontWeight:700}}>商店</span>
+            <Store size={22} color="var(--gold)"/><span style={{fontSize:12,fontWeight:700}}>売店</span>
           </button>
           <button className="card" onClick={()=>setView("codex")} style={{padding:"14px 8px",display:"flex",flexDirection:"column",alignItems:"center",gap:6,cursor:"pointer"}}>
             <BookOpen size={22} color="var(--xp)"/><span style={{fontSize:12,fontWeight:700}}>言ノ葉帳</span>
@@ -1081,7 +1012,7 @@ function App(){
         </div>
       </div>
       <div style={{flex:1,overflowY:"auto",marginTop:14}}>
-        <MapView save={save} onPick={(n)=>{ setNode(n); setView(n.boss?"boss":"lesson"); }}/>
+        <ScheduleView save={save} update={update} onPick={(n)=>{ setNode(n); setView(n.event?"event":"lesson"); }}/>
       </div>
     </div>
   );
