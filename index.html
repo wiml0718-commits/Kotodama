@@ -141,95 +141,170 @@ const AFF={
   joushi:{label:"上司",emoji:"\uD83D\uDC54"},
   kyaku:{label:"お客様",emoji:"\uD83C\uDFE2"},
 };
-const STUDENT_CORE=["s-train","s-class","s-lunch","s-clothes","s-home","s-fun"];
-const WORKER_CHAIN=["w-morning","w-phone","w-mail","w-nomikai","w-trip","w-meeting","w-complaint"];
+const SLOT_NAMES=["朝","昼","夕","夜"];
+const SLOT_ICON={"朝":"\uD83C\uDF05","昼":"\u2600\uFE0F","夕":"\uD83C\uDF06","夜":"\uD83C\uDF19"};
+const DAYFLOW={
+  "学生":{
+    "朝":{prompt:"朝。まず何をする？",actions:["s-train","s-class","s-home"]},
+    "昼":{prompt:"お昼。お腹がすいた。今日は何にする？",actions:["s-lunch","s-cafe"]},
+    "夕":{prompt:"夕方。帰り道、どうする？",actions:["s-clothes","s-super"]},
+    "夜":{prompt:"夜。今日の締めくくりは？",actions:["s-fun","s-cook","s-event"]},
+  },
+  "社会人":{
+    "朝":{prompt:"朝。出社前、まず何を？",actions:["w-morning","w-trip"]},
+    "昼":{prompt:"昼。午後の仕事は？",actions:["w-phone","w-meeting"]},
+    "夕":{prompt:"夕方。退社前に？",actions:["w-mail","w-complaint"]},
+    "夜":{prompt:"夜。仕事帰り、どうする？",actions:["w-nomikai","w-conbini"]},
+  },
+};
+const STUDENT_IDS=["s-train","s-class","s-lunch","s-clothes","s-home","s-fun","s-cafe","s-super","s-cook"];
+const PROMOTE_AT=5;
+function studentDoneCount(s){ const d=s.done||{}; return STUDENT_IDS.filter(id=>d[id]).length; }
+function actionLock(node,s){
+  if(node.event){ const g=node.affGate; const v=(s.aff&&s.aff[g.key])||0; return v<g.val?{locked:true,reason:"好感度 "+AFF[g.key].label+" "+g.val}:{locked:false}; }
+  if(node.minLv && (s.lv||1)<node.minLv) return {locked:true,reason:"Lv."+node.minLv+" で解放"};
+  return {locked:false};
+}
 
 const SCENES=[
   /* ============ 学生編 ============ */
   { id:"s-train", stage:"学生編", domain:"行", cefr:"A1", cost:20, aff:[],
     title:"朝の通学", sub:"Morning commute", setting:"朝。最寄り駅で改札を通り、大学行きの電車に乗る。",
     teach:[
-      {jp:"駅",reading:"えき",meaning:"車站"},{jp:"切符",reading:"きっぷ",meaning:"車票"},
-      {jp:"改札",reading:"かいさつ",meaning:"剪票口"},{jp:"IC カード",reading:"アイシーカード",meaning:"交通IC卡"},
-      {jp:"〜行き",reading:"〜ゆき",meaning:"開往〜（東京行き＝開往東京）"},{jp:"次の電車",reading:"つぎのでんしゃ",meaning:"下一班電車"},
+      {jp:"駅",reading:"えき",meaning:"車站"},{jp:"改札",reading:"かいさつ",meaning:"剪票口"},
+      {jp:"IC カード",reading:"アイシーカード",meaning:"交通IC卡"},{jp:"〜行き",reading:"〜ゆき",meaning:"開往〜"},
+      {jp:"乗る",reading:"のる",meaning:"搭乘"},{jp:"降りる",reading:"おりる",meaning:"下車"},
+      {jp:"ホーム",reading:"ホーム",meaning:"月台"},{jp:"各駅停車",reading:"かくえきていしゃ",meaning:"每站皆停（普通車）"},
     ],
     quiz:[
       {kind:"mc",prompt:"「駅」の意味は？",answer:"車站",choices:["車站","機場","醫院","郵局"]},
       {kind:"mc",prompt:"改札で IC カードはどうする？",answer:"タッチする",choices:["タッチする","食べる","洗う","投げる"]},
+      {kind:"mc",prompt:"「乗る」の反対は？",answer:"降りる",choices:["降りる","出る","着く","待つ"]},
+      {kind:"mc",prompt:"「各駅停車」は？",answer:"每站都停",choices:["每站都停","只停大站","終點直達","臨時停駛"]},
+      {kind:"mc",prompt:"電車を待つ場所は？",answer:"ホーム",choices:["ホーム","改札","トイレ","出口"]},
+      {kind:"mc",prompt:"「〜行き」の意味は？",answer:"開往〜",choices:["開往〜","來自〜","經過〜","在〜附近"]},
       {kind:"cloze",prompt:"東京＿＿の電車に乗る。（開往東京）",answer:"行き",choices:["行き","駅","切符","改札"]},
+      {kind:"cloze",prompt:"次の駅で＿＿ます。（下車）",answer:"降り",choices:["降り","乗り","着き","待ち"]},
+      {kind:"cloze",prompt:"＿＿で IC カードをタッチする。（剪票口）",answer:"改札",choices:["改札","ホーム","切符","電車"]},
       {kind:"dictation",jp:"えき",accept:["えき"],hint:"車站（ひらがな2字）"},
-      {kind:"mc",prompt:"「次の電車」は？",answer:"下一班電車",choices:["下一班電車","上一班電車","最後一班","沒有電車"]},
+      {kind:"dictation",jp:"でんしゃ",accept:["でんしゃ"],hint:"電車（ひらがな）"},
+      {kind:"build",prompt:"並べて：『次の電車に乗ります。』",target:["次の電車","に","乗ります"],pool:["次の電車","に","乗ります","降ります"]},
+      {kind:"translate",prompt:"用日文問：「下一班電車是幾點？」",model:"次の電車は何時ですか。",notes:"何時（なんじ）＝幾點。"},
     ]},
   { id:"s-class", stage:"学生編", domain:"育", cefr:"A2", cost:25, aff:["senpai"],
     title:"大学の授業", sub:"At the lecture", setting:"教室。少し遅れて到着。先生に質問し、先輩に挨拶する。",
     teach:[
       {jp:"授業",reading:"じゅぎょう",meaning:"課程"},{jp:"出席",reading:"しゅっせき",meaning:"出席"},
-      {jp:"質問",reading:"しつもん",meaning:"問題／提問"},{jp:"遅れる",reading:"おくれる",meaning:"遲到"},
-      {jp:"すみません、遅れました",reading:"すみません、おくれました",meaning:"對不起，我遲到了"},
-      {jp:"お疲れさまです",reading:"おつかれさまです",meaning:"辛苦了（同儕/前輩問候）"},
+      {jp:"質問",reading:"しつもん",meaning:"提問"},{jp:"遅れる",reading:"おくれる",meaning:"遲到"},
+      {jp:"宿題",reading:"しゅくだい",meaning:"作業"},{jp:"もう一度",reading:"もういちど",meaning:"再一次"},
+      {jp:"わかりました",reading:"わかりました",meaning:"我懂了"},{jp:"お疲れさまです",reading:"おつかれさまです",meaning:"辛苦了"},
     ],
     quiz:[
       {kind:"mc",prompt:"「授業」は？",answer:"課程",choices:["課程","午餐","社團","宿舍"]},
       {kind:"mc",prompt:"遲到時，進教室先說？",answer:"すみません、遅れました",choices:["すみません、遅れました","いただきます","おやすみなさい","ごちそうさま"]},
-      {kind:"cloze",prompt:"先生に＿＿があります。（提問）",answer:"質問",choices:["質問","出席","授業","遅れ"]},
+      {kind:"mc",prompt:"「宿題」は？",answer:"作業",choices:["作業","考試","出席","社團"]},
+      {kind:"mc",prompt:"聞き取れず、もう一度聞きたい時：",answer:"もう一度お願いします",choices:["もう一度お願いします","わかりました","さようなら","いただきます"]},
+      {kind:"mc",prompt:"先生に「わかりましたか」と聞かれ、理解した時：",answer:"わかりました",choices:["わかりました","はじめまして","ごめんください","おかえりなさい"]},
+      {kind:"cloze",prompt:"先生に＿＿があります。（提問）",answer:"質問",choices:["質問","出席","授業","宿題"]},
+      {kind:"cloze",prompt:"今日の＿＿を出してください。（作業）",answer:"宿題",choices:["宿題","出席","質問","遅れ"]},
+      {kind:"cloze",prompt:"毎日きちんと＿＿します。（出席）",answer:"出席",choices:["出席","質問","試着","分別"]},
       {kind:"build",prompt:"並べて：『質問してもいいですか。』",target:["質問して","も","いいですか"],pool:["質問して","も","いいですか","ました"]},
+      {kind:"build",prompt:"並べて：『すみません、遅れました。』",target:["すみません","遅れ","ました"],pool:["すみません","遅れ","ました","ません"]},
+      {kind:"dictation",jp:"しつもん",accept:["しつもん"],hint:"提問（ひらがな）"},
       {kind:"translate",prompt:"用日文說：「我可以提問嗎？」",model:"質問してもいいですか。",notes:"て形＋もいいですか＝請求許可。"},
+      {kind:"translate",prompt:"用日文說：「請再說一次。」",model:"もう一度お願いします。",notes:"もう一度＝再一次。"},
     ]},
   { id:"s-lunch", stage:"学生編", domain:"食", cefr:"A2", cost:20, aff:["ten"],
     title:"学食とコンビニ", sub:"Lunch run", setting:"お昼。学食で定食を頼み、帰りにコンビニで買い物。",
     teach:[
       {jp:"定食",reading:"ていしょく",meaning:"定食套餐"},{jp:"お弁当",reading:"おべんとう",meaning:"便當"},
-      {jp:"これください",reading:"これください",meaning:"請給我這個"},{jp:"温めますか",reading:"あたためますか",meaning:"要加熱嗎（店員問）"},
-      {jp:"お会計",reading:"おかいけい",meaning:"結帳"},{jp:"いくらですか",reading:"いくらですか",meaning:"多少錢？"},
+      {jp:"これください",reading:"これください",meaning:"請給我這個"},{jp:"温めますか",reading:"あたためますか",meaning:"要加熱嗎"},
+      {jp:"お会計",reading:"おかいけい",meaning:"結帳"},{jp:"いくらですか",reading:"いくらですか",meaning:"多少錢"},
+      {jp:"袋",reading:"ふくろ",meaning:"袋子"},{jp:"レジ",reading:"レジ",meaning:"收銀台"},
     ],
     quiz:[
       {kind:"mc",prompt:"「お弁当」は？",answer:"便當",choices:["便當","飲料","筷子","菜單"]},
       {kind:"mc",prompt:"コンビニで「温めますか」と聞かれ、温めてほしい時：",answer:"はい、お願いします",choices:["はい、お願いします","いいえ、結構です","いただきます","ごちそうさま"]},
+      {kind:"mc",prompt:"「温めますか」に、温めなくていい時：",answer:"いいえ、大丈夫です",choices:["いいえ、大丈夫です","はい、お願いします","もう一度","ください"]},
+      {kind:"mc",prompt:"「お会計」は？",answer:"結帳",choices:["結帳","加熱","外帶","菜單"]},
+      {kind:"mc",prompt:"「袋」は？",answer:"袋子",choices:["袋子","湯匙","發票","零錢"]},
       {kind:"cloze",prompt:"すみません、これ＿＿。（請給我）",answer:"ください",choices:["ください","です","ました","でした"]},
+      {kind:"cloze",prompt:"全部で＿＿ですか。（多少錢）",answer:"いくら",choices:["いくら","どこ","いつ","だれ"]},
+      {kind:"cloze",prompt:"お＿＿お願いします。（結帳）",answer:"会計",choices:["会計","弁当","改札","出席"]},
       {kind:"dictation",jp:"おべんとう",accept:["おべんとう"],hint:"便當（ひらがな）"},
-      {kind:"translate",prompt:"用日文問：「多少錢？」",model:"いくらですか。",notes:"いくら＝多少錢；丁寧形＋ですか。"},
+      {kind:"dictation",jp:"ていしょく",accept:["ていしょく"],hint:"定食（ひらがな）"},
+      {kind:"build",prompt:"並べて：『これをください。』",target:["これ","を","ください"],pool:["これ","を","ください","です"]},
+      {kind:"translate",prompt:"用日文問：「多少錢？」",model:"いくらですか。",notes:"いくら＝多少；丁寧形＋ですか。"},
+      {kind:"translate",prompt:"用日文說：「請幫我加熱。」",model:"温めてください。",notes:"て形＋ください＝請求。"},
     ]},
   { id:"s-clothes", stage:"学生編", domain:"衣", cefr:"A2", cost:25, aff:["ten"],
     title:"服を買う", sub:"Clothes shopping", setting:"夕方。服屋でサイズを聞き、試着する。",
     teach:[
       {jp:"服",reading:"ふく",meaning:"衣服"},{jp:"サイズ",reading:"サイズ",meaning:"尺寸"},
-      {jp:"試着",reading:"しちゃく",meaning:"試穿"},{jp:"もう少し大きいの",reading:"もうすこしおおきいの",meaning:"再大一點的"},
-      {jp:"色違い",reading:"いろちがい",meaning:"不同顏色（同款）"},
+      {jp:"試着",reading:"しちゃく",meaning:"試穿"},{jp:"色違い",reading:"いろちがい",meaning:"不同顏色（同款）"},
+      {jp:"似合う",reading:"にあう",meaning:"適合／好看"},{jp:"高い",reading:"たかい",meaning:"貴"},
+      {jp:"安い",reading:"やすい",meaning:"便宜"},{jp:"もう少し大きいの",reading:"もうすこしおおきいの",meaning:"再大一點的"},
     ],
     quiz:[
       {kind:"mc",prompt:"「試着」は？",answer:"試穿",choices:["試穿","結帳","退貨","包裝"]},
+      {kind:"mc",prompt:"「高い」（価格）は？",answer:"貴",choices:["貴","便宜","大","小"]},
+      {kind:"mc",prompt:"「安い」は？",answer:"便宜",choices:["便宜","貴","新","舊"]},
+      {kind:"mc",prompt:"店員に「似合いますね」と言われたら？",answer:"很適合您",choices:["很適合您","太貴了","沒有貨","不能試穿"]},
+      {kind:"mc",prompt:"「色違いはありますか」は何を聞いている？",answer:"有沒有別的顏色",choices:["有沒有別的顏色","有沒有大一點的","可以退嗎","在哪結帳"]},
       {kind:"cloze",prompt:"これ、＿＿してもいいですか。（試穿）",answer:"試着",choices:["試着","会計","出席","質問"]},
-      {kind:"mc",prompt:"「もう少し大きいの、ありますか」は何を聞いている？",answer:"有沒有大一點的",choices:["有沒有大一點的","有沒有便宜的","可以退嗎","在哪裡結帳"]},
+      {kind:"cloze",prompt:"もう少し＿＿のはありますか。（大一點）",answer:"大きい",choices:["大きい","小さい","安い","高い"]},
+      {kind:"cloze",prompt:"この服は＿＿です。（貴）",answer:"高い",choices:["高い","安い","大きい","小さい"]},
       {kind:"build",prompt:"並べて：『試着してもいいですか。』",target:["試着して","も","いいですか"],pool:["試着して","も","いいですか","ください"]},
-      {kind:"translate",prompt:"用日文問：「有別的顏色嗎？」",model:"色違いはありますか。",notes:"色違い＝不同色；ありますか＝有嗎。"},
+      {kind:"build",prompt:"並べて：『もう少し安いのはありますか。』",target:["もう少し","安いのは","ありますか"],pool:["もう少し","安いのは","ありますか","大きいのは"]},
+      {kind:"dictation",jp:"しちゃく",accept:["しちゃく"],hint:"試穿（ひらがな）"},
+      {kind:"translate",prompt:"用日文問：「有別的顏色嗎？」",model:"色違いはありますか。",notes:"色違い＝同款不同色。"},
+      {kind:"translate",prompt:"用日文問：「這個多少錢？」",model:"これはいくらですか。",notes:"いくら＝多少錢。"},
     ]},
   { id:"s-home", stage:"学生編", domain:"住", cefr:"A2", cost:20, aff:[],
     title:"アパート暮らし", sub:"At the apartment", setting:"朝。大家さんに挨拶し、ゴミを分別して出す。",
     teach:[
       {jp:"大家さん",reading:"おおやさん",meaning:"房東"},{jp:"ゴミ",reading:"ゴミ",meaning:"垃圾"},
-      {jp:"燃えるゴミ",reading:"もえるゴミ",meaning:"可燃垃圾"},{jp:"分別",reading:"ぶんべつ",meaning:"分類"},
-      {jp:"よろしくお願いします",reading:"よろしくおねがいします",meaning:"請多指教／拜託了"},
+      {jp:"燃えるゴミ",reading:"もえるゴミ",meaning:"可燃垃圾"},{jp:"燃えないゴミ",reading:"もえないゴミ",meaning:"不可燃垃圾"},
+      {jp:"分別",reading:"ぶんべつ",meaning:"分類"},{jp:"〜曜日",reading:"〜ようび",meaning:"星期〜"},
+      {jp:"鍵",reading:"かぎ",meaning:"鑰匙"},{jp:"よろしくお願いします",reading:"よろしくおねがいします",meaning:"請多指教"},
     ],
     quiz:[
       {kind:"mc",prompt:"「大家さん」は？",answer:"房東",choices:["房東","鄰居","郵差","警察"]},
       {kind:"mc",prompt:"「燃えるゴミ」は？",answer:"可燃垃圾",choices:["可燃垃圾","不可燃垃圾","資源回收","大型垃圾"]},
-      {kind:"cloze",prompt:"ゴミは＿＿してから出す。（分類）",answer:"分別",choices:["分別","出席","試着","質問"]},
+      {kind:"mc",prompt:"「鍵」は？",answer:"鑰匙",choices:["鑰匙","垃圾","門","窗"]},
+      {kind:"mc",prompt:"「燃えないゴミ」は？",answer:"不可燃垃圾",choices:["不可燃垃圾","可燃垃圾","廚餘","紙類"]},
       {kind:"mc",prompt:"引っ越しの挨拶でよく言うのは？",answer:"よろしくお願いします",choices:["よろしくお願いします","おつかれさまです","いただきます","おかえりなさい"]},
-      {kind:"dictation",jp:"おおや",accept:["おおや"],hint:"房東（さん抜き、ひらがな）"},
+      {kind:"mc",prompt:"ゴミを出す日は何で決まる？",answer:"曜日",choices:["曜日","天気","気分","値段"]},
+      {kind:"cloze",prompt:"ゴミは＿＿してから出す。（分類）",answer:"分別",choices:["分別","出席","試着","質問"]},
+      {kind:"cloze",prompt:"月曜＿＿に燃えるゴミを出す。（星期）",answer:"日",choices:["日","曜","週","朝"]},
+      {kind:"cloze",prompt:"＿＿をなくして家に入れない。（鑰匙）",answer:"鍵",choices:["鍵","ゴミ","大家","改札"]},
+      {kind:"build",prompt:"並べて：『ゴミを分別して出します。』",target:["ゴミを","分別して","出します"],pool:["ゴミを","分別して","出します","入れます"]},
+      {kind:"dictation",jp:"おおや",accept:["おおや"],hint:"房東（さん抜き）"},
+      {kind:"dictation",jp:"かぎ",accept:["かぎ"],hint:"鑰匙（ひらがな）"},
+      {kind:"translate",prompt:"用日文問：「垃圾星期幾丟？」",model:"ゴミは何曜日に出しますか。",notes:"何曜日（なんようび）＝星期幾。"},
     ]},
   { id:"s-fun", stage:"学生編", domain:"楽", cefr:"B1", cost:25, aff:["tomo","senpai"],
     title:"サークルとカラオケ", sub:"Hanging out", setting:"夜。サークルの後、友達と先輩でカラオケに誘い合う。",
     teach:[
       {jp:"サークル",reading:"サークル",meaning:"社團"},{jp:"カラオケ",reading:"カラオケ",meaning:"卡拉OK"},
       {jp:"一緒に",reading:"いっしょに",meaning:"一起"},{jp:"〜ない？",reading:"〜ない？",meaning:"要不要〜？（邀約）"},
-      {jp:"また今度",reading:"またこんど",meaning:"下次再說／下次吧"},
+      {jp:"また今度",reading:"またこんど",meaning:"下次吧"},{jp:"楽しい",reading:"たのしい",meaning:"開心"},
+      {jp:"暇",reading:"ひま",meaning:"有空"},{jp:"忙しい",reading:"いそがしい",meaning:"忙"},
     ],
     quiz:[
       {kind:"mc",prompt:"「サークル」は？",answer:"社團",choices:["社團","打工","考試","宿舍"]},
-      {kind:"cloze",prompt:"今度、＿＿にカラオケ行かない？（一起）",answer:"一緒",choices:["一緒","試着","出席","分別"]},
+      {kind:"mc",prompt:"「暇」は？",answer:"有空",choices:["有空","忙","累","餓"]},
+      {kind:"mc",prompt:"「忙しい」は？",answer:"忙",choices:["忙","閒","開心","難過"]},
       {kind:"mc",prompt:"「カラオケ行かない？」のニュアンスは？",answer:"邀約（要不要去）",choices:["邀約（要不要去）","命令","拒絕","道歉"]},
+      {kind:"mc",prompt:"誘いを柔らかく断る言い方は？",answer:"また今度",choices:["また今度","行かない","いやだ","だめ"]},
+      {kind:"cloze",prompt:"今度、＿＿にカラオケ行かない？（一起）",answer:"一緒",choices:["一緒","試着","出席","分別"]},
+      {kind:"cloze",prompt:"今日は＿＿だから遊べる。（有空）",answer:"暇",choices:["暇","忙しい","大変","残念"]},
+      {kind:"cloze",prompt:"昨日のパーティー、＿＿かった。（開心）",answer:"楽し",choices:["楽し","忙し","寂し","難し"]},
       {kind:"build",prompt:"並べて：『一緒に行かない？』",target:["一緒に","行か","ない"],pool:["一緒に","行か","ない","ました"]},
+      {kind:"build",prompt:"並べて：『また今度、一緒に行こう。』",target:["また今度","一緒に","行こう"],pool:["また今度","一緒に","行こう","行った"]},
+      {kind:"dictation",jp:"たのしい",accept:["たのしい"],hint:"開心（ひらがな）"},
       {kind:"translate",prompt:"用日文說：「下次再一起去吧。」",model:"また今度、一緒に行こう。",notes:"〜う／よう＝意志・邀約形。"},
+      {kind:"translate",prompt:"用日文問：「明天有空嗎？」",model:"明日、暇ですか。",notes:"暇（ひま）＝有空。"},
     ]},
   { id:"s-event", stage:"学生編", domain:"楽", cefr:"B1", cost:30, aff:["tomo","senpai"], event:true,
     title:"居酒屋で語る夜", sub:"Izakaya night（好感度イベント）", setting:"友達との好感度が深まった。居酒屋で、これまで覚えた言葉を総動員して語り合う。",
@@ -242,56 +317,89 @@ const SCENES=[
     teach:[
       {jp:"お疲れさまです",reading:"おつかれさまです",meaning:"辛苦了（職場問候）"},{jp:"報告",reading:"ほうこく",meaning:"報告"},
       {jp:"連絡",reading:"れんらく",meaning:"聯絡"},{jp:"相談",reading:"そうだん",meaning:"商量"},
-      {jp:"よろしくお願いいたします",reading:"よろしくおねがいいたします",meaning:"請多指教（更禮貌）"},
+      {jp:"承知しました",reading:"しょうちしました",meaning:"我了解了（鄭重應答）"},{jp:"確認",reading:"かくにん",meaning:"確認"},
+      {jp:"締め切り",reading:"しめきり",meaning:"截止日"},{jp:"よろしくお願いいたします",reading:"よろしくおねがいいたします",meaning:"請多指教"},
     ],
     quiz:[
       {kind:"mc",prompt:"職場で同僚に会ったら？",answer:"お疲れさまです",choices:["お疲れさまです","いただきます","おやすみなさい","ただいま"]},
       {kind:"mc",prompt:"「報連相」の「相」は？",answer:"相談",choices:["相談","掃除","散歩","写真"]},
+      {kind:"mc",prompt:"上司の指示を受けて返す言葉は？",answer:"承知しました",choices:["承知しました","知らない","いやです","なに？"]},
+      {kind:"mc",prompt:"「締め切り」は？",answer:"截止日",choices:["截止日","休息","加班","會議"]},
+      {kind:"mc",prompt:"「確認します」は？",answer:"我來確認",choices:["我來確認","我拒絕","我請假","我遲到"]},
       {kind:"cloze",prompt:"進捗に＿＿て報告します。（關於）",answer:"ついて",choices:["ついて","よって","おいて","たいして"]},
+      {kind:"cloze",prompt:"＿＿したいことがあります。（商量・謙讓）",answer:"ご相談",choices:["ご相談","ご出席","ご試着","ご改札"]},
+      {kind:"cloze",prompt:"内容を＿＿いたします。（確認）",answer:"確認",choices:["確認","報告","連絡","相談"]},
       {kind:"build",prompt:"並べて：『ご相談したいことがあります。』",target:["ご相談したい","ことが","あります"],pool:["ご相談したい","ことが","あります","でした"]},
-      {kind:"translate",prompt:"用日文說：「我想跟您商量一件事。」",model:"ご相談したいことがあるのですが。",notes:"ご＋名詞＋したい＝謙讓；のですが＝婉曲鋪陳。"},
+      {kind:"build",prompt:"並べて：『後で報告いたします。』",target:["後で","報告","いたします"],pool:["後で","報告","いたします","されます"]},
+      {kind:"dictation",jp:"かくにん",accept:["かくにん"],hint:"確認（ひらがな）"},
+      {kind:"translate",prompt:"用日文說：「我想跟您商量一件事。」",model:"ご相談したいことがあるのですが。",notes:"のですが＝婉曲鋪陳。"},
+      {kind:"translate",prompt:"用日文說：「我了解了，馬上確認。」",model:"承知しました。すぐ確認いたします。",notes:"承知しました＝鄭重應答。"},
     ]},
   { id:"w-phone", stage:"社会人編", domain:"職", cefr:"B2", cost:25, aff:["kyaku","joushi"],
     title:"電話応対", sub:"Answering the phone", setting:"昼。外線が鳴る。会社名を名乗り、担当者へ取り次ぐ。",
     teach:[
       {jp:"お電話ありがとうございます",reading:"おでんわありがとうございます",meaning:"感謝您來電"},{jp:"少々お待ちください",reading:"しょうしょうおまちください",meaning:"請稍候"},
       {jp:"担当の者",reading:"たんとうのもの",meaning:"負責的人（謙稱自方）"},{jp:"かしこまりました",reading:"かしこまりました",meaning:"我明白了（鄭重）"},
-      {jp:"折り返し",reading:"おりかえし",meaning:"回撥"},
+      {jp:"折り返し",reading:"おりかえし",meaning:"回撥"},{jp:"席を外しております",reading:"せきをはずしております",meaning:"現在不在座位（謙）"},
+      {jp:"伝言",reading:"でんごん",meaning:"留言"},{jp:"失礼します",reading:"しつれいします",meaning:"我先掛了／告辭"},
     ],
     quiz:[
       {kind:"mc",prompt:"会社で電話を取ったら、まず？",answer:"お電話ありがとうございます",choices:["お電話ありがとうございます","もしもし、どなた？","はい、なに？","いま忙しいです"]},
       {kind:"mc",prompt:"「少々お待ちください」は？",answer:"請稍候",choices:["請稍候","請掛斷","請再打","我不在"]},
       {kind:"mc",prompt:"「かしこまりました」の意味は？",answer:"我明白了（鄭重）",choices:["我明白了（鄭重）","我不知道","請等等","謝謝"]},
+      {kind:"mc",prompt:"「折り返し」は？",answer:"回撥",choices:["回撥","轉接","留言","掛斷"]},
+      {kind:"mc",prompt:"「伝言」は？",answer:"留言",choices:["留言","回撥","號碼","姓名"]},
+      {kind:"mc",prompt:"担当者が不在の丁寧な伝え方は？",answer:"ただいま席を外しております",choices:["ただいま席を外しております","今いません","知りません","いないよ"]},
+      {kind:"mc",prompt:"電話を切る前に言うのは？",answer:"失礼します",choices:["失礼します","さようなら","バイバイ","おやすみ"]},
       {kind:"cloze",prompt:"担当の＿＿におつなぎします。（自方謙稱）",answer:"者",choices:["者","方","様","君"]},
-      {kind:"find_error",prompt:"自社の人について丁寧に。誤りを探せ：",parts:["ただいま","担当者は","席に","います"],wrongIndex:3,correct:"おりません／おります",explain:"自分側には謙譲語。「います」→「おります（おりません）」。"},
+      {kind:"cloze",prompt:"＿＿お待ちください。（稍微）",answer:"少々",choices:["少々","たくさん","ずっと","もう"]},
+      {kind:"cloze",prompt:"後ほど＿＿お電話いたします。（回撥）",answer:"折り返し",choices:["折り返し","少々","担当","伝言"]},
+      {kind:"cloze",prompt:"＿＿を承りましょうか。（留言・謙讓）",answer:"ご伝言",choices:["ご伝言","お会計","ご試着","ご出席"]},
+      {kind:"find_error",prompt:"自社の人について。語体の誤りを探せ：",parts:["ただいま","担当者は","席に","います"],wrongIndex:3,correct:"おりません／おります",explain:"自分側には謙譲語。「います」→「おります（おりません）」。"},
+      {kind:"find_error",prompt:"社外に自社の上司を高めない。誤りを探せ：",parts:["課長","は","お出かけに","なりました"],wrongIndex:2,correct:"出かけております",explain:"社外には自社の上司も謙譲表現で。「お出かけになりました」は尊敬語で不適。"},
     ]},
   { id:"w-mail", stage:"社会人編", domain:"職", cefr:"B2", cost:25, aff:["kyaku"], reading:true,
     title:"ビジネスメール", sub:"Reading: a work email", setting:"夕方。取引先からのメールを読み、内容を把握する。",
     passage:"お世話になっております。株式会社さくらの田中です。先日はお打ち合わせのお時間をいただき、ありがとうございました。さて、ご依頼いただいた見積書につきまして、添付ファイルにてお送りいたします。ご確認のうえ、ご不明な点がございましたら、お気軽にお問い合わせください。何卒よろしくお願いいたします。",
     gloss:[
-      {jp:"お世話になっております",meaning:"承蒙關照（商務開頭語）"},{jp:"見積書（みつもりしょ）",meaning:"報價單"},
-      {jp:"添付（てんぷ）",meaning:"附件"},{jp:"ご確認のうえ",meaning:"確認之後"},
+      {jp:"お世話になっております",meaning:"承蒙關照（商務開頭語）"},{jp:"お打ち合わせ",meaning:"洽談／開會"},
+      {jp:"見積書（みつもりしょ）",meaning:"報價單"},{jp:"添付（てんぷ）",meaning:"附件"},
+      {jp:"ご確認のうえ",meaning:"確認之後"},{jp:"何卒（なにとぞ）",meaning:"務必（鄭重請託）"},
     ],
     quiz:[
       {kind:"mc",prompt:"このメールの主な目的は？",answer:"見積書を送ること",choices:["見積書を送ること","会議を断ること","苦情を言うこと","求人に応募すること"]},
       {kind:"mc",prompt:"「添付ファイルにて」送るものは？",answer:"見積書",choices:["見積書","請求書","履歴書","名刺"]},
-      {kind:"cloze",prompt:"ご確認の＿＿、お問い合わせください。",answer:"うえ",choices:["うえ","した","なか","あいだ"]},
       {kind:"mc",prompt:"「お世話になっております」を使う場面は？",answer:"ビジネスの挨拶",choices:["ビジネスの挨拶","謝罪","別れ際","食事の前"]},
-      {kind:"find_error",prompt:"取引先への文。語体の誤りを探せ：",parts:["見積書","を","送って","やりました"],wrongIndex:3,correct:"お送りいたしました",explain:"「やる」は目下向け。取引先には謙譲語「お送りいたします／いたしました」。"},
+      {kind:"mc",prompt:"「お打ち合わせ」は？",answer:"洽談／開會",choices:["洽談／開會","用餐","出差","休假"]},
+      {kind:"mc",prompt:"「ご確認のうえ」の意味は？",answer:"確認之後",choices:["確認之後","確認之前","不用確認","代為確認"]},
+      {kind:"mc",prompt:"「何卒よろしくお願いいたします」のトーンは？",answer:"鄭重請託",choices:["鄭重請託","輕鬆問候","嚴厲要求","道歉"]},
+      {kind:"cloze",prompt:"ご確認の＿＿、お問い合わせください。",answer:"うえ",choices:["うえ","した","なか","あいだ"]},
+      {kind:"cloze",prompt:"ご不明な点が＿＿ましたら…（有的話・鄭重）",answer:"ござい",choices:["ござい","おり","いたし","まいり"]},
+      {kind:"cloze",prompt:"添付ファイル＿＿お送りします。（以）",answer:"にて",choices:["にて","から","より","まで"]},
+      {kind:"find_error",prompt:"取引先への語体。誤りを探せ：",parts:["見積書","を","送って","やりました"],wrongIndex:3,correct:"お送りいたしました",explain:"「やる」は目下向け。取引先には謙譲語「お送りいたします／いたしました」。"},
+      {kind:"find_error",prompt:"取引先に敬意を。より丁寧にすべき箇所を探せ：",parts:["資料","を","見て","ください"],wrongIndex:2,correct:"ご覧",explain:"「見てください」より敬意ある「ご覧ください」が適切。"},
     ]},
   { id:"w-nomikai", stage:"社会人編", domain:"食", cefr:"B2", cost:30, aff:["joushi","kyaku"],
     title:"飲み会・接待", sub:"Business dinner", setting:"夜。取引先との会食。注ぐ・勧める・気を配る。",
     teach:[
       {jp:"お注ぎします",reading:"おつぎします",meaning:"我為您倒（酒）"},{jp:"お先に失礼します",reading:"おさきにしつれいします",meaning:"我先告辭了"},
-      {jp:"ご馳走になります",reading:"ごちそうになります",meaning:"承蒙招待"},{jp:"もう一杯いかがですか",reading:"もういっぱいいかがですか",meaning:"再來一杯如何？"},
-      {jp:"乾杯",reading:"かんぱい",meaning:"乾杯"},
+      {jp:"ご馳走になります",reading:"ごちそうになります",meaning:"承蒙招待"},{jp:"もう一杯いかがですか",reading:"もういっぱいいかがですか",meaning:"再來一杯如何"},
+      {jp:"乾杯",reading:"かんぱい",meaning:"乾杯"},{jp:"召し上がる",reading:"めしあがる",meaning:"享用（尊敬語）"},
+      {jp:"二次会",reading:"にじかい",meaning:"續攤"},{jp:"気が利く",reading:"きがきく",meaning:"體貼周到"},
     ],
     quiz:[
       {kind:"mc",prompt:"上司にお酒を勧める時、丁寧なのは？",answer:"もう一杯いかがですか",choices:["もう一杯いかがですか","もっと飲め","いる？","自分で注いで"]},
-      {kind:"mc",prompt:"「お先に失礼します」は？",answer:"我先告辭了",choices:["我先告辭了","我遲到了","我吃飽了","請坐"]},
-      {kind:"cloze",prompt:"本日はお招きいただき、ありがとう＿＿。",answer:"ございます",choices:["ございます","です","でした","ました"]},
+      {kind:"mc",prompt:"「お先に失礼します」は？",answer:"我先告辭",choices:["我先告辭","我遲到了","我吃飽了","請坐"]},
       {kind:"mc",prompt:"自分が相手にお酌する時に言うのは？",answer:"お注ぎします",choices:["お注ぎします","お注ぎになります","注いでやる","注いでくれ"]},
+      {kind:"mc",prompt:"「二次会」は？",answer:"續攤",choices:["續攤","主菜","結帳","預約"]},
+      {kind:"mc",prompt:"相手が食べる動作の尊敬語は？",answer:"召し上がる",choices:["召し上がる","いただく","食べてやる","食う"]},
+      {kind:"mc",prompt:"「気が利く」人とは？",answer:"體貼周到",choices:["體貼周到","動作慢","愛遲到","話很多"]},
+      {kind:"cloze",prompt:"本日はお招きいただき、ありがとう＿＿。",answer:"ございます",choices:["ございます","です","でした","ました"]},
+      {kind:"cloze",prompt:"乾杯の前に「お疲れさま＿＿」と言う。",answer:"です",choices:["です","でした","ます","ません"]},
+      {kind:"cloze",prompt:"お酒を＿＿します。（倒）",answer:"お注ぎ",choices:["お注ぎ","お先","ご馳走","お招き"]},
       {kind:"build",prompt:"並べて：『お先に失礼します。』",target:["お先に","失礼","します"],pool:["お先に","失礼","します","しました"]},
+      {kind:"build",prompt:"並べて：『今日はご馳走になります。』",target:["今日は","ご馳走に","なります"],pool:["今日は","ご馳走に","なります","します"]},
+      {kind:"find_error",prompt:"相手の動作に謙譲語は誤り。探せ：",parts:["部長","も","ビール","いただきますか"],wrongIndex:3,correct:"召し上がりますか",explain:"相手の動作には尊敬語「召し上がる」。自分が飲むなら「いただく」。"},
     ]},
   { id:"w-trip", stage:"社会人編", domain:"行", cefr:"B2", cost:25, aff:[],
     title:"出張・新幹線", sub:"Business trip", setting:"朝。出張で新幹線に乗る。指定席を取り、乗り換える。",
@@ -299,27 +407,44 @@ const SCENES=[
       {jp:"出張",reading:"しゅっちょう",meaning:"出差"},{jp:"新幹線",reading:"しんかんせん",meaning:"新幹線"},
       {jp:"指定席",reading:"していせき",meaning:"對號座"},{jp:"自由席",reading:"じゆうせき",meaning:"自由座"},
       {jp:"乗り換え",reading:"のりかえ",meaning:"轉乘"},{jp:"〜番線",reading:"〜ばんせん",meaning:"〜號月台"},
+      {jp:"領収書",reading:"りょうしゅうしょ",meaning:"收據（報帳用）"},{jp:"経費",reading:"けいひ",meaning:"經費"},
     ],
     quiz:[
       {kind:"mc",prompt:"「指定席」は？",answer:"對號座",choices:["對號座","自由座","站票","臥鋪"]},
       {kind:"mc",prompt:"「乗り換え」は？",answer:"轉乘",choices:["轉乘","直達","誤點","終點"]},
-      {kind:"cloze",prompt:"東京駅で＿＿があります。（轉乘）",answer:"乗り換え",choices:["乗り換え","出張","指定席","改札"]},
-      {kind:"dictation",jp:"しんかんせん",accept:["しんかんせん"],hint:"新幹線（ひらがな）"},
+      {kind:"mc",prompt:"「領収書」は？",answer:"收據",choices:["收據","車票","行李","座位"]},
       {kind:"mc",prompt:"「3番線」が指すのは？",answer:"月台號",choices:["月台號","車廂號","座位號","班次號"]},
+      {kind:"mc",prompt:"指定席と自由席の違いは？",answer:"指定席は座席が決まっている",choices:["指定席は座席が決まっている","自由席のほうが高い","同じ意味","指定席は立ち乗り"]},
+      {kind:"cloze",prompt:"東京駅で＿＿があります。（轉乘）",answer:"乗り換え",choices:["乗り換え","出張","指定席","改札"]},
+      {kind:"cloze",prompt:"経費で落とすので＿＿をください。（收據）",answer:"領収書",choices:["領収書","切符","弁当","名刺"]},
+      {kind:"cloze",prompt:"＿＿で大阪へ行きます。（新幹線）",answer:"新幹線",choices:["新幹線","改札","定食","試着"]},
+      {kind:"dictation",jp:"しんかんせん",accept:["しんかんせん"],hint:"新幹線（ひらがな）"},
+      {kind:"dictation",jp:"していせき",accept:["していせき"],hint:"對號座（ひらがな）"},
+      {kind:"build",prompt:"並べて：『指定席を予約します。』",target:["指定席","を","予約します"],pool:["指定席","を","予約します","出します"]},
+      {kind:"translate",prompt:"用日文說：「請給我收據。」",model:"領収書をください。",notes:"経費精算でよく使う。"},
     ]},
   { id:"w-meeting", stage:"社会人編", domain:"職", cefr:"C1", cost:30, aff:["joushi"], contact:true, minLv:5,
     title:"会議で意見を述べる", sub:"Disagreeing softly（上級接觸）", setting:"会議。上司の案に、角を立てずに別の見方を添える。※認識のみ・自由産出なし。",
     teach:[
       {jp:"おっしゃる通りですが",reading:"おっしゃるとおりですが",meaning:"您說得對，不過…（先肯定再轉折）"},
       {jp:"〜という見方もあります",reading:"〜というみかたもあります",meaning:"也有〜這種看法"},
-      {jp:"一点よろしいでしょうか",reading:"いってんよろしいでしょうか",meaning:"我可以講一點嗎"},
+      {jp:"一点よろしいでしょうか",reading:"いってんよろしいでしょうか",meaning:"我可以說一點嗎"},
       {jp:"差し支えなければ",reading:"さしつかえなければ",meaning:"如果方便的話（婉曲前置）"},
+      {jp:"〜かと存じます",reading:"〜かとぞんじます",meaning:"我認為〜（謙讓）"},
+      {jp:"検討の余地",reading:"けんとうのよち",meaning:"討論的空間"},
+      {jp:"念のため",reading:"ねんのため",meaning:"為求保險／以防萬一"},
     ],
     quiz:[
-      {kind:"mc",prompt:"上司の意見に反対する時、最も角が立たないのは？",answer:"おっしゃる通りですが、別の見方もあるかと",choices:["おっしゃる通りですが、別の見方もあるかと","それは違います","反対です","意味がわかりません"]},
-      {kind:"mc",prompt:"「差し支えなければ」の働きは？",answer:"婉曲に前置きする（如果方便）",choices:["婉曲に前置きする（如果方便）","強く命令する","謝罪する","感謝する"]},
+      {kind:"mc",prompt:"上司の案に反対する時、最も角が立たないのは？",answer:"おっしゃる通りですが、別の見方もあるかと",choices:["おっしゃる通りですが、別の見方もあるかと","それは違います","反対です","意味がわかりません"]},
+      {kind:"mc",prompt:"「差し支えなければ」の働きは？",answer:"婉曲な前置き（如果方便）",choices:["婉曲な前置き（如果方便）","強い命令","謝罪","感謝"]},
+      {kind:"mc",prompt:"発言の許可を控えめに求めるなら？",answer:"一点よろしいでしょうか",choices:["一点よろしいでしょうか","黙ってて","聞いて","はい"]},
+      {kind:"mc",prompt:"「検討の余地があります」の含意は？",answer:"還有討論空間（婉轉的否定）",choices:["還有討論空間（婉轉的否定）","完全同意","立刻執行","毫無關係"]},
+      {kind:"mc",prompt:"自分の意見を控えめに述べる形は？",answer:"〜かと存じます",choices:["〜かと存じます","〜に決まってる","〜しろ","〜だろ"]},
+      {kind:"mc",prompt:"「念のため確認ですが」の役割は？",answer:"慎重に念押しする",choices:["慎重に念押しする","相手を責める","謝る","雑談する"]},
       {kind:"cloze",prompt:"一点、よろしい＿＿。（請求發言）",answer:"でしょうか",choices:["でしょうか","ください","ません","でした"]},
-      {kind:"find_error",prompt:"上司への異議。失礼な箇所を探せ：",parts:["部長","は","間違って","います"],wrongIndex:2,correct:"〜という見方もあるかと",explain:"直接「間違っている」は失礼。婉曲表現でやわらげる。"},
+      {kind:"cloze",prompt:"そういう＿＿もあるかと存じます。（看法）",answer:"見方",choices:["見方","出席","改札","試着"]},
+      {kind:"find_error",prompt:"上司への異議。失礼な箇所を探せ：",parts:["部長","は","間違って","います"],wrongIndex:2,correct:"という見方もあるかと",explain:"直接「間違っている」は失礼。婉曲にやわらげる。"},
+      {kind:"find_error",prompt:"断定が強すぎる箇所を探せ：",parts:["その案","は","だめ","です"],wrongIndex:2,correct:"再考の余地があるかと",explain:"「だめ」は断定的すぎ。やわらかい表現に。"},
     ]},
   { id:"w-complaint", stage:"社会人編", domain:"職", cefr:"C1", cost:30, aff:["kyaku","joushi"], contact:true, minLv:6,
     title:"苦情対応", sub:"Handling complaints（上級接觸）", setting:"夕方。クレームの電話。共感し、謝罪し、対応する。※認識のみ・自由産出なし。",
@@ -327,13 +452,101 @@ const SCENES=[
       {jp:"申し訳ございません",reading:"もうしわけございません",meaning:"非常抱歉（最鄭重的道歉）"},
       {jp:"ご迷惑をおかけしました",reading:"ごめいわくをおかけしました",meaning:"給您添麻煩了"},
       {jp:"さっそく確認いたします",reading:"さっそくかくにんいたします",meaning:"立刻為您確認"},
+      {jp:"おっしゃる通りです",reading:"おっしゃるとおりです",meaning:"您說得對（表示共感）"},
       {jp:"今後このようなことがないよう",reading:"こんごこのようなことがないよう",meaning:"今後不再發生"},
+      {jp:"善処いたします",reading:"ぜんしょいたします",meaning:"妥善處理"},
+      {jp:"お詫び申し上げます",reading:"おわびもうしあげます",meaning:"向您致歉"},
     ],
     quiz:[
       {kind:"mc",prompt:"最も丁寧な謝罪は？",answer:"申し訳ございません",choices:["申し訳ございません","ごめんね","すみません","悪いね"]},
-      {kind:"mc",prompt:"クレーム客にまず示すべきは？",answer:"共感と謝罪",choices:["共感と謝罪","言い訳","無視","反論"]},
+      {kind:"mc",prompt:"クレームにまず示すべきは？",answer:"共感と謝罪",choices:["共感と謝罪","言い訳","無視","反論"]},
+      {kind:"mc",prompt:"「善処いたします」は？",answer:"妥善處理",choices:["妥善處理","置之不理","推給別人","馬上拒絕"]},
+      {kind:"mc",prompt:"「おっしゃる通りです」の役割は？",answer:"共感を示す",choices:["共感を示す","反論する","話を変える","命令する"]},
+      {kind:"mc",prompt:"再発防止を伝える表現は？",answer:"今後このようなことがないよう",choices:["今後このようなことがないよう","知りません","仕方ないです","そちらのせいです"]},
+      {kind:"mc",prompt:"「お詫び申し上げます」は？",answer:"向您致歉",choices:["向您致歉","向您道謝","向您請教","向您報告"]},
       {kind:"cloze",prompt:"ご迷惑を＿＿し、申し訳ございません。（添麻煩）",answer:"おかけ",choices:["おかけ","かけて","かかり","かかって"]},
-      {kind:"find_error",prompt:"対応として不適切な箇所を探せ：",parts:["それは","お客様","の","せいです"],wrongIndex:3,correct:"こちらの確認不足でございました",explain:"客に責任転嫁は禁物。自社の非として受け止める。"},
+      {kind:"cloze",prompt:"深く＿＿申し上げます。（致歉）",answer:"お詫び",choices:["お詫び","お祝い","お礼","お願い"]},
+      {kind:"cloze",prompt:"＿＿確認いたします。（立刻）",answer:"さっそく",choices:["さっそく","ゆっくり","たぶん","あとで"]},
+      {kind:"find_error",prompt:"責任転嫁は禁物。不適切な箇所を探せ：",parts:["それは","お客様","の","せいです"],wrongIndex:3,correct:"こちらの確認不足でございました",explain:"客に責任転嫁は禁物。自社の非として受け止める。"},
+      {kind:"find_error",prompt:"苦情への態度として不適切な箇所を探せ：",parts:["クレーム","なんて","聞きたく","ありません"],wrongIndex:2,correct:"お話を伺います",explain:"苦情こそ傾聴。拒否の姿勢は厳禁。"},
+    ]},
+
+  /* ---- 学生編：分支追加 ---- */
+  { id:"s-cafe", stage:"学生編", domain:"食", cefr:"A2", cost:20, aff:["tomo"],
+    title:"友達とカフェ", sub:"Cafe with a friend", setting:"昼。学食の代わりに、友達とカフェで一息。注文する。",
+    teach:[
+      {jp:"カフェ",reading:"カフェ",meaning:"咖啡廳"},{jp:"注文",reading:"ちゅうもん",meaning:"點餐"},
+      {jp:"ホット",reading:"ホット",meaning:"熱（飲）"},{jp:"アイス",reading:"アイス",meaning:"冰（飲）"},
+      {jp:"持ち帰り",reading:"もちかえり",meaning:"外帶"},{jp:"店内",reading:"てんない",meaning:"內用"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「注文」は？",answer:"點餐",choices:["點餐","結帳","外帶","內用"]},
+      {kind:"mc",prompt:"「持ち帰り」は？",answer:"外帶",choices:["外帶","內用","加熱","續杯"]},
+      {kind:"mc",prompt:"温かいコーヒーは？",answer:"ホット",choices:["ホット","アイス","ソフト","ロング"]},
+      {kind:"mc",prompt:"「店内でお召し上がりですか」と聞かれた。意味は？",answer:"問你要內用嗎",choices:["問你要內用嗎","問你要不要加糖","問你幾位","問你付現嗎"]},
+      {kind:"cloze",prompt:"アイスコーヒー＿＿します。（我要）",answer:"に",choices:["に","を","が","で"]},
+      {kind:"cloze",prompt:"＿＿でお願いします。（外帶）",answer:"持ち帰り",choices:["持ち帰り","店内","注文","会計"]},
+      {kind:"build",prompt:"並べて：『アイスコーヒーにします。』",target:["アイスコーヒー","に","します"],pool:["アイスコーヒー","に","します","です"]},
+      {kind:"dictation",jp:"ちゅうもん",accept:["ちゅうもん"],hint:"點餐（ひらがな）"},
+      {kind:"translate",prompt:"用日文說：「我要一杯熱咖啡。」",model:"ホットコーヒーをひとつお願いします。",notes:"ひとつ＝一個；お願いします＝麻煩了。"},
+    ]},
+  { id:"s-super", stage:"学生編", domain:"住", cefr:"A2", cost:20, aff:[],
+    title:"スーパーで買い物", sub:"Grocery run", setting:"夕方。スーパーで食材を買う。場所を聞き、特売を探す。",
+    teach:[
+      {jp:"スーパー",reading:"スーパー",meaning:"超市"},{jp:"〜はどこですか",reading:"〜はどこですか",meaning:"〜在哪裡"},
+      {jp:"値段",reading:"ねだん",meaning:"價錢"},{jp:"特売",reading:"とくばい",meaning:"特價"},
+      {jp:"半額",reading:"はんがく",meaning:"半價"},{jp:"レジ袋",reading:"レジぶくろ",meaning:"購物袋"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「スーパー」は？",answer:"超市",choices:["超市","百貨","藥局","銀行"]},
+      {kind:"mc",prompt:"「特売」は？",answer:"特價",choices:["特價","缺貨","退貨","預購"]},
+      {kind:"mc",prompt:"「半額」は？",answer:"半價",choices:["半價","免費","雙倍","定價"]},
+      {kind:"mc",prompt:"牛乳の場所を尋ねる言い方は？",answer:"牛乳はどこですか",choices:["牛乳はどこですか","牛乳は誰ですか","牛乳はいつですか","牛乳はなぜですか"]},
+      {kind:"cloze",prompt:"お肉＿＿どこですか。（主題）",answer:"は",choices:["は","を","に","へ"]},
+      {kind:"cloze",prompt:"今日は卵が＿＿です。（特價）",answer:"特売",choices:["特売","半額","値段","会計"]},
+      {kind:"cloze",prompt:"＿＿はいりません。（購物袋）",answer:"レジ袋",choices:["レジ袋","値段","特売","半額"]},
+      {kind:"build",prompt:"並べて：『お肉はどこですか。』",target:["お肉","は","どこですか"],pool:["お肉","は","どこですか","いくらですか"]},
+      {kind:"translate",prompt:"用日文問：「這個多少錢？」",model:"これはいくらですか。",notes:"いくら＝多少錢。"},
+    ]},
+  { id:"s-cook", stage:"学生編", domain:"住", cefr:"B1", cost:25, aff:[],
+    title:"家で自炊", sub:"Cooking at home", setting:"夜。外食せず、買ってきた食材で自炊する。",
+    teach:[
+      {jp:"自炊",reading:"じすい",meaning:"自己下廚"},{jp:"切る",reading:"きる",meaning:"切"},
+      {jp:"炒める",reading:"いためる",meaning:"炒"},{jp:"煮る",reading:"にる",meaning:"燉／煮"},
+      {jp:"味見",reading:"あじみ",meaning:"試味道"},{jp:"レシピ",reading:"レシピ",meaning:"食譜"},
+      {jp:"焦げる",reading:"こげる",meaning:"燒焦"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「自炊」は？",answer:"自己下廚",choices:["自己下廚","外食","叫外送","訂位"]},
+      {kind:"mc",prompt:"「炒める」は？",answer:"炒",choices:["炒","切","洗","烤"]},
+      {kind:"mc",prompt:"「切る」は？",answer:"切",choices:["切","煮","炒","蒸"]},
+      {kind:"mc",prompt:"「焦げる」は？",answer:"燒焦",choices:["燒焦","煮熟","變冷","發酸"]},
+      {kind:"mc",prompt:"「味見する」は？",answer:"試味道",choices:["試味道","洗碗","擺盤","計時"]},
+      {kind:"cloze",prompt:"野菜を＿＿。（切）",answer:"切る",choices:["切る","煮る","炒める","焼く"]},
+      {kind:"cloze",prompt:"肉を＿＿。（炒）",answer:"炒める",choices:["炒める","切る","煮る","蒸す"]},
+      {kind:"cloze",prompt:"＿＿を見て作る。（食譜）",answer:"レシピ",choices:["レシピ","味見","自炊","焦げ"]},
+      {kind:"build",prompt:"並べて：『野菜を切って炒めます。』",target:["野菜を","切って","炒めます"],pool:["野菜を","切って","炒めます","煮ます"]},
+      {kind:"translate",prompt:"用日文說：「今天我自己煮。」",model:"今日は自炊します。",notes:"自炊（じすい）＝自己下廚。"},
+    ]},
+
+  /* ---- 社会人編：分支追加 ---- */
+  { id:"w-conbini", stage:"社会人編", domain:"食", cefr:"B1", cost:20, aff:[],
+    title:"残業後のコンビニ", sub:"Late-night convenience store", setting:"夜。残業の帰り、コンビニで夜食を買い、ついでに支払いも。",
+    teach:[
+      {jp:"残業",reading:"ざんぎょう",meaning:"加班"},{jp:"夜食",reading:"やしょく",meaning:"宵夜"},
+      {jp:"温め直す",reading:"あたためなおす",meaning:"重新加熱"},{jp:"公共料金",reading:"こうきょうりょうきん",meaning:"水電瓦斯等費用"},
+      {jp:"支払い",reading:"しはらい",meaning:"付款"},{jp:"ポイントカード",reading:"ポイントカード",meaning:"集點卡"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「残業」は？",answer:"加班",choices:["加班","請假","出差","午休"]},
+      {kind:"mc",prompt:"「夜食」は？",answer:"宵夜",choices:["宵夜","早餐","便當","飲料"]},
+      {kind:"mc",prompt:"コンビニでの「公共料金の支払い」とは？",answer:"繳水電費等",choices:["繳水電費等","換零錢","寄信","影印"]},
+      {kind:"mc",prompt:"「ポイントカードはお持ちですか」の意味は？",answer:"問你有沒有集點卡",choices:["問你有沒有集點卡","問你要不要袋子","問你內用嗎","問你付現嗎"]},
+      {kind:"cloze",prompt:"今日も＿＿で遅くなった。（加班）",answer:"残業",choices:["残業","夜食","支払い","出張"]},
+      {kind:"cloze",prompt:"お弁当を＿＿ますか。（加熱）",answer:"温め",choices:["温め","冷やし","切り","炒め"]},
+      {kind:"cloze",prompt:"＿＿はカードでお願いします。（付款）",answer:"支払い",choices:["支払い","残業","夜食","料金"]},
+      {kind:"build",prompt:"並べて：『お弁当を温めてください。』",target:["お弁当を","温めて","ください"],pool:["お弁当を","温めて","ください","冷やして"]},
+      {kind:"translate",prompt:"用日文說：「我要用卡付款。」",model:"カードで払います。",notes:"〜で＝手段；払う（はらう）＝付款。"},
     ]},
 ];
 /*DATA_END*/
@@ -381,26 +594,8 @@ function sampleCards(lessonIds,n){
   const pool=Object.keys(CARD_INDEX).filter(id=>lessonIds.includes(CARD_INDEX[id]._lesson));
   return shuffle(pool).slice(0,n).map(id=>({...CARD_INDEX[id],_id:id}));
 }
-function sceneStatus(s){
-  const st={}; const done=s.done||{}; const lv=s.lv||1;
-  STUDENT_CORE.forEach((id,i)=>{
-    const locked = i===0 ? false : !done[STUDENT_CORE[i-1]];
-    st[id]={done:!!done[id],locked};
-  });
-  const ev=sceneById("s-event");
-  const affVal=(s.aff&&s.aff[ev.affGate.key])||0;
-  st["s-event"]={done:!!done["s-event"],locked: affVal<ev.affGate.val};
-  const studentDone=STUDENT_CORE.every(id=>done[id]);
-  WORKER_CHAIN.forEach((id,i)=>{
-    const sc=sceneById(id);
-    let locked = !studentDone || (i>0 && !done[WORKER_CHAIN[i-1]]);
-    if(sc.minLv && lv<sc.minLv) locked=true;
-    st[id]={done:!!done[id],locked,needLv: (sc.minLv&&lv<sc.minLv)?sc.minLv:0};
-  });
-  return st;
-}
 function freshSave(){
-  return { name:"あなた", lv:1, xp:0, gold:60, day:1, slot:0, energy:100,
+  return { name:"あなた", lv:1, xp:0, gold:60, day:1, slot:0, energy:100, phase:"学生", justPromoted:false,
     done:{}, srs:{}, codex:{}, aff:{}, inv:{}, created:Date.now() };
 }
 function normalize(s){
@@ -409,11 +604,12 @@ function normalize(s){
   if(typeof s.gold!=="number")s.gold=0; if(typeof s.lv!=="number")s.lv=1; if(typeof s.xp!=="number")s.xp=0;
   if(typeof s.day!=="number")s.day=1; if(typeof s.slot!=="number")s.slot=0;
   if(typeof s.energy!=="number")s.energy=100;
+  if(s.phase!=="社会人")s.phase="学生";
+  if(typeof s.justPromoted!=="boolean")s.justPromoted=false;
   if(!s.name)s.name="あなた";
   return s;
 }
-const SLOTS=["朝","昼","夕","夜"];
-function slotLabel(slot){ return SLOTS[(slot||0)%4]; }
+function slotLabel(slot){ return SLOT_NAMES[(slot||0)%4]; }
 
 /* ===================== shared UI ===================== */
 function TopBar({title,sub,onBack}){
@@ -636,8 +832,10 @@ function Scene({node,save,update,onDone,onBack}){
 
   function finish(){
     cards.forEach(c=>{ if(!grades.current[c._id]) grades.current[c._id]="good"; });
-    const gold=Math.round(right.current*8*tired)+(node.event?40:0);
-    const xpAmt=Math.round((cards.length*20+40)*tired);
+    const replay=!!(save.done && save.done[node.id] && !node.event);
+    const factor=replay?0.5:1;
+    const gold=Math.round(right.current*8*tired*factor)+(node.event?40:0);
+    const xpAmt=Math.round((cards.length*20+40)*tired*factor);
     update(s=>{
       const srs={...s.srs};
       cards.forEach(c=>{ srs[c._id]=schedule(srs[c._id],grades.current[c._id]); });
@@ -854,17 +1052,18 @@ function Codex({save,onBack}){
   );
 }
 
-/* ===================== Schedule (map replacement) ===================== */
-function SceneCard({node,s,onPick}){
-  const locked=s.locked, done=s.done;
+/* ===================== Day cycle (action branches) ===================== */
+function ActionCard({node,save,onPick}){
+  const lk=actionLock(node,save);
+  const done=!!(save.done||{})[node.id];
+  const locked=lk.locked;
   return (
     <button disabled={locked} onClick={()=>onPick(node)} className="card"
       style={{padding:14,display:"flex",alignItems:"center",gap:13,textAlign:"left",cursor:locked?"default":"pointer",width:"100%",
-        border:node.event?"1px solid rgba(240,138,184,.45)":(node.contact?"1px solid rgba(232,198,107,.4)":"1px solid var(--line)"),opacity:locked?.45:1,
-        background:done?"linear-gradient(180deg,rgba(79,209,122,.07),var(--bg2))":(node.event?"linear-gradient(180deg,rgba(240,138,184,.07),var(--bg2))":"linear-gradient(180deg,var(--panel),var(--bg2))")}}>
-      <div style={{width:42,height:42,borderRadius:12,flex:"none",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,
-        background:"var(--panel2)",border:"1px solid var(--line)"}}>
-        {locked?<Lock size={18} color="var(--muted)"/>:done?<Check size={20} color="var(--good)"/>:(DOMAIN_EMOJI[node.domain]||"✨")}
+        border:node.event?"1px solid rgba(240,138,184,.45)":(node.contact?"1px solid rgba(232,198,107,.4)":"1px solid var(--line)"),opacity:locked?.5:1,
+        background:node.event?"linear-gradient(180deg,rgba(240,138,184,.07),var(--bg2))":"linear-gradient(180deg,var(--panel),var(--bg2))"}}>
+      <div style={{width:44,height:44,borderRadius:12,flex:"none",display:"flex",alignItems:"center",justifyContent:"center",fontSize:21,background:"var(--panel2)",border:"1px solid var(--line)"}}>
+        {locked?<Lock size={18} color="var(--muted)"/>:(DOMAIN_EMOJI[node.domain]||"✨")}
       </div>
       <div style={{flex:1,minWidth:0}}>
         <div style={{display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
@@ -872,73 +1071,114 @@ function SceneCard({node,s,onPick}){
           {node.event&&<span className="badge" style={{color:"var(--aff)"}}>イベント</span>}
           {node.contact&&<span className="badge" style={{color:"var(--gold)"}}>上級接觸</span>}
           {node.reading&&<span className="badge">読解</span>}
+          {done&&!locked&&<Check size={14} color="var(--good)"/>}
           <span style={{fontWeight:700,fontSize:15}} className="brush">{node.title}</span>
         </div>
         <div className="eyebrow" style={{marginTop:3}}>{node.sub}</div>
-        {locked&&s.needLv?<div style={{fontSize:11,color:"var(--hp)",marginTop:4}}>Lv.{s.needLv} で解放</div>:null}
+        {locked&&<div style={{fontSize:11,color:"var(--hp)",marginTop:4}}>🔒 {lk.reason}</div>}
       </div>
-      {!locked&&<div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:2,flex:"none"}}>
-        <span style={{fontSize:11,color:"var(--muted)"}}>体力 -{node.cost}</span>
-        <ChevronRight size={18} color="var(--muted)"/>
+      {!locked&&<div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:3,flex:"none"}}>
+        <span style={{fontSize:11,color:"var(--hp)",display:"flex",alignItems:"center",gap:3}}><Heart size={11}/>-{node.cost}</span>
+        <span style={{fontSize:10,color:"var(--muted)"}}>{done?"もう一度":"はじめる"}</span>
       </div>}
     </button>
   );
 }
-function ScheduleView({save,update,onPick}){
-  const st=sceneStatus(save);
+function DayView({save,update,onPick}){
   const energy=save.energy||0;
+  const slot=(save.slot||0);
+  const phase=save.phase||"学生";
   const affKeys=Object.keys(save.aff||{}).filter(k=>AFF[k]&&(save.aff[k]||0)>0);
   const ownedItems=ITEMS.filter(it=>(save.inv[it.id]||0)>0);
+  const sdc=studentDoneCount(save);
   function useItem(it){ update(s=>({...s, energy:clamp((s.energy||0)+it.heal,0,100), inv:{...s.inv,[it.id]:(s.inv[it.id]||0)-1}})); }
-  function rest(){ update(s=>({...s, energy:clamp((s.energy||0)+40,0,100), slot:(s.slot||0)+1})); }
-  function nextDay(){ update(s=>({...s, day:(s.day||1)+1, slot:0, energy:100})); }
-  const students=[...STUDENT_CORE.map(sceneById),sceneById("s-event")];
-  const workers=WORKER_CHAIN.map(sceneById);
+  function rest(){ update(s=>({...s, energy:clamp((s.energy||0)+30,0,100), slot:(s.slot||0)+1})); }
+  function nextDay(){ update(s=>{
+    let ph=s.phase||"学生", promoted=false;
+    if(ph==="学生" && studentDoneCount(s)>=PROMOTE_AT){ ph="社会人"; promoted=true; }
+    return {...s, day:(s.day||1)+1, slot:0, energy:100, phase:ph, justPromoted:promoted||s.justPromoted};
+  }); }
+  function clearBanner(){ update(s=>({...s, justPromoted:false})); }
+
+  const Header=(
+    <div className="card" style={{padding:14,marginBottom:14}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+        <span style={{display:"flex",alignItems:"center",gap:8}}><Calendar size={16} color="var(--gold)"/><b>{save.day||1} 日目</b><span className="badge">{phase}編</span></span>
+        <span style={{display:"flex",gap:5,alignItems:"center"}}>{SLOT_NAMES.map((sl,n)=>(
+          <span key={n} style={{fontSize:13,opacity:n<Math.min(slot,4)?1:(n===slot?1:.3),filter:n<Math.min(slot,4)?"grayscale(0)":"none"}}>
+            <span style={{color:n<slot?"var(--gold)":(n===slot?"var(--ink)":"var(--muted)"),fontWeight:n===slot?800:400,fontSize:12}}>{SLOT_ICON[sl]}</span>
+          </span>
+        ))}</span>
+      </div>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        <Heart size={15} color="var(--hp)"/>
+        <div className="bar" style={{flex:1}}><i className="enf" style={{width:energy+"%"}}/></div>
+        <span style={{fontSize:12,color:"var(--muted)",fontWeight:700}}>体力 {energy}</span>
+      </div>
+      {affKeys.length>0&&<div style={{marginTop:12,display:"grid",gap:6}}>
+        {affKeys.map(kk=>(
+          <div key={kk} style={{display:"flex",alignItems:"center",gap:8}}>
+            <span style={{fontSize:13,width:92,color:"var(--muted)"}}>{AFF[kk].emoji} {AFF[kk].label}</span>
+            <div className="bar" style={{flex:1}}><i className="afff" style={{width:(save.aff[kk]||0)+"%"}}/></div>
+          </div>
+        ))}
+      </div>}
+      {ownedItems.length>0&&<div style={{display:"flex",gap:8,marginTop:12,flexWrap:"wrap"}}>
+        {ownedItems.map(it=>(
+          <button key={it.id} className="btn btn-dark btn-sm" onClick={()=>useItem(it)}>{it.emoji} {it.name}×{save.inv[it.id]}（体力+{it.heal}）</button>
+        ))}
+      </div>}
+    </div>
+  );
+
+  // day-end summary
+  if(slot>=4){
+    return (
+      <div style={{padding:"4px 16px 24px"}}>
+        {Header}
+        <div className="card fade" style={{padding:22,textAlign:"center"}}>
+          <div style={{fontSize:44}}>🌙</div>
+          <div className="brush glint" style={{fontSize:24,marginTop:6}}>{save.day||1} 日目、おつかれさま</div>
+          <div className="mincho" style={{color:"var(--muted)",marginTop:8,fontSize:13.5,lineHeight:1.7}}>
+            今日も一日を生き抜いた。{phase==="学生"&&sdc<PROMOTE_AT?<><br/>学生編の場面をあと {Math.max(0,PROMOTE_AT-sdc)} つこなすと、就職して社会人編へ。</>:null}
+          </div>
+          <button className="btn" style={{marginTop:18,minWidth:200}} onClick={nextDay}>🌅 翌日へ（体力全回復）</button>
+        </div>
+      </div>
+    );
+  }
+
+  const slotName=SLOT_NAMES[slot];
+  const flow=DAYFLOW[phase][slotName];
+  const actions=flow.actions.map(sceneById).filter(Boolean);
 
   return (
     <div style={{padding:"4px 16px 24px"}}>
-      <div className="card" style={{padding:14,marginBottom:14}}>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
-          <span style={{display:"flex",alignItems:"center",gap:8}}><Calendar size={16} color="var(--gold)"/><b>{save.day||1} 日目</b><span className="badge"><Clock size={11}/> {slotLabel(save.slot)}</span></span>
-          <span style={{display:"flex",gap:4}}>{SLOTS.map((sl,n)=><span key={n} style={{width:8,height:8,borderRadius:99,background:n<((save.slot||0)%4)?"var(--gold)":"var(--line)"}}/>)}</span>
+      {Header}
+      {save.justPromoted&&(
+        <div className="card fade" style={{padding:16,marginBottom:14,border:"1px solid var(--gold)",background:"linear-gradient(180deg,rgba(232,198,107,.12),var(--bg2))"}}>
+          <div className="brush glint" style={{fontSize:18}}>🎉 就職おめでとう</div>
+          <div style={{fontSize:13,color:"var(--muted)",marginTop:6,lineHeight:1.6}}>学生生活を終え、社会人編へ。ここから敬語・ビジネス場面が中心になる。</div>
+          <button className="btn btn-sm" style={{marginTop:10}} onClick={clearBanner}>はじめる</button>
         </div>
-        <div style={{display:"flex",alignItems:"center",gap:8}}>
-          <Heart size={15} color="var(--hp)"/>
-          <div className="bar" style={{flex:1}}><i className="enf" style={{width:energy+"%"}}/></div>
-          <span style={{fontSize:12,color:"var(--muted)",fontWeight:700}}>体力 {energy}</span>
-        </div>
-        {affKeys.length>0&&<div style={{marginTop:12,display:"grid",gap:6}}>
-          {affKeys.map(kk=>(
-            <div key={kk} style={{display:"flex",alignItems:"center",gap:8}}>
-              <span style={{fontSize:13,width:88,color:"var(--muted)"}}>{AFF[kk].emoji} {AFF[kk].label}</span>
-              <div className="bar" style={{flex:1}}><i className="afff" style={{width:(save.aff[kk]||0)+"%"}}/></div>
-            </div>
-          ))}
-        </div>}
-        <div style={{display:"flex",gap:8,marginTop:12,flexWrap:"wrap"}}>
-          <button className="btn btn-dark btn-sm" onClick={rest}>😴 休む（体力+40）</button>
-          <button className="btn btn-dark btn-sm" onClick={nextDay}>🌅 翌日へ（全回復）</button>
-          {ownedItems.map(it=>(
-            <button key={it.id} className="btn btn-dark btn-sm" onClick={()=>useItem(it)}>{it.emoji} {it.name}×{save.inv[it.id]}</button>
-          ))}
-        </div>
+      )}
+      <div style={{marginBottom:12,display:"flex",alignItems:"center",gap:8}}>
+        <span style={{fontSize:22}}>{SLOT_ICON[slotName]}</span>
+        <span className="brush" style={{fontSize:17}}>{flow.prompt}</span>
+      </div>
+      <div style={{display:"grid",gap:10}}>
+        {actions.map(n=> <ActionCard key={n.id} node={n} save={save} onPick={onPick}/>)}
+        <button className="card" onClick={rest} style={{padding:14,display:"flex",alignItems:"center",gap:13,textAlign:"left",cursor:"pointer",width:"100%",border:"1px solid var(--line)"}}>
+          <div style={{width:44,height:44,borderRadius:12,flex:"none",display:"flex",alignItems:"center",justifyContent:"center",fontSize:21,background:"var(--panel2)",border:"1px solid var(--line)"}}>😴</div>
+          <div style={{flex:1}}>
+            <div style={{fontWeight:700,fontSize:15}} className="brush">少し休む</div>
+            <div className="eyebrow" style={{marginTop:3}}>Take a breather</div>
+          </div>
+          <span style={{fontSize:11,color:"var(--good)",display:"flex",alignItems:"center",gap:3,flex:"none"}}><Heart size={11}/>+30</span>
+        </button>
       </div>
 
-      <div style={{marginBottom:8,display:"flex",alignItems:"center",gap:8}}>
-        <span className="badge">A1–B1</span><span className="brush" style={{fontSize:16}}>学生編  — 大学生の毎日</span>
-      </div>
-      <div style={{display:"grid",gap:10,marginBottom:22}}>
-        {students.map(n=> <SceneCard key={n.id} node={n} s={st[n.id]||{}} onPick={onPick}/>)}
-      </div>
-
-      <div style={{marginBottom:8,display:"flex",alignItems:"center",gap:8}}>
-        <span className="badge">B1–C1</span><span className="brush" style={{fontSize:16}}>社会人編 — 働く日々</span>
-      </div>
-      <div style={{display:"grid",gap:10,marginBottom:18}}>
-        {workers.map(n=> <SceneCard key={n.id} node={n} s={st[n.id]||{}} onPick={onPick}/>)}
-      </div>
-
-      <div className="card" style={{padding:14,background:"var(--panel2)"}}>
+      <div className="card" style={{padding:14,background:"var(--panel2)",marginTop:18}}>
         <div className="eyebrow" style={{marginBottom:6}}>この旅の到達設計（誠実なCEFR）</div>
         <div style={{fontSize:12.5,color:"var(--muted)",lineHeight:1.7}}>読解：B1＋／受控産出（語体選択・活用・組句）：B1、語体選択肢はB2／上級接觸（敬語・婉曲・慣用の認識）：C1形式を含むが自由産出の認証はなし／聴解：評価には入れず（任意の読み上げあり）、各自で補強。</div>
       </div>
@@ -1012,7 +1252,7 @@ function App(){
         </div>
       </div>
       <div style={{flex:1,overflowY:"auto",marginTop:14}}>
-        <ScheduleView save={save} update={update} onPick={(n)=>{ setNode(n); setView(n.event?"event":"lesson"); }}/>
+        <DayView save={save} update={update} onPick={(n)=>{ setNode(n); setView(n.event?"event":"lesson"); }}/>
       </div>
     </div>
   );
