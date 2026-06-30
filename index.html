@@ -132,7 +132,7 @@ const ITEMS=[
 function item(id){ return ITEMS.find(x=>x.id===id)||{}; }
 
 /* ===================== world: 場面 ===================== */
-const DOMAIN_EMOJI={"食":"\uD83C\uDF71","衣":"\uD83D\uDC55","住":"\uD83C\uDFE0","行":"\uD83D\uDE83","育":"\uD83C\uDF93","楽":"\uD83C\uDFA4","職":"\uD83D\uDCBC"};
+const DOMAIN_EMOJI={"食":"\uD83C\uDF71","衣":"\uD83D\uDC55","住":"\uD83C\uDFE0","行":"\uD83D\uDE83","育":"\uD83C\uDF93","楽":"\uD83C\uDFA4","職":"\uD83D\uDCBC","医":"\uD83C\uDFE5","金":"\uD83C\uDFE6","郵":"\uD83D\uDCEE","公":"\uD83C\uDFDB\uFE0F","通":"\uD83D\uDCF1","美":"\uD83D\uDC87","急":"\uD83D\uDEA8","天":"\u2600\uFE0F","宿":"\uD83C\uDFE8"};
 const AFF={
   tomo:{label:"友達",emoji:"\uD83D\uDE04"},
   senpai:{label:"先輩",emoji:"\uD83D\uDE4B"},
@@ -234,19 +234,55 @@ const DAYS=[
     "夕":{prompt:"夕方。「したばかり」を使う。",actions:["b2-bakari"]},
     "夜":{prompt:"夜。敬語をさらに深める。",actions:["b2-keigo2"]},
   }},
-  {id:"d16",label:"16日目",stage:"社会人",theme:"社会人デビュー",slots:{
+  {id:"d16",label:"16日目",stage:"実用",theme:"街の手続き",slots:{
+    "朝":{prompt:"朝。役所で手続きをする。",actions:["theme-cityhall"]},
+    "昼":{prompt:"昼。銀行で口座を開く。",actions:["theme-bank"]},
+    "夕":{prompt:"夕方。郵便局で荷物を送る。",actions:["theme-post"]},
+    "夜":{prompt:"夜。携帯を契約する。",actions:["theme-phone"]},
+  }},
+  {id:"d17",label:"17日目",stage:"実用",theme:"暮らしと住まい",slots:{
+    "朝":{prompt:"朝。不動産屋で部屋を探す。",actions:["theme-rent"]},
+    "昼":{prompt:"昼。道に迷った。道を聞く。",actions:["theme-directions"]},
+    "夕":{prompt:"夕方。美容院で髪を切る。",actions:["theme-salon"]},
+    "夜":{prompt:"夜。レストランを予約する。",actions:["theme-restaurant"]},
+  }},
+  {id:"d18",label:"18日目",stage:"実用",theme:"体とトラブル",slots:{
+    "朝":{prompt:"朝。体調が悪い。病院へ。",actions:["theme-hospital"]},
+    "昼":{prompt:"昼。薬局で薬を買う。",actions:["theme-pharmacy"]},
+    "夕":{prompt:"夕方。天気の話をする。",actions:["theme-weather"]},
+    "夜":{prompt:"夜。トラブル発生。助けを求める。",actions:["theme-emergency"]},
+  }},
+  {id:"d19",label:"19日目",stage:"実用",theme:"お店めぐり",slots:{
+    "朝":{prompt:"朝。ドラッグストアで買い物。",actions:["theme2-drugstore"]},
+    "昼":{prompt:"昼。スーパーのレジで会計。",actions:["theme2-checkout"]},
+    "夕":{prompt:"夕方。クリーニングに出す。",actions:["theme2-cleaning"]},
+    "夜":{prompt:"夜。出前を注文する。",actions:["theme2-demae"]},
+  }},
+  {id:"d20",label:"20日目",stage:"実用",theme:"手続きと移動",slots:{
+    "朝":{prompt:"朝。ホテルにチェックイン。",actions:["theme2-hotel"]},
+    "昼":{prompt:"昼。両替所でお金を替える。",actions:["theme2-exchange"]},
+    "夕":{prompt:"夕方。電車の遅延・忘れ物。",actions:["theme2-traintrouble"]},
+    "夜":{prompt:"夜。宅配の再配達を頼む。",actions:["theme2-delivery"]},
+  }},
+  {id:"d21",label:"21日目",stage:"実用",theme:"学びと安全",slots:{
+    "朝":{prompt:"朝。図書館で本を借りる。",actions:["theme2-library"]},
+    "昼":{prompt:"昼。ジムの入会を相談。",actions:["theme2-gym"]},
+    "夕":{prompt:"夕方。観光地でチケットを買う。",actions:["theme2-sightseeing"]},
+    "夜":{prompt:"夜。災害に備え、避難する。",actions:["theme2-disaster"]},
+  }},
+  {id:"d22",label:"22日目",stage:"社会人",theme:"社会人デビュー",slots:{
     "朝":{prompt:"朝。出社前、まず？",actions:["w-morning"]},
     "昼":{prompt:"昼。午後の仕事は？",actions:["w-phone"]},
     "夕":{prompt:"夕方。退社前に？",actions:["w-mail"]},
     "夜":{prompt:"夜。仕事帰り、どうする？",actions:["w-nomikai","w-conbini"]},
   }},
-  {id:"d17",label:"17日目",stage:"社会人",theme:"出張の日",slots:{
+  {id:"d23",label:"23日目",stage:"社会人",theme:"出張の日",slots:{
     "朝":{prompt:"朝。出張へ出発。",actions:["w-trip"]},
     "昼":{prompt:"昼。先方とやりとり。",actions:["w-phone"]},
     "夕":{prompt:"夕方。事務処理。",actions:["w-mail"]},
     "夜":{prompt:"夜。出張先の夜。",actions:["w-conbini","w-nomikai"]},
   }},
-  {id:"d18",label:"18日目",stage:"社会人",theme:"難しい一日",slots:{
+  {id:"d24",label:"24日目",stage:"社会人",theme:"難しい一日",slots:{
     "朝":{prompt:"朝。報連相から。",actions:["w-morning","w-trip"]},
     "昼":{prompt:"昼。会議で意見を述べる。",actions:["w-meeting","w-phone"]},
     "夕":{prompt:"夕方。クレーム対応。",actions:["w-complaint","w-mail"]},
@@ -9160,6 +9196,3140 @@ const SCENES=[
         "notes": "〜ていただけますか＝最禮貌的請託。"
       }
     ]
+  },
+  {
+    "id": "theme-hospital",
+    "stage": "実用編",
+    "domain": "医",
+    "cefr": "B1",
+    "cost": 20,
+    "aff": [],
+    "title": "病院で症状を伝える",
+    "sub": "At the clinic",
+    "setting": "体調が悪い。受付と医師に症状を伝える。",
+    "grammar": {
+      "point": "〜が痛いです",
+      "gloss": "身體部位＋が＋痛い（陳述症狀）",
+      "example": "頭が痛いです。"
+    },
+    "teach": [
+      {
+        "jp": "病院",
+        "reading": "びょういん",
+        "meaning": "醫院"
+      },
+      {
+        "jp": "痛い",
+        "reading": "いたい",
+        "meaning": "痛"
+      },
+      {
+        "jp": "熱",
+        "reading": "ねつ",
+        "meaning": "發燒"
+      },
+      {
+        "jp": "診察",
+        "reading": "しんさつ",
+        "meaning": "看診"
+      },
+      {
+        "jp": "風邪",
+        "reading": "かぜ",
+        "meaning": "感冒"
+      },
+      {
+        "jp": "〜が痛い",
+        "reading": "〜がいたい",
+        "meaning": "…痛"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「痛い」是什麼意思？",
+        "answer": "痛",
+        "choices": [
+          "痛",
+          "癢",
+          "麻",
+          "腫"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「熱がある」是什麼意思？",
+        "answer": "發燒",
+        "choices": [
+          "發燒",
+          "退燒",
+          "健康",
+          "過敏"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「診察」是什麼意思？",
+        "answer": "看診",
+        "choices": [
+          "看診",
+          "結帳",
+          "掛號",
+          "領藥"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "頭＿＿痛いです。（…痛，主語助詞）",
+        "answer": "が",
+        "choices": [
+          "が",
+          "を",
+          "に",
+          "で"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "昨日から熱＿＿あります。（有發燒）",
+        "answer": "が",
+        "choices": [
+          "が",
+          "を",
+          "に",
+          "へ"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "お腹が痛い＿＿です。（好像…，婉轉）",
+        "answer": "みたい",
+        "choices": [
+          "みたい",
+          "ぐらい",
+          "だけ",
+          "しか"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "びょういん",
+        "accept": [
+          "びょういん"
+        ],
+        "hint": "醫院（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「我頭痛。」",
+        "model": "頭が痛いです。",
+        "notes": "身體部位＋が＋痛い。"
+      }
+    ]
+  },
+  {
+    "id": "theme-pharmacy",
+    "stage": "実用編",
+    "domain": "医",
+    "cefr": "A2",
+    "cost": 18,
+    "aff": [
+      "ten"
+    ],
+    "title": "薬局で薬を買う",
+    "sub": "At the pharmacy",
+    "setting": "薬局で、症状に合う薬を買う。",
+    "grammar": {
+      "point": "〜に効く",
+      "gloss": "對…有效（薬が〜に効く）",
+      "example": "風邪に効く薬はありますか。"
+    },
+    "teach": [
+      {
+        "jp": "薬局",
+        "reading": "やっきょく",
+        "meaning": "藥局"
+      },
+      {
+        "jp": "薬",
+        "reading": "くすり",
+        "meaning": "藥"
+      },
+      {
+        "jp": "処方箋",
+        "reading": "しょほうせん",
+        "meaning": "處方箋"
+      },
+      {
+        "jp": "食後",
+        "reading": "しょくご",
+        "meaning": "飯後"
+      },
+      {
+        "jp": "一日三回",
+        "reading": "いちにちさんかい",
+        "meaning": "一天三次"
+      },
+      {
+        "jp": "〜に効く",
+        "reading": "〜にきく",
+        "meaning": "對…有效"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「薬」是什麼意思？",
+        "answer": "藥",
+        "choices": [
+          "藥",
+          "水",
+          "糖",
+          "茶"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「処方箋」是什麼意思？",
+        "answer": "處方箋",
+        "choices": [
+          "處方箋",
+          "收據",
+          "掛號單",
+          "說明書"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「食後」是什麼意思？",
+        "answer": "飯後",
+        "choices": [
+          "飯後",
+          "飯前",
+          "睡前",
+          "空腹"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "風邪＿＿効く薬をください。（對…有效）",
+        "answer": "に",
+        "choices": [
+          "に",
+          "を",
+          "が",
+          "で"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "一日三回、食後＿＿飲んでください。（在…時點）",
+        "answer": "に",
+        "choices": [
+          "に",
+          "を",
+          "は",
+          "へ"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「一日三回」是什麼意思？",
+        "answer": "一天三次",
+        "choices": [
+          "一天三次",
+          "一次三天",
+          "三天一次",
+          "一天三顆"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "くすり",
+        "accept": [
+          "くすり"
+        ],
+        "hint": "藥（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文問：「有對感冒有效的藥嗎？」",
+        "model": "風邪に効く薬はありますか。",
+        "notes": "〜に効く＝對…有效。"
+      }
+    ]
+  },
+  {
+    "id": "theme-bank",
+    "stage": "実用編",
+    "domain": "金",
+    "cefr": "B1",
+    "cost": 20,
+    "aff": [],
+    "title": "銀行で口座を開く",
+    "sub": "At the bank",
+    "setting": "銀行の窓口で、口座開設や振込をする。",
+    "grammar": {
+      "point": "〜たいんですが",
+      "gloss": "我想…（委婉提出需求）",
+      "example": "口座を開きたいんですが。"
+    },
+    "teach": [
+      {
+        "jp": "銀行",
+        "reading": "ぎんこう",
+        "meaning": "銀行"
+      },
+      {
+        "jp": "口座",
+        "reading": "こうざ",
+        "meaning": "帳戶"
+      },
+      {
+        "jp": "振込",
+        "reading": "ふりこみ",
+        "meaning": "匯款"
+      },
+      {
+        "jp": "引き出す",
+        "reading": "ひきだす",
+        "meaning": "提款／領錢"
+      },
+      {
+        "jp": "通帳",
+        "reading": "つうちょう",
+        "meaning": "存摺"
+      },
+      {
+        "jp": "〜たいんですが",
+        "reading": "〜たいんですが",
+        "meaning": "我想…（委婉）"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「口座」是什麼意思？",
+        "answer": "帳戶",
+        "choices": [
+          "帳戶",
+          "密碼",
+          "利息",
+          "匯率"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「振込」是什麼意思？",
+        "answer": "匯款",
+        "choices": [
+          "匯款",
+          "提款",
+          "存款",
+          "換錢"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「引き出す」是什麼意思？",
+        "answer": "提款／領錢",
+        "choices": [
+          "提款／領錢",
+          "存錢",
+          "匯款",
+          "借錢"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "口座を開き＿＿んですが。（我想開戶，委婉）",
+        "answer": "たい",
+        "choices": [
+          "たい",
+          "たく",
+          "た",
+          "て"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "ATMでお金を引き出し＿＿。（想提款）",
+        "answer": "たいです",
+        "choices": [
+          "たいです",
+          "ました",
+          "ています",
+          "ません"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「通帳」是什麼意思？",
+        "answer": "存摺",
+        "choices": [
+          "存摺",
+          "提款卡",
+          "鈔票",
+          "印章"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "ぎんこう",
+        "accept": [
+          "ぎんこう"
+        ],
+        "hint": "銀行（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「我想開戶。」",
+        "model": "口座を開きたいんですが。",
+        "notes": "〜たいんですが＝委婉提出需求。"
+      }
+    ]
+  },
+  {
+    "id": "theme-post",
+    "stage": "実用編",
+    "domain": "郵",
+    "cefr": "A2",
+    "cost": 18,
+    "aff": [
+      "ten"
+    ],
+    "title": "郵便局で送る",
+    "sub": "At the post office",
+    "setting": "郵便局で、荷物や手紙を送る。",
+    "grammar": {
+      "point": "〜で送る",
+      "gloss": "用…（手段）寄",
+      "example": "航空便で送りたいです。"
+    },
+    "teach": [
+      {
+        "jp": "郵便局",
+        "reading": "ゆうびんきょく",
+        "meaning": "郵局"
+      },
+      {
+        "jp": "切手",
+        "reading": "きって",
+        "meaning": "郵票"
+      },
+      {
+        "jp": "小包",
+        "reading": "こづつみ",
+        "meaning": "包裹"
+      },
+      {
+        "jp": "航空便",
+        "reading": "こうくうびん",
+        "meaning": "航空郵件"
+      },
+      {
+        "jp": "船便",
+        "reading": "ふなびん",
+        "meaning": "海運"
+      },
+      {
+        "jp": "〜で送る",
+        "reading": "〜でおくる",
+        "meaning": "用…寄"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「切手」是什麼意思？",
+        "answer": "郵票",
+        "choices": [
+          "郵票",
+          "信封",
+          "包裹",
+          "明信片"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「小包」是什麼意思？",
+        "answer": "包裹",
+        "choices": [
+          "包裹",
+          "信件",
+          "郵票",
+          "郵筒"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「航空便」是什麼意思？",
+        "answer": "航空郵件",
+        "choices": [
+          "航空郵件",
+          "海運",
+          "平信",
+          "限時"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "これを台湾＿＿送りたいです。（寄到…）",
+        "answer": "へ",
+        "choices": [
+          "へ",
+          "を",
+          "は",
+          "より"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "船便＿＿送ると安いです。（用…手段）",
+        "answer": "で",
+        "choices": [
+          "で",
+          "に",
+          "を",
+          "へ"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「どのくらいかかりますか」在問什麼？",
+        "answer": "要花多久／多少",
+        "choices": [
+          "要花多久／多少",
+          "在哪寄",
+          "要不要",
+          "寄給誰"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "きって",
+        "accept": [
+          "きって"
+        ],
+        "hint": "郵票（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「我想用航空寄。」",
+        "model": "航空便で送りたいです。",
+        "notes": "〜で＝手段（用…寄）。"
+      }
+    ]
+  },
+  {
+    "id": "theme-rent",
+    "stage": "実用編",
+    "domain": "住",
+    "cefr": "B1",
+    "cost": 20,
+    "aff": [],
+    "title": "部屋を探す",
+    "sub": "Renting an apartment",
+    "setting": "不動産屋で、部屋の条件を相談する。",
+    "grammar": {
+      "point": "〜込みですか",
+      "gloss": "含…在內嗎（〜込み）",
+      "example": "家賃は管理費込みですか。"
+    },
+    "teach": [
+      {
+        "jp": "不動産",
+        "reading": "ふどうさん",
+        "meaning": "房仲／不動產"
+      },
+      {
+        "jp": "家賃",
+        "reading": "やちん",
+        "meaning": "房租"
+      },
+      {
+        "jp": "敷金",
+        "reading": "しききん",
+        "meaning": "押金"
+      },
+      {
+        "jp": "礼金",
+        "reading": "れいきん",
+        "meaning": "禮金"
+      },
+      {
+        "jp": "間取り",
+        "reading": "まどり",
+        "meaning": "格局"
+      },
+      {
+        "jp": "〜込み",
+        "reading": "〜こみ",
+        "meaning": "含…"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「家賃」是什麼意思？",
+        "answer": "房租",
+        "choices": [
+          "房租",
+          "押金",
+          "水電",
+          "仲介費"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「敷金」是什麼意思？",
+        "answer": "押金",
+        "choices": [
+          "押金",
+          "房租",
+          "禮金",
+          "管理費"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「間取り」是什麼意思？",
+        "answer": "格局",
+        "choices": [
+          "格局",
+          "地址",
+          "租金",
+          "坪數"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "家賃は管理費＿＿ですか。（含…）",
+        "answer": "込み",
+        "choices": [
+          "込み",
+          "だけ",
+          "しか",
+          "ながら"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "駅から近い部屋＿＿探しています。（受詞）",
+        "answer": "を",
+        "choices": [
+          "を",
+          "は",
+          "に",
+          "へ"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "日本租屋的「礼金」是？",
+        "answer": "給房東的禮金（不退）",
+        "choices": [
+          "給房東的禮金（不退）",
+          "可退的押金",
+          "每月房租",
+          "仲介手續費"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "やちん",
+        "accept": [
+          "やちん"
+        ],
+        "hint": "房租（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文問：「房租含管理費嗎？」",
+        "model": "家賃は管理費込みですか。",
+        "notes": "〜込み＝含…在內。"
+      }
+    ]
+  },
+  {
+    "id": "theme-cityhall",
+    "stage": "実用編",
+    "domain": "公",
+    "cefr": "B1",
+    "cost": 20,
+    "aff": [],
+    "title": "役所で手続き",
+    "sub": "At the city hall",
+    "setting": "市役所で、転入や登録の手続きをする。",
+    "grammar": {
+      "point": "〜の手続きをする",
+      "gloss": "辦…的手續",
+      "example": "住民登録の手続きをしたいです。"
+    },
+    "teach": [
+      {
+        "jp": "役所",
+        "reading": "やくしょ",
+        "meaning": "區公所／市役所"
+      },
+      {
+        "jp": "手続き",
+        "reading": "てつづき",
+        "meaning": "手續／辦理"
+      },
+      {
+        "jp": "住民登録",
+        "reading": "じゅうみんとうろく",
+        "meaning": "居民登記"
+      },
+      {
+        "jp": "在留カード",
+        "reading": "ざいりゅうカード",
+        "meaning": "在留卡（居留證）"
+      },
+      {
+        "jp": "印鑑",
+        "reading": "いんかん",
+        "meaning": "印章"
+      },
+      {
+        "jp": "〜が必要",
+        "reading": "〜がひつよう",
+        "meaning": "需要…"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「手続き」是什麼意思？",
+        "answer": "辦手續",
+        "choices": [
+          "辦手續",
+          "排隊",
+          "繳費",
+          "影印"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「在留カード」是什麼？",
+        "answer": "在留卡（居留證）",
+        "choices": [
+          "在留卡（居留證）",
+          "健保卡",
+          "提款卡",
+          "學生證"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「印鑑」是什麼意思？",
+        "answer": "印章",
+        "choices": [
+          "印章",
+          "簽名",
+          "照片",
+          "指紋"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "引っ越しの手続き＿＿したいです。（受詞）",
+        "answer": "を",
+        "choices": [
+          "を",
+          "は",
+          "に",
+          "へ"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "パスポートと写真＿＿必要です。（主語）",
+        "answer": "が",
+        "choices": [
+          "が",
+          "を",
+          "に",
+          "で"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「住民登録」是什麼意思？",
+        "answer": "居民登記",
+        "choices": [
+          "居民登記",
+          "戶口名簿",
+          "納稅",
+          "投票"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "やくしょ",
+        "accept": [
+          "やくしょ"
+        ],
+        "hint": "區公所（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「我想辦居民登記。」",
+        "model": "住民登録の手続きをしたいです。",
+        "notes": "〜の手続きをする＝辦…手續。"
+      }
+    ]
+  },
+  {
+    "id": "theme-phone",
+    "stage": "実用編",
+    "domain": "通",
+    "cefr": "B1",
+    "cost": 20,
+    "aff": [],
+    "title": "携帯を契約する",
+    "sub": "Getting a phone plan",
+    "setting": "携帯ショップで、料金プランを選んで契約する。",
+    "grammar": {
+      "point": "〜にします",
+      "gloss": "選擇／決定…（做出選擇）",
+      "example": "このプランにします。"
+    },
+    "teach": [
+      {
+        "jp": "携帯",
+        "reading": "けいたい",
+        "meaning": "手機"
+      },
+      {
+        "jp": "契約",
+        "reading": "けいやく",
+        "meaning": "合約"
+      },
+      {
+        "jp": "料金プラン",
+        "reading": "りょうきんプラン",
+        "meaning": "資費方案"
+      },
+      {
+        "jp": "データ通信",
+        "reading": "データつうしん",
+        "meaning": "行動上網"
+      },
+      {
+        "jp": "かけ放題",
+        "reading": "かけほうだい",
+        "meaning": "通話吃到飽"
+      },
+      {
+        "jp": "〜にする",
+        "reading": "〜にする",
+        "meaning": "選…（決定）"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「契約」是什麼意思？",
+        "answer": "合約",
+        "choices": [
+          "合約",
+          "帳單",
+          "門號",
+          "維修"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「料金プラン」是什麼意思？",
+        "answer": "資費方案",
+        "choices": [
+          "資費方案",
+          "通話紀錄",
+          "簡訊",
+          "鈴聲"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「かけ放題」是什麼意思？",
+        "answer": "通話吃到飽",
+        "choices": [
+          "通話吃到飽",
+          "上網吃到飽",
+          "免月租",
+          "預付卡"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "一番安いプラン＿＿します。（選…）",
+        "answer": "に",
+        "choices": [
+          "に",
+          "を",
+          "が",
+          "で"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "毎月のデータ＿＿どのくらいですか。（主題）",
+        "answer": "は",
+        "choices": [
+          "は",
+          "を",
+          "に",
+          "へ"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「データ通信」指什麼？",
+        "answer": "行動上網",
+        "choices": [
+          "行動上網",
+          "通話",
+          "簡訊",
+          "定位"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "けいやく",
+        "accept": [
+          "けいやく"
+        ],
+        "hint": "合約（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「我要這個方案。」",
+        "model": "このプランにします。",
+        "notes": "〜にする＝做出選擇。"
+      }
+    ]
+  },
+  {
+    "id": "theme-salon",
+    "stage": "実用編",
+    "domain": "美",
+    "cefr": "B1",
+    "cost": 18,
+    "aff": [
+      "ten"
+    ],
+    "title": "美容院で",
+    "sub": "At the hair salon",
+    "setting": "美容院で、希望の髪型を伝える。",
+    "grammar": {
+      "point": "〜くしてください",
+      "gloss": "い形容詞＋く＋してください（請弄成…）",
+      "example": "少し短くしてください。"
+    },
+    "teach": [
+      {
+        "jp": "美容院",
+        "reading": "びよういん",
+        "meaning": "美容院"
+      },
+      {
+        "jp": "カット",
+        "reading": "カット",
+        "meaning": "剪髮"
+      },
+      {
+        "jp": "髪型",
+        "reading": "かみがた",
+        "meaning": "髮型"
+      },
+      {
+        "jp": "短く",
+        "reading": "みじかく",
+        "meaning": "剪短"
+      },
+      {
+        "jp": "前髪",
+        "reading": "まえがみ",
+        "meaning": "瀏海"
+      },
+      {
+        "jp": "このくらい",
+        "reading": "このくらい",
+        "meaning": "這樣（程度）"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「髪型」是什麼意思？",
+        "answer": "髮型",
+        "choices": [
+          "髮型",
+          "顏色",
+          "長度",
+          "瀏海"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「カット」是什麼意思？",
+        "answer": "剪髮",
+        "choices": [
+          "剪髮",
+          "染髮",
+          "燙髮",
+          "洗髮"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "前髪を少し短く＿＿ください。（剪短）",
+        "answer": "して",
+        "choices": [
+          "して",
+          "なって",
+          "される",
+          "した"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "このくらい＿＿お願いします。（這個長度）",
+        "answer": "で",
+        "choices": [
+          "で",
+          "を",
+          "は",
+          "に"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「短くしてください」是什麼意思？",
+        "answer": "請剪短一點",
+        "choices": [
+          "請剪短一點",
+          "請留長",
+          "請染色",
+          "請燙捲"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「美容院（びよういん）」和「病院（びょういん）」差在？",
+        "answer": "長音不同，意思全異",
+        "choices": [
+          "長音不同，意思全異",
+          "完全相同",
+          "只是寫法",
+          "都指醫院"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "かみがた",
+        "accept": [
+          "かみがた"
+        ],
+        "hint": "髮型（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「請剪短一點。」",
+        "model": "少し短くしてください。",
+        "notes": "い形容詞＋く＋してください。"
+      }
+    ]
+  },
+  {
+    "id": "theme-directions",
+    "stage": "実用編",
+    "domain": "行",
+    "cefr": "A2",
+    "cost": 18,
+    "aff": [],
+    "title": "道を聞く",
+    "sub": "Asking for directions",
+    "setting": "道に迷った。道順を聞いて理解する。",
+    "grammar": {
+      "point": "〜を〜に曲がる",
+      "gloss": "在…（地點を）往…（方向に）轉",
+      "example": "次の角を右に曲がってください。"
+    },
+    "teach": [
+      {
+        "jp": "道",
+        "reading": "みち",
+        "meaning": "路"
+      },
+      {
+        "jp": "まっすぐ",
+        "reading": "まっすぐ",
+        "meaning": "直直地"
+      },
+      {
+        "jp": "曲がる",
+        "reading": "まがる",
+        "meaning": "轉彎"
+      },
+      {
+        "jp": "右",
+        "reading": "みぎ",
+        "meaning": "右"
+      },
+      {
+        "jp": "左",
+        "reading": "ひだり",
+        "meaning": "左"
+      },
+      {
+        "jp": "信号",
+        "reading": "しんごう",
+        "meaning": "紅綠燈"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「曲がる」是什麼意思？",
+        "answer": "轉彎",
+        "choices": [
+          "轉彎",
+          "直走",
+          "停下",
+          "後退"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「信号」是什麼意思？",
+        "answer": "紅綠燈",
+        "choices": [
+          "紅綠燈",
+          "路口",
+          "標誌",
+          "斑馬線"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「まっすぐ」是什麼意思？",
+        "answer": "直直地",
+        "choices": [
+          "直直地",
+          "左邊",
+          "右邊",
+          "後面"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "次の角＿＿右に曲がってください。（在…轉，經過點）",
+        "answer": "を",
+        "choices": [
+          "を",
+          "に",
+          "で",
+          "へ"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "信号を左＿＿曲がります。（往…方向）",
+        "answer": "に",
+        "choices": [
+          "に",
+          "を",
+          "で",
+          "から"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「右」的相反是？",
+        "answer": "左",
+        "choices": [
+          "左",
+          "上",
+          "前",
+          "後"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "みち",
+        "accept": [
+          "みち"
+        ],
+        "hint": "路（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「請在下個轉角右轉。」",
+        "model": "次の角を右に曲がってください。",
+        "notes": "〜を〜に曲がる＝在…往…轉。"
+      }
+    ]
+  },
+  {
+    "id": "theme-emergency",
+    "stage": "実用編",
+    "domain": "急",
+    "cefr": "B1",
+    "cost": 20,
+    "aff": [],
+    "title": "緊急・トラブル",
+    "sub": "Emergencies",
+    "setting": "物をなくしたり、助けが必要なとき。",
+    "grammar": {
+      "point": "〜てしまいました",
+      "gloss": "（不小心）…了（用於遺失等）",
+      "example": "財布をなくしてしまいました。"
+    },
+    "teach": [
+      {
+        "jp": "助けて",
+        "reading": "たすけて",
+        "meaning": "救命／幫幫我"
+      },
+      {
+        "jp": "警察",
+        "reading": "けいさつ",
+        "meaning": "警察"
+      },
+      {
+        "jp": "救急車",
+        "reading": "きゅうきゅうしゃ",
+        "meaning": "救護車"
+      },
+      {
+        "jp": "事故",
+        "reading": "じこ",
+        "meaning": "事故"
+      },
+      {
+        "jp": "落とす",
+        "reading": "おとす",
+        "meaning": "掉／遺失"
+      },
+      {
+        "jp": "〜をなくす",
+        "reading": "〜をなくす",
+        "meaning": "弄丟…"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「助けて」是什麼意思？",
+        "answer": "救命／幫幫我",
+        "choices": [
+          "救命／幫幫我",
+          "謝謝",
+          "對不起",
+          "再見"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「救急車」是什麼意思？",
+        "answer": "救護車",
+        "choices": [
+          "救護車",
+          "警車",
+          "消防車",
+          "計程車"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "在日本叫救護車要打？",
+        "answer": "119",
+        "choices": [
+          "119",
+          "110",
+          "911",
+          "112"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "財布を落とし＿＿。（弄丟了，遺憾）",
+        "answer": "てしまいました",
+        "choices": [
+          "てしまいました",
+          "ておきました",
+          "てみました",
+          "ています"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "パスポート＿＿なくしました。（受詞）",
+        "answer": "を",
+        "choices": [
+          "を",
+          "は",
+          "に",
+          "へ"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "在日本報警要打？",
+        "answer": "110",
+        "choices": [
+          "110",
+          "119",
+          "118",
+          "114"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "たすけて",
+        "accept": [
+          "たすけて"
+        ],
+        "hint": "救命（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「我把錢包弄丟了。」",
+        "model": "財布をなくしてしまいました。",
+        "notes": "〜てしまいました＝（不小心）…了。"
+      }
+    ]
+  },
+  {
+    "id": "theme-restaurant",
+    "stage": "実用編",
+    "domain": "食",
+    "cefr": "B1",
+    "cost": 20,
+    "aff": [
+      "ten"
+    ],
+    "title": "レストランを予約する",
+    "sub": "Restaurant reservation",
+    "setting": "電話でレストランを予約する。",
+    "grammar": {
+      "point": "〜たいんですが",
+      "gloss": "我想…（委婉提出，鋪陳請求）",
+      "example": "7時に二名で予約したいんですが。"
+    },
+    "teach": [
+      {
+        "jp": "予約",
+        "reading": "よやく",
+        "meaning": "預約／訂位"
+      },
+      {
+        "jp": "〜名",
+        "reading": "〜めい",
+        "meaning": "…位"
+      },
+      {
+        "jp": "禁煙席",
+        "reading": "きんえんせき",
+        "meaning": "禁菸席"
+      },
+      {
+        "jp": "アレルギー",
+        "reading": "アレルギー",
+        "meaning": "過敏"
+      },
+      {
+        "jp": "満席",
+        "reading": "まんせき",
+        "meaning": "客滿"
+      },
+      {
+        "jp": "〜たいんですが",
+        "reading": "〜たいんですが",
+        "meaning": "我想…（委婉）"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「予約」是什麼意思？",
+        "answer": "預約／訂位",
+        "choices": [
+          "預約／訂位",
+          "結帳",
+          "點餐",
+          "外帶"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「禁煙席」是什麼意思？",
+        "answer": "禁菸席",
+        "choices": [
+          "禁菸席",
+          "吸菸席",
+          "包廂",
+          "吧台"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「満席」是什麼意思？",
+        "answer": "客滿",
+        "choices": [
+          "客滿",
+          "空位",
+          "休息",
+          "預約"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "7時に二名で予約し＿＿んですが。（想訂位，委婉）",
+        "answer": "たい",
+        "choices": [
+          "たい",
+          "たく",
+          "た",
+          "て"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "卵のアレルギーが＿＿んですが。（有…，委婉鋪陳）",
+        "answer": "ある",
+        "choices": [
+          "ある",
+          "いる",
+          "する",
+          "なる"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「アレルギー」是什麼意思？",
+        "answer": "過敏",
+        "choices": [
+          "過敏",
+          "口味",
+          "份量",
+          "飲料"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "よやく",
+        "accept": [
+          "よやく"
+        ],
+        "hint": "預約（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「我想訂七點兩位。」",
+        "model": "7時に二名で予約したいんですが。",
+        "notes": "〜たいんですが＝委婉提出。"
+      }
+    ]
+  },
+  {
+    "id": "theme-weather",
+    "stage": "実用編",
+    "domain": "天",
+    "cefr": "A2",
+    "cost": 18,
+    "aff": [],
+    "title": "天気と季節",
+    "sub": "Weather & seasons",
+    "setting": "天気の話をしたり、予報を聞いたり。",
+    "grammar": {
+      "point": "〜そうです（樣態）",
+      "gloss": "看起來要…（憑外觀判斷）",
+      "example": "雨が降りそうです。"
+    },
+    "teach": [
+      {
+        "jp": "天気",
+        "reading": "てんき",
+        "meaning": "天氣"
+      },
+      {
+        "jp": "晴れ",
+        "reading": "はれ",
+        "meaning": "晴天"
+      },
+      {
+        "jp": "曇り",
+        "reading": "くもり",
+        "meaning": "陰天"
+      },
+      {
+        "jp": "雨",
+        "reading": "あめ",
+        "meaning": "雨"
+      },
+      {
+        "jp": "涼しい",
+        "reading": "すずしい",
+        "meaning": "涼爽"
+      },
+      {
+        "jp": "〜になる",
+        "reading": "〜になる",
+        "meaning": "變成…"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「曇り」是什麼意思？",
+        "answer": "陰天",
+        "choices": [
+          "陰天",
+          "晴天",
+          "雨天",
+          "雪天"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「涼しい」是什麼意思？",
+        "answer": "涼爽",
+        "choices": [
+          "涼爽",
+          "炎熱",
+          "寒冷",
+          "潮濕"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "空が暗い。雨が降り＿＿です。（看起來要下）",
+        "answer": "そう",
+        "choices": [
+          "そう",
+          "らしい",
+          "という",
+          "ない"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "秋になって、涼しく＿＿ました。（變得…，い形＋く＋）",
+        "answer": "なり",
+        "choices": [
+          "なり",
+          "して",
+          "あり",
+          "いき"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「晴れ」是什麼意思？",
+        "answer": "晴天",
+        "choices": [
+          "晴天",
+          "陰天",
+          "颱風",
+          "下雪"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「明日は晴れでしょう」的「でしょう」是？",
+        "answer": "（推測）大概…吧",
+        "choices": [
+          "（推測）大概…吧",
+          "命令",
+          "過去",
+          "疑問"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "てんき",
+        "accept": [
+          "てんき"
+        ],
+        "hint": "天氣（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「看起來要下雨了。」",
+        "model": "雨が降りそうです。",
+        "notes": "樣態〜そう＝看起來要…。"
+      }
+    ]
+  },
+  {
+    "id": "theme2-drugstore",
+    "stage": "実用編",
+    "domain": "医",
+    "cefr": "A2",
+    "cost": 18,
+    "aff": [
+      "ten"
+    ],
+    "title": "ドラッグストアで",
+    "sub": "At the drugstore",
+    "setting": "日用品や化粧品を探して買う。",
+    "grammar": {
+      "point": "〜はどこにありますか",
+      "gloss": "…在哪裡（找位置）",
+      "example": "シャンプーはどこにありますか。"
+    },
+    "teach": [
+      {
+        "jp": "ドラッグストア",
+        "reading": "ドラッグストア",
+        "meaning": "藥妝店"
+      },
+      {
+        "jp": "日用品",
+        "reading": "にちようひん",
+        "meaning": "日用品"
+      },
+      {
+        "jp": "化粧品",
+        "reading": "けしょうひん",
+        "meaning": "化妝品"
+      },
+      {
+        "jp": "シャンプー",
+        "reading": "シャンプー",
+        "meaning": "洗髮精"
+      },
+      {
+        "jp": "試供品",
+        "reading": "しきょうひん",
+        "meaning": "試用品"
+      },
+      {
+        "jp": "〜はどこ",
+        "reading": "〜はどこ",
+        "meaning": "…在哪"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「化粧品」是什麼意思？",
+        "answer": "化妝品",
+        "choices": [
+          "化妝品",
+          "日用品",
+          "藥",
+          "食品"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「日用品」是什麼意思？",
+        "answer": "日常用品",
+        "choices": [
+          "日常用品",
+          "奢侈品",
+          "食品",
+          "文具"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「ドラッグストア」是什麼？",
+        "answer": "藥妝店",
+        "choices": [
+          "藥妝店",
+          "百貨",
+          "書店",
+          "便利商店"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "シャンプー＿＿どこにありますか。（主題）",
+        "answer": "は",
+        "choices": [
+          "は",
+          "を",
+          "に",
+          "で"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "歯ブラシ＿＿探しています。（受詞）",
+        "answer": "を",
+        "choices": [
+          "を",
+          "は",
+          "に",
+          "へ"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「試供品」是什麼意思？",
+        "answer": "試用品",
+        "choices": [
+          "試用品",
+          "贈品券",
+          "折價券",
+          "正品"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "けしょうひん",
+        "accept": [
+          "けしょうひん"
+        ],
+        "hint": "化妝品（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文問：「洗髮精在哪裡？」",
+        "model": "シャンプーはどこにありますか。",
+        "notes": "〜はどこにありますか＝…在哪裡。"
+      }
+    ]
+  },
+  {
+    "id": "theme2-checkout",
+    "stage": "実用編",
+    "domain": "食",
+    "cefr": "A2",
+    "cost": 18,
+    "aff": [
+      "ten"
+    ],
+    "title": "スーパーのレジ",
+    "sub": "Supermarket checkout",
+    "setting": "レジで会計し、支払い方法を伝える。",
+    "grammar": {
+      "point": "〜でお願いします",
+      "gloss": "用…（指定方式）",
+      "example": "カードでお願いします。"
+    },
+    "teach": [
+      {
+        "jp": "レジ",
+        "reading": "レジ",
+        "meaning": "收銀台"
+      },
+      {
+        "jp": "会計",
+        "reading": "かいけい",
+        "meaning": "結帳"
+      },
+      {
+        "jp": "現金",
+        "reading": "げんきん",
+        "meaning": "現金"
+      },
+      {
+        "jp": "ポイントカード",
+        "reading": "ポイントカード",
+        "meaning": "集點卡"
+      },
+      {
+        "jp": "袋",
+        "reading": "ふくろ",
+        "meaning": "袋子"
+      },
+      {
+        "jp": "〜でお願いします",
+        "reading": "〜でおねがいします",
+        "meaning": "用…（麻煩了）"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「現金」是什麼意思？",
+        "answer": "現金",
+        "choices": [
+          "現金",
+          "信用卡",
+          "集點",
+          "發票"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「レジ」是什麼意思？",
+        "answer": "收銀台",
+        "choices": [
+          "收銀台",
+          "試衣間",
+          "出口",
+          "推車"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "支払いはカード＿＿お願いします。（用…）",
+        "answer": "で",
+        "choices": [
+          "で",
+          "に",
+          "を",
+          "は"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "袋＿＿いりますか。（主題：需要嗎）",
+        "answer": "は",
+        "choices": [
+          "は",
+          "を",
+          "に",
+          "へ"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「ポイントカードはお持ちですか」在問？",
+        "answer": "有沒有集點卡",
+        "choices": [
+          "有沒有集點卡",
+          "要不要袋子",
+          "付現嗎",
+          "要加熱嗎"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「袋は要りません」是什麼意思？",
+        "answer": "不需要袋子",
+        "choices": [
+          "不需要袋子",
+          "要袋子",
+          "要兩個",
+          "要紙袋"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "げんきん",
+        "accept": [
+          "げんきん"
+        ],
+        "hint": "現金（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「我要刷卡。」",
+        "model": "カードでお願いします。",
+        "notes": "〜でお願いします＝指定方式。"
+      }
+    ]
+  },
+  {
+    "id": "theme2-cleaning",
+    "stage": "実用編",
+    "domain": "衣",
+    "cefr": "B1",
+    "cost": 18,
+    "aff": [
+      "ten"
+    ],
+    "title": "クリーニング店",
+    "sub": "Dry cleaner",
+    "setting": "服を出して、仕上がりの日を確認する。",
+    "grammar": {
+      "point": "〜までにできますか",
+      "gloss": "在…之前能完成嗎（期限）",
+      "example": "金曜までにできますか。"
+    },
+    "teach": [
+      {
+        "jp": "クリーニング",
+        "reading": "クリーニング",
+        "meaning": "乾洗／送洗"
+      },
+      {
+        "jp": "出す",
+        "reading": "だす",
+        "meaning": "送（洗）"
+      },
+      {
+        "jp": "受け取る",
+        "reading": "うけとる",
+        "meaning": "領取"
+      },
+      {
+        "jp": "シミ",
+        "reading": "シミ",
+        "meaning": "污漬"
+      },
+      {
+        "jp": "仕上がり",
+        "reading": "しあがり",
+        "meaning": "完成"
+      },
+      {
+        "jp": "〜までに",
+        "reading": "〜までに",
+        "meaning": "在…之前（期限）"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「クリーニング」是什麼意思？",
+        "answer": "乾洗／送洗",
+        "choices": [
+          "乾洗／送洗",
+          "修改",
+          "染色",
+          "裁縫"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「シミ」是什麼意思？",
+        "answer": "污漬",
+        "choices": [
+          "污漬",
+          "破洞",
+          "皺摺",
+          "鈕扣"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「受け取る」是什麼意思？",
+        "answer": "領取",
+        "choices": [
+          "領取",
+          "送洗",
+          "丟棄",
+          "清洗"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "このスーツをクリーニングに＿＿たいです。（送洗）",
+        "answer": "出し",
+        "choices": [
+          "出し",
+          "受け取り",
+          "着",
+          "洗い"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "金曜＿＿にできますか。（在…之前）",
+        "answer": "まで",
+        "choices": [
+          "まで",
+          "から",
+          "より",
+          "ほど"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「仕上がりはいつですか」在問？",
+        "answer": "什麼時候完成",
+        "choices": [
+          "什麼時候完成",
+          "多少錢",
+          "在哪取",
+          "要不要"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "しあがり",
+        "accept": [
+          "しあがり"
+        ],
+        "hint": "完成（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文問：「星期五前能好嗎？」",
+        "model": "金曜までにできますか。",
+        "notes": "〜までに＝在…之前（期限）。"
+      }
+    ]
+  },
+  {
+    "id": "theme2-library",
+    "stage": "実用編",
+    "domain": "育",
+    "cefr": "B1",
+    "cost": 18,
+    "aff": [],
+    "title": "図書館で借りる",
+    "sub": "At the library",
+    "setting": "本を借りたり返したり、延長したり。",
+    "grammar": {
+      "point": "〜まで（期限）／可能形",
+      "gloss": "借りられる＋何冊まで（能借到…）",
+      "example": "何冊まで借りられますか。"
+    },
+    "teach": [
+      {
+        "jp": "図書館",
+        "reading": "としょかん",
+        "meaning": "圖書館"
+      },
+      {
+        "jp": "借りる",
+        "reading": "かりる",
+        "meaning": "借（進來）"
+      },
+      {
+        "jp": "返す",
+        "reading": "かえす",
+        "meaning": "歸還"
+      },
+      {
+        "jp": "延長",
+        "reading": "えんちょう",
+        "meaning": "延長（借期）"
+      },
+      {
+        "jp": "貸出",
+        "reading": "かしだし",
+        "meaning": "借閱"
+      },
+      {
+        "jp": "〜冊",
+        "reading": "〜さつ",
+        "meaning": "…本（書）"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「借りる」是什麼意思？",
+        "answer": "借（進來）",
+        "choices": [
+          "借（進來）",
+          "還",
+          "買",
+          "賣"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「返す」是什麼意思？",
+        "answer": "歸還",
+        "choices": [
+          "歸還",
+          "借",
+          "延長",
+          "影印"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「延長」是什麼意思？",
+        "answer": "延長（借期）",
+        "choices": [
+          "延長（借期）",
+          "罰款",
+          "預約",
+          "取消"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "本を3冊借り＿＿。（想借）",
+        "answer": "たいです",
+        "choices": [
+          "たいです",
+          "ました",
+          "ています",
+          "ません"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "返却は来週＿＿です。（到…為止）",
+        "answer": "まで",
+        "choices": [
+          "まで",
+          "から",
+          "より",
+          "ほど"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「何冊まで借りられますか」在問？",
+        "answer": "最多能借幾本",
+        "choices": [
+          "最多能借幾本",
+          "在哪借",
+          "借多久",
+          "要錢嗎"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "としょかん",
+        "accept": [
+          "としょかん"
+        ],
+        "hint": "圖書館（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文問：「能借幾本？」",
+        "model": "何冊まで借りられますか。",
+        "notes": "〜まで＝到…為止；可能形 借りられる。"
+      }
+    ]
+  },
+  {
+    "id": "theme2-disaster",
+    "stage": "実用編",
+    "domain": "急",
+    "cefr": "B1",
+    "cost": 20,
+    "aff": [],
+    "title": "災害・避難",
+    "sub": "Disaster & evacuation",
+    "setting": "地震や災害のとき、落ち着いて避難する。",
+    "grammar": {
+      "point": "〜ないでください",
+      "gloss": "請不要…（禁止/指示）",
+      "example": "エレベーターを使わないでください。"
+    },
+    "teach": [
+      {
+        "jp": "地震",
+        "reading": "じしん",
+        "meaning": "地震"
+      },
+      {
+        "jp": "避難",
+        "reading": "ひなん",
+        "meaning": "避難"
+      },
+      {
+        "jp": "避難所",
+        "reading": "ひなんじょ",
+        "meaning": "避難所"
+      },
+      {
+        "jp": "非常口",
+        "reading": "ひじょうぐち",
+        "meaning": "緊急出口"
+      },
+      {
+        "jp": "落ち着く",
+        "reading": "おちつく",
+        "meaning": "冷靜"
+      },
+      {
+        "jp": "〜ないでください",
+        "reading": "〜ないでください",
+        "meaning": "請不要…"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「地震」是什麼意思？",
+        "answer": "地震",
+        "choices": [
+          "地震",
+          "颱風",
+          "火災",
+          "海嘯"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「非常口」是什麼意思？",
+        "answer": "緊急出口",
+        "choices": [
+          "緊急出口",
+          "入口",
+          "樓梯",
+          "廁所"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「避難所」是什麼意思？",
+        "answer": "避難所",
+        "choices": [
+          "避難所",
+          "醫院",
+          "警局",
+          "車站"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "地震のときはエレベーターを使わ＿＿ください。（請不要用）",
+        "answer": "ないで",
+        "choices": [
+          "ないで",
+          "て",
+          "たいで",
+          "ても"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "まず落ち着い＿＿、頭を守ってください。（先…然後，て形）",
+        "answer": "て",
+        "choices": [
+          "て",
+          "たら",
+          "ても",
+          "から"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「落ち着いてください」是什麼意思？",
+        "answer": "請冷靜",
+        "choices": [
+          "請冷靜",
+          "請快跑",
+          "請大叫",
+          "請坐下"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "じしん",
+        "accept": [
+          "じしん"
+        ],
+        "hint": "地震（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「請不要搭電梯。」",
+        "model": "エレベーターを使わないでください。",
+        "notes": "〜ないでください＝請不要…。"
+      }
+    ]
+  },
+  {
+    "id": "theme2-hotel",
+    "stage": "実用編",
+    "domain": "宿",
+    "cefr": "A2",
+    "cost": 18,
+    "aff": [],
+    "title": "ホテルのチェックイン",
+    "sub": "Hotel check-in",
+    "setting": "フロントでチェックインの手続きをする。",
+    "grammar": {
+      "point": "〜を予約しています／〜付き",
+      "gloss": "已預約（狀態）／附…",
+      "example": "チェックインをお願いします。"
+    },
+    "teach": [
+      {
+        "jp": "チェックイン",
+        "reading": "チェックイン",
+        "meaning": "入住登記"
+      },
+      {
+        "jp": "チェックアウト",
+        "reading": "チェックアウト",
+        "meaning": "退房"
+      },
+      {
+        "jp": "予約",
+        "reading": "よやく",
+        "meaning": "預約"
+      },
+      {
+        "jp": "朝食付き",
+        "reading": "ちょうしょくつき",
+        "meaning": "附早餐"
+      },
+      {
+        "jp": "部屋",
+        "reading": "へや",
+        "meaning": "房間"
+      },
+      {
+        "jp": "〜付き",
+        "reading": "〜つき",
+        "meaning": "附…"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「チェックイン」是什麼意思？",
+        "answer": "入住登記",
+        "choices": [
+          "入住登記",
+          "退房",
+          "訂位",
+          "結帳"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「チェックアウト」是什麼意思？",
+        "answer": "退房",
+        "choices": [
+          "退房",
+          "入住",
+          "續住",
+          "訂房"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「朝食付き」是什麼意思？",
+        "answer": "附早餐",
+        "choices": [
+          "附早餐",
+          "不附餐",
+          "自助餐",
+          "晚餐"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "山田の名前で予約し＿＿。（已預約，狀態）",
+        "answer": "ています",
+        "choices": [
+          "ています",
+          "たいです",
+          "ました",
+          "ません"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "朝食＿＿のプランにします。（附…）",
+        "answer": "付き",
+        "choices": [
+          "付き",
+          "込み",
+          "だけ",
+          "しか"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「チェックアウトは何時ですか」在問？",
+        "answer": "幾點退房",
+        "choices": [
+          "幾點退房",
+          "房號",
+          "早餐時間",
+          "Wi-Fi密碼"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "よやく",
+        "accept": [
+          "よやく"
+        ],
+        "hint": "預約（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「我要辦入住。」",
+        "model": "チェックインをお願いします。",
+        "notes": "予約しています＝已預約（狀態）。"
+      }
+    ]
+  },
+  {
+    "id": "theme2-exchange",
+    "stage": "実用編",
+    "domain": "金",
+    "cefr": "B1",
+    "cost": 18,
+    "aff": [],
+    "title": "両替・お金",
+    "sub": "Currency exchange",
+    "setting": "両替所で、お金を両替する。",
+    "grammar": {
+      "point": "〜を〜に両替する",
+      "gloss": "把…換成…",
+      "example": "円をドルに両替したいです。"
+    },
+    "teach": [
+      {
+        "jp": "両替",
+        "reading": "りょうがえ",
+        "meaning": "兌換／換錢"
+      },
+      {
+        "jp": "レート",
+        "reading": "レート",
+        "meaning": "匯率"
+      },
+      {
+        "jp": "円",
+        "reading": "えん",
+        "meaning": "日圓"
+      },
+      {
+        "jp": "ドル",
+        "reading": "ドル",
+        "meaning": "美元"
+      },
+      {
+        "jp": "手数料",
+        "reading": "てすうりょう",
+        "meaning": "手續費"
+      },
+      {
+        "jp": "〜を〜に両替",
+        "reading": "〜を〜にりょうがえ",
+        "meaning": "把…換成…"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「両替」是什麼意思？",
+        "answer": "兌換／換錢",
+        "choices": [
+          "兌換／換錢",
+          "存款",
+          "匯款",
+          "提款"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「レート」是什麼意思？",
+        "answer": "匯率",
+        "choices": [
+          "匯率",
+          "手續費",
+          "餘額",
+          "利息"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「手数料」是什麼意思？",
+        "answer": "手續費",
+        "choices": [
+          "手續費",
+          "匯率",
+          "本金",
+          "利息"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "円をドル＿＿両替したいです。（換成…）",
+        "answer": "に",
+        "choices": [
+          "に",
+          "を",
+          "が",
+          "で"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "今日のレート＿＿いくらですか。（主題）",
+        "answer": "は",
+        "choices": [
+          "は",
+          "を",
+          "に",
+          "へ"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「手数料はかかりますか」在問？",
+        "answer": "需不需要手續費",
+        "choices": [
+          "需不需要手續費",
+          "匯率多少",
+          "在哪換",
+          "要等多久"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "りょうがえ",
+        "accept": [
+          "りょうがえ"
+        ],
+        "hint": "兌換（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「我想把日圓換成美元。」",
+        "model": "円をドルに両替したいです。",
+        "notes": "〜を〜に両替＝把…換成…。"
+      }
+    ]
+  },
+  {
+    "id": "theme2-traintrouble",
+    "stage": "実用編",
+    "domain": "行",
+    "cefr": "B1",
+    "cost": 20,
+    "aff": [],
+    "title": "電車の遅延・忘れ物",
+    "sub": "Train delays & lost items",
+    "setting": "電車が遅れたり、物を忘れたとき、駅員に相談する。",
+    "grammar": {
+      "point": "〜てしまう／〜んですが",
+      "gloss": "（不小心）…了＋鋪陳問題",
+      "example": "電車に傘を忘れてしまったんですが。"
+    },
+    "teach": [
+      {
+        "jp": "遅延",
+        "reading": "ちえん",
+        "meaning": "誤點／延誤"
+      },
+      {
+        "jp": "忘れ物",
+        "reading": "わすれもの",
+        "meaning": "遺失物"
+      },
+      {
+        "jp": "遅延証明",
+        "reading": "ちえんしょうめい",
+        "meaning": "誤點證明"
+      },
+      {
+        "jp": "駅員",
+        "reading": "えきいん",
+        "meaning": "站務員"
+      },
+      {
+        "jp": "届ける",
+        "reading": "とどける",
+        "meaning": "送交／送達"
+      },
+      {
+        "jp": "〜んですが",
+        "reading": "〜んですが",
+        "meaning": "…（鋪陳）"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「遅延」是什麼意思？",
+        "answer": "誤點／延誤",
+        "choices": [
+          "誤點／延誤",
+          "準點",
+          "取消",
+          "加班"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「忘れ物」是什麼意思？",
+        "answer": "遺失物",
+        "choices": [
+          "遺失物",
+          "行李",
+          "車票",
+          "座位"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「遅延証明」是什麼意思？",
+        "answer": "誤點證明",
+        "choices": [
+          "誤點證明",
+          "車票",
+          "收據",
+          "月票"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "電車に傘を忘れ＿＿んですが。（不小心忘了，鋪陳）",
+        "answer": "てしまった",
+        "choices": [
+          "てしまった",
+          "ておいた",
+          "てみた",
+          "ていた"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "遅延証明＿＿ほしいんですが。（受詞，想要）",
+        "answer": "が",
+        "choices": [
+          "が",
+          "を",
+          "に",
+          "へ"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「忘れ物はどこに届きますか」在問？",
+        "answer": "失物會送到哪",
+        "choices": [
+          "失物會送到哪",
+          "要罰錢嗎",
+          "誤點多久",
+          "在哪上車"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "わすれもの",
+        "accept": [
+          "わすれもの"
+        ],
+        "hint": "遺失物（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「我把傘忘在電車上了。」",
+        "model": "電車に傘を忘れてしまいました。",
+        "notes": "〜てしまう＝（不小心）…了。"
+      }
+    ]
+  },
+  {
+    "id": "theme2-sightseeing",
+    "stage": "実用編",
+    "domain": "楽",
+    "cefr": "A2",
+    "cost": 18,
+    "aff": [],
+    "title": "観光・チケット",
+    "sub": "Sightseeing & tickets",
+    "setting": "観光地の窓口で、入場券を買う。",
+    "grammar": {
+      "point": "数＋枚ください",
+      "gloss": "請給我…張（票）",
+      "example": "大人二枚ください。"
+    },
+    "teach": [
+      {
+        "jp": "観光",
+        "reading": "かんこう",
+        "meaning": "觀光"
+      },
+      {
+        "jp": "チケット",
+        "reading": "チケット",
+        "meaning": "票"
+      },
+      {
+        "jp": "入場料",
+        "reading": "にゅうじょうりょう",
+        "meaning": "入場費"
+      },
+      {
+        "jp": "割引",
+        "reading": "わりびき",
+        "meaning": "折扣"
+      },
+      {
+        "jp": "学生料金",
+        "reading": "がくせいりょうきん",
+        "meaning": "學生票價"
+      },
+      {
+        "jp": "〜枚",
+        "reading": "〜まい",
+        "meaning": "…張"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「観光」是什麼意思？",
+        "answer": "觀光",
+        "choices": [
+          "觀光",
+          "出差",
+          "留學",
+          "搬家"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「割引」是什麼意思？",
+        "answer": "折扣",
+        "choices": [
+          "折扣",
+          "加價",
+          "免費",
+          "退費"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「入場料」是什麼意思？",
+        "answer": "入場費",
+        "choices": [
+          "入場費",
+          "停車費",
+          "導覽費",
+          "紀念品"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "大人二＿＿ください。（…張，票）",
+        "answer": "枚",
+        "choices": [
+          "枚",
+          "個",
+          "人",
+          "本"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "この美術館は学生＿＿安いです。（針對學生，主題）",
+        "answer": "は",
+        "choices": [
+          "は",
+          "を",
+          "に",
+          "で"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「学生料金」是什麼意思？",
+        "answer": "學生票價",
+        "choices": [
+          "學生票價",
+          "團體價",
+          "全票",
+          "免費"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "わりびき",
+        "accept": [
+          "わりびき"
+        ],
+        "hint": "折扣（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「請給我兩張大人票。」",
+        "model": "大人二枚ください。",
+        "notes": "数＋枚＝張（票）。"
+      }
+    ]
+  },
+  {
+    "id": "theme2-gym",
+    "stage": "実用編",
+    "domain": "楽",
+    "cefr": "B1",
+    "cost": 18,
+    "aff": [],
+    "title": "ジムの入会",
+    "sub": "Joining a gym",
+    "setting": "ジムの受付で、入会の相談をする。",
+    "grammar": {
+      "point": "〜たいんですが",
+      "gloss": "我想…（委婉提出）",
+      "example": "入会したいんですが。"
+    },
+    "teach": [
+      {
+        "jp": "ジム",
+        "reading": "ジム",
+        "meaning": "健身房"
+      },
+      {
+        "jp": "入会",
+        "reading": "にゅうかい",
+        "meaning": "入會"
+      },
+      {
+        "jp": "会員",
+        "reading": "かいいん",
+        "meaning": "會員"
+      },
+      {
+        "jp": "月会費",
+        "reading": "げつかいひ",
+        "meaning": "月費"
+      },
+      {
+        "jp": "体験",
+        "reading": "たいけん",
+        "meaning": "體驗"
+      },
+      {
+        "jp": "〜たいんですが",
+        "reading": "〜たいんですが",
+        "meaning": "我想…（委婉）"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「入会」是什麼意思？",
+        "answer": "入會",
+        "choices": [
+          "入會",
+          "退會",
+          "續約",
+          "暫停"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「会員」是什麼意思？",
+        "answer": "會員",
+        "choices": [
+          "會員",
+          "教練",
+          "訪客",
+          "職員"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「月会費」是什麼意思？",
+        "answer": "月費",
+        "choices": [
+          "月費",
+          "入會費",
+          "年費",
+          "押金"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "ジムに入会し＿＿んですが。（我想入會）",
+        "answer": "たい",
+        "choices": [
+          "たい",
+          "たく",
+          "た",
+          "て"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "一度、体験＿＿したいです。（受詞）",
+        "answer": "を",
+        "choices": [
+          "を",
+          "は",
+          "に",
+          "へ"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「体験はできますか」在問？",
+        "answer": "能不能試一次",
+        "choices": [
+          "能不能試一次",
+          "要多少錢",
+          "在哪報名",
+          "幾點開"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "にゅうかい",
+        "accept": [
+          "にゅうかい"
+        ],
+        "hint": "入會（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「我想入會。」",
+        "model": "入会したいんですが。",
+        "notes": "〜たいんですが＝委婉提出。"
+      }
+    ]
+  },
+  {
+    "id": "theme2-delivery",
+    "stage": "実用編",
+    "domain": "郵",
+    "cefr": "B1",
+    "cost": 20,
+    "aff": [],
+    "title": "宅配・荷物の受け取り",
+    "sub": "Package delivery",
+    "setting": "不在票が入っていた。再配達を頼む。",
+    "grammar": {
+      "point": "〜てもらえますか",
+      "gloss": "能請您…嗎（請對方做）",
+      "example": "再配達してもらえますか。"
+    },
+    "teach": [
+      {
+        "jp": "宅配",
+        "reading": "たくはい",
+        "meaning": "宅配"
+      },
+      {
+        "jp": "再配達",
+        "reading": "さいはいたつ",
+        "meaning": "重新配送"
+      },
+      {
+        "jp": "不在票",
+        "reading": "ふざいひょう",
+        "meaning": "招領單"
+      },
+      {
+        "jp": "時間指定",
+        "reading": "じかんしてい",
+        "meaning": "指定時間"
+      },
+      {
+        "jp": "受け取る",
+        "reading": "うけとる",
+        "meaning": "領取"
+      },
+      {
+        "jp": "〜てもらえますか",
+        "reading": "〜てもらえますか",
+        "meaning": "能請您…嗎"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「再配達」是什麼意思？",
+        "answer": "重新配送",
+        "choices": [
+          "重新配送",
+          "退貨",
+          "轉寄",
+          "自取"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「不在票」是什麼意思？",
+        "answer": "（沒收到時的）招領單",
+        "choices": [
+          "（沒收到時的）招領單",
+          "收據",
+          "發票",
+          "保證書"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「時間指定」是什麼意思？",
+        "answer": "指定送達時間",
+        "choices": [
+          "指定送達時間",
+          "指定地點",
+          "加急",
+          "代收"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "明日、再配達して＿＿ますか。（能請您…）",
+        "answer": "もらえ",
+        "choices": [
+          "もらえ",
+          "あげ",
+          "やり",
+          "おき"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "午後6時＿＿指定したいです。（指定…時點）",
+        "answer": "に",
+        "choices": [
+          "に",
+          "を",
+          "は",
+          "へ"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「不在票が入っていました」是什麼意思？",
+        "answer": "信箱裡有招領單",
+        "choices": [
+          "信箱裡有招領單",
+          "包裹已送達",
+          "包裹遺失",
+          "要再付錢"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "たくはい",
+        "accept": [
+          "たくはい"
+        ],
+        "hint": "宅配（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「能幫我重新配送嗎？」",
+        "model": "再配達してもらえますか。",
+        "notes": "〜てもらえますか＝請對方做某事。"
+      }
+    ]
+  },
+  {
+    "id": "theme2-demae",
+    "stage": "実用編",
+    "domain": "食",
+    "cefr": "A2",
+    "cost": 18,
+    "aff": [],
+    "title": "出前・デリバリー",
+    "sub": "Food delivery",
+    "setting": "電話やアプリで、食事を注文する。",
+    "grammar": {
+      "point": "〜をお願いします",
+      "gloss": "麻煩給我…（點餐）",
+      "example": "ピザを一枚お願いします。"
+    },
+    "teach": [
+      {
+        "jp": "出前",
+        "reading": "でまえ",
+        "meaning": "外送"
+      },
+      {
+        "jp": "デリバリー",
+        "reading": "デリバリー",
+        "meaning": "外送"
+      },
+      {
+        "jp": "配達",
+        "reading": "はいたつ",
+        "meaning": "配送"
+      },
+      {
+        "jp": "配達料",
+        "reading": "はいたつりょう",
+        "meaning": "外送費"
+      },
+      {
+        "jp": "〜くらい",
+        "reading": "〜くらい",
+        "meaning": "…左右"
+      },
+      {
+        "jp": "〜をお願いします",
+        "reading": "〜をおねがいします",
+        "meaning": "麻煩給我…"
+      }
+    ],
+    "quiz": [
+      {
+        "kind": "mc",
+        "prompt": "「出前」是什麼意思？",
+        "answer": "外送",
+        "choices": [
+          "外送",
+          "內用",
+          "自取",
+          "預約"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「配達」是什麼意思？",
+        "answer": "配送",
+        "choices": [
+          "配送",
+          "結帳",
+          "點餐",
+          "包裝"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "ピザ＿＿一枚お願いします。（受詞）",
+        "answer": "を",
+        "choices": [
+          "を",
+          "は",
+          "に",
+          "へ"
+        ]
+      },
+      {
+        "kind": "cloze",
+        "prompt": "配達は30分＿＿かかります。（左右）",
+        "answer": "くらい",
+        "choices": [
+          "くらい",
+          "しか",
+          "だけ",
+          "まで"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「どのくらいかかりますか」在問？",
+        "answer": "要花多久",
+        "choices": [
+          "要花多久",
+          "多少錢",
+          "送到哪",
+          "要不要"
+        ]
+      },
+      {
+        "kind": "mc",
+        "prompt": "「配達料」是什麼意思？",
+        "answer": "外送費",
+        "choices": [
+          "外送費",
+          "餐費",
+          "服務費",
+          "稅金"
+        ]
+      },
+      {
+        "kind": "dictation",
+        "jp": "でまえ",
+        "accept": [
+          "でまえ"
+        ],
+        "hint": "外送（ひらがな）"
+      },
+      {
+        "kind": "translate",
+        "prompt": "用日文說：「麻煩給我一個披薩。」",
+        "model": "ピザを一枚お願いします。",
+        "notes": "〜をお願いします＝麻煩給我…。"
+      }
+    ]
   }
 ];
 /*DATA_END*/
@@ -9724,7 +12894,7 @@ function DayView({save,update,onPick}){
   function rest(){ update(s=>({...s, energy:clamp((s.energy||0)+30,0,100), slot:(s.slot||0)+1})); }
   function nextDay(){ update(s=>{
     const cur=clamp(s.dayIdx||0,0,DAYS.length); const nxt=cur+1;
-    const crossing = DAYS[nxt] && DAYS[nxt].stage==="社会人" && (!DAYS[cur]||DAYS[cur].stage==="学生") && !s.seenJob;
+    const crossing = DAYS[nxt] && DAYS[nxt].stage==="社会人" && (!DAYS[cur]||DAYS[cur].stage!=="社会人") && !s.seenJob;
     return {...s, dayIdx:nxt, slot:0, energy:100, showJob:crossing?true:s.showJob, seenJob:s.seenJob||crossing};
   }); }
   function clearBanner(){ update(s=>({...s, showJob:false})); }
