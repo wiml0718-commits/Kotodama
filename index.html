@@ -143,23 +143,81 @@ const AFF={
 };
 const SLOT_NAMES=["朝","昼","夕","夜"];
 const SLOT_ICON={"朝":"\uD83C\uDF05","昼":"\u2600\uFE0F","夕":"\uD83C\uDF06","夜":"\uD83C\uDF19"};
-const DAYFLOW={
-  "学生":{
-    "朝":{prompt:"朝。まず何をする？",actions:["s-train","s-class","s-home"]},
-    "昼":{prompt:"お昼。お腹がすいた。今日は何にする？",actions:["s-lunch","s-cafe"]},
-    "夕":{prompt:"夕方。帰り道、どうする？",actions:["s-clothes","s-super"]},
-    "夜":{prompt:"夜。今日の締めくくりは？",actions:["s-fun","s-cook","s-event"]},
-  },
-  "社会人":{
-    "朝":{prompt:"朝。出社前、まず何を？",actions:["w-morning","w-trip"]},
-    "昼":{prompt:"昼。午後の仕事は？",actions:["w-phone","w-meeting"]},
-    "夕":{prompt:"夕方。退社前に？",actions:["w-mail","w-complaint"]},
+const DAYS=[
+  {id:"d1",label:"1日目",stage:"学生",theme:"はじめまして",slots:{
+    "朝":{prompt:"朝。教室で自己紹介。",actions:["a1-jikoshoukai"]},
+    "昼":{prompt:"昼。これ、何だろう？",actions:["a1-kore"]},
+    "夕":{prompt:"夕方。カフェで確認する。",actions:["a1-deha"]},
+    "夜":{prompt:"夜。自分の部屋で。",actions:["a1-aru"]},
+  }},
+  {id:"d2",label:"2日目",stage:"学生",theme:"毎日のリズム",slots:{
+    "朝":{prompt:"朝。何時に起きる？",actions:["a1-jikan"]},
+    "昼":{prompt:"昼。一日の行動を言う。",actions:["a1-masu"]},
+    "夕":{prompt:"夕方。何が食べたい？",actions:["a1-tai"]},
+    "夜":{prompt:"夜。今日のできごと。",actions:["a1-mashita"]},
+  }},
+  {id:"d3",label:"3日目",stage:"学生",theme:"ことばを増やす",slots:{
+    "朝":{prompt:"朝。どんな服？",actions:["a1-iadj"]},
+    "昼":{prompt:"昼。いくつ買う？",actions:["a1-counter"]},
+    "夕":{prompt:"夕方。どんな町？",actions:["a1-naadj"]},
+    "夜":{prompt:"夜。友達を誘う。",actions:["a1-mashou"]},
+  }},
+  {id:"d4",label:"4日目",stage:"学生",theme:"初めての通学",slots:{
+    "朝":{prompt:"朝。まず何をする？",actions:["s-train"]},
+    "昼":{prompt:"お昼。お腹がすいた。何を食べる？",actions:["s-lunch"]},
+    "夕":{prompt:"夕方。帰り道、どうする？",actions:["s-clothes"]},
+    "夜":{prompt:"夜。今日の締めくくりは？",actions:["s-fun"]},
+  }},
+  {id:"d5",label:"5日目",stage:"学生",theme:"大学生活",slots:{
+    "朝":{prompt:"朝。授業の前に？",actions:["s-class"]},
+    "昼":{prompt:"お昼。今日はどこで食べる？",actions:["s-cafe","s-lunch"]},
+    "夕":{prompt:"夕方。買い物に行く？",actions:["s-super","s-clothes"]},
+    "夜":{prompt:"夜。夕飯はどうする？",actions:["s-cook","s-fun"]},
+  }},
+  {id:"d6",label:"6日目",stage:"学生",theme:"一人暮らしのリズム",slots:{
+    "朝":{prompt:"朝。家のことを片付ける？",actions:["s-home","s-train"]},
+    "昼":{prompt:"お昼。今日は何にする？",actions:["s-lunch","s-cafe"]},
+    "夕":{prompt:"夕方。何をする？",actions:["s-clothes","s-super"]},
+    "夜":{prompt:"夜。今夜の予定は？",actions:["s-fun","s-cook","s-event"]},
+  }},
+  {id:"d7",label:"7日目",stage:"社会人",theme:"社会人デビュー",slots:{
+    "朝":{prompt:"朝。出社前、まず？",actions:["w-morning"]},
+    "昼":{prompt:"昼。午後の仕事は？",actions:["w-phone"]},
+    "夕":{prompt:"夕方。退社前に？",actions:["w-mail"]},
     "夜":{prompt:"夜。仕事帰り、どうする？",actions:["w-nomikai","w-conbini"]},
-  },
+  }},
+  {id:"d8",label:"8日目",stage:"社会人",theme:"出張の日",slots:{
+    "朝":{prompt:"朝。出張へ出発。",actions:["w-trip"]},
+    "昼":{prompt:"昼。先方とやりとり。",actions:["w-phone"]},
+    "夕":{prompt:"夕方。事務処理。",actions:["w-mail"]},
+    "夜":{prompt:"夜。出張先の夜。",actions:["w-conbini","w-nomikai"]},
+  }},
+  {id:"d9",label:"9日目",stage:"社会人",theme:"難しい一日",slots:{
+    "朝":{prompt:"朝。報連相から。",actions:["w-morning","w-trip"]},
+    "昼":{prompt:"昼。会議で意見を述べる。",actions:["w-meeting","w-phone"]},
+    "夕":{prompt:"夕方。クレーム対応。",actions:["w-complaint","w-mail"]},
+    "夜":{prompt:"夜。一日の終わりに。",actions:["w-nomikai","w-conbini"]},
+  }},
+];
+const GRAMMAR={
+  "s-train":{point:"〜に乗る／〜で降りる",gloss:"移動の助詞「に・で」",example:"電車に乗ります。"},
+  "s-class":{point:"〜てもいいですか",gloss:"許可を求める",example:"質問してもいいですか。"},
+  "s-lunch":{point:"〜をください",gloss:"注文・依頼",example:"これをください。"},
+  "s-clothes":{point:"い形容詞＋の",gloss:"名詞の代わり（大きいの）",example:"もう少し大きいのはありますか。"},
+  "s-home":{point:"〜てから",gloss:"動作の前後（先にA、それからB）",example:"分別してから出します。"},
+  "s-fun":{point:"〜（よ）う／〜ない？",gloss:"勧誘・カジュアルな誘い",example:"一緒に行かない？"},
+  "s-cafe":{point:"〜にします",gloss:"選択・決定",example:"アイスコーヒーにします。"},
+  "s-super":{point:"〜はどこですか",gloss:"場所をたずねる",example:"お肉はどこですか。"},
+  "s-cook":{point:"〜て、〜",gloss:"動作の連続（切って炒める）",example:"野菜を切って炒めます。"},
+  "w-morning":{point:"お／ご＋名詞＋します",gloss:"謙譲語Ⅰ（自分の動作を低める）",example:"ご相談します。"},
+  "w-phone":{point:"おります／いたします",gloss:"謙譲語（自分側を低める）",example:"担当者はおりません。"},
+  "w-mail":{point:"ご〜ください",gloss:"丁寧な依頼",example:"ご確認ください。"},
+  "w-nomikai":{point:"尊敬語と謙譲語",gloss:"相手＝召し上がる／自分＝いただく",example:"どうぞ召し上がってください。"},
+  "w-trip":{point:"〜で（手段）",gloss:"交通手段・方法",example:"新幹線で行きます。"},
+  "w-meeting":{point:"婉曲表現",gloss:"〜かと存じます（やわらかく述べる）",example:"別の見方もあるかと存じます。"},
+  "w-complaint":{point:"最上級の謝罪",gloss:"申し訳ございません／お詫び申し上げます",example:"お詫び申し上げます。"},
+  "w-conbini":{point:"動詞ます形＋直す",gloss:"重新～（やり直す・温め直す）",example:"お弁当を温め直します。"},
 };
-const STUDENT_IDS=["s-train","s-class","s-lunch","s-clothes","s-home","s-fun","s-cafe","s-super","s-cook"];
-const PROMOTE_AT=5;
-function studentDoneCount(s){ const d=s.done||{}; return STUDENT_IDS.filter(id=>d[id]).length; }
 function actionLock(node,s){
   if(node.event){ const g=node.affGate; const v=(s.aff&&s.aff[g.key])||0; return v<g.val?{locked:true,reason:"好感度 "+AFF[g.key].label+" "+g.val}:{locked:false}; }
   if(node.minLv && (s.lv||1)<node.minLv) return {locked:true,reason:"Lv."+node.minLv+" で解放"};
@@ -548,6 +606,223 @@ const SCENES=[
       {kind:"build",prompt:"並べて：『お弁当を温めてください。』",target:["お弁当を","温めて","ください"],pool:["お弁当を","温めて","ください","冷やして"]},
       {kind:"translate",prompt:"用日文說：「我要用卡付款。」",model:"カードで払います。",notes:"〜で＝手段；払う（はらう）＝付款。"},
     ]},
+
+  /* ============ A1 基礎文型バッチ ============ */
+  { id:"a1-jikoshoukai", stage:"学生編", domain:"育", cefr:"A1", cost:15, aff:["tomo"],
+    title:"自己紹介", sub:"Introducing yourself", setting:"入学初日。教室で、隣の人に自己紹介する。",
+    grammar:{point:"〜は〜です",gloss:"X 是 Y（最基本的丁寧斷定）",example:"私は学生です。"},
+    teach:[
+      {jp:"私",reading:"わたし",meaning:"我"},{jp:"名前",reading:"なまえ",meaning:"名字"},
+      {jp:"学生",reading:"がくせい",meaning:"學生"},{jp:"〜です",reading:"〜です",meaning:"是〜（丁寧斷定）"},
+      {jp:"はじめまして",reading:"はじめまして",meaning:"初次見面"},{jp:"よろしくお願いします",reading:"よろしくおねがいします",meaning:"請多指教"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「私」は？",answer:"我",choices:["我","你","他","我們"]},
+      {kind:"mc",prompt:"「学生」は？",answer:"學生",choices:["學生","老師","醫生","上班族"]},
+      {kind:"mc",prompt:"初めて会った人への挨拶は？",answer:"はじめまして",choices:["はじめまして","おやすみなさい","ただいま","いただきます"]},
+      {kind:"cloze",prompt:"私は田中＿＿。（是）",answer:"です",choices:["です","ます","でした","ました"]},
+      {kind:"cloze",prompt:"＿＿は何ですか。（名字）",answer:"名前",choices:["名前","学生","私","先生"]},
+      {kind:"build",prompt:"並べて：『私は学生です。』",target:["私は","学生","です"],pool:["私は","学生","です","でした"]},
+      {kind:"dictation",jp:"わたし",accept:["わたし"],hint:"我（ひらがな）"},
+      {kind:"translate",prompt:"用日文說：「我是學生。」",model:"私は学生です。",notes:"〜は〜です＝X 是 Y。"},
+    ]},
+  { id:"a1-kore", stage:"学生編", domain:"楽", cefr:"A1", cost:15, aff:["tomo"],
+    title:"これは何？", sub:"This and that", setting:"昼休み。友達の持ち物を見て、名前をたずねる。",
+    grammar:{point:"これ／それ／あれ＋は〜です",gloss:"近我／近你／遠處的指示詞",example:"これは本です。"},
+    teach:[
+      {jp:"これ",reading:"これ",meaning:"這個（靠近我）"},{jp:"それ",reading:"それ",meaning:"那個（靠近你）"},
+      {jp:"あれ",reading:"あれ",meaning:"那個（離兩人都遠）"},{jp:"何",reading:"なに",meaning:"什麼"},
+      {jp:"本",reading:"ほん",meaning:"書"},{jp:"かばん",reading:"かばん",meaning:"包包"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"自分に近い物を指すのは？",answer:"これ",choices:["これ","それ","あれ","どれ"]},
+      {kind:"mc",prompt:"相手に近い物を指すのは？",answer:"それ",choices:["それ","これ","あれ","どこ"]},
+      {kind:"mc",prompt:"「本」は？",answer:"書",choices:["書","包包","筆","桌子"]},
+      {kind:"cloze",prompt:"＿＿は何ですか。（這個）",answer:"これ",choices:["これ","そこ","あそこ","だれ"]},
+      {kind:"cloze",prompt:"それは＿＿です。（書）",answer:"本",choices:["本","かばん","私","学生"]},
+      {kind:"build",prompt:"並べて：『これは本です。』",target:["これは","本","です"],pool:["これは","本","です","でした"]},
+      {kind:"mc",prompt:"離れた所の物を指すのは？",answer:"あれ",choices:["あれ","これ","それ","この"]},
+      {kind:"translate",prompt:"用日文問：「那個（遠）是什麼？」",model:"あれは何ですか。",notes:"あれ＝離雙方都遠的「那個」。"},
+    ]},
+  { id:"a1-deha", stage:"学生編", domain:"食", cefr:"A1", cost:15, aff:["ten"],
+    title:"これは違います", sub:"It's not that", setting:"カフェで、出てきた飲み物を確認する。",
+    grammar:{point:"〜は〜じゃありません",gloss:"「です」的否定（不是〜）",example:"これはお茶じゃありません。"},
+    teach:[
+      {jp:"じゃありません",reading:"じゃありません",meaning:"不是（です的口語否定）"},{jp:"ではありません",reading:"ではありません",meaning:"不是（鄭重否定）"},
+      {jp:"違います",reading:"ちがいます",meaning:"不對／不是"},{jp:"お茶",reading:"おちゃ",meaning:"茶"},
+      {jp:"コーヒー",reading:"コーヒー",meaning:"咖啡"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「違います」は？",answer:"不對／不是",choices:["不對／不是","對","謝謝","請稍候"]},
+      {kind:"mc",prompt:"「です」の否定（口語）は？",answer:"じゃありません",choices:["じゃありません","でした","ましょう","たいです"]},
+      {kind:"cloze",prompt:"これはコーヒー＿＿。お茶です。（不是）",answer:"じゃありません",choices:["じゃありません","です","でした","ました"]},
+      {kind:"cloze",prompt:"「お茶ですか」「いいえ、＿＿」（不是）",answer:"違います",choices:["違います","そうです","お願いします","いただきます"]},
+      {kind:"build",prompt:"並べて：『これはお茶じゃありません。』",target:["これは","お茶","じゃありません"],pool:["これは","お茶","じゃありません","です"]},
+      {kind:"mc",prompt:"より丁寧な否定は？",answer:"ではありません",choices:["ではありません","じゃないよ","違うよ","ない"]},
+      {kind:"dictation",jp:"おちゃ",accept:["おちゃ"],hint:"茶（ひらがな）"},
+      {kind:"translate",prompt:"用日文說：「我不是學生。」",model:"私は学生じゃありません。",notes:"〜じゃありません＝不是〜。"},
+    ]},
+  { id:"a1-aru", stage:"学生編", domain:"住", cefr:"A1", cost:15, aff:[],
+    title:"部屋に何がある", sub:"There is / there are", setting:"夜。自分の部屋にある物を説明する。",
+    grammar:{point:"〜が あります／います",gloss:"存在：無生命=あります、生物=います",example:"部屋に猫がいます。"},
+    teach:[
+      {jp:"あります",reading:"あります",meaning:"有（無生命物）"},{jp:"います",reading:"います",meaning:"有／在（人・動物）"},
+      {jp:"机",reading:"つくえ",meaning:"桌子"},{jp:"椅子",reading:"いす",meaning:"椅子"},
+      {jp:"猫",reading:"ねこ",meaning:"貓"},{jp:"部屋",reading:"へや",meaning:"房間"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"無生命の物の存在は？",answer:"あります",choices:["あります","います","です","ました"]},
+      {kind:"mc",prompt:"人や動物の存在は？",answer:"います",choices:["います","あります","です","たいです"]},
+      {kind:"mc",prompt:"「机」は？",answer:"桌子",choices:["桌子","椅子","貓","房間"]},
+      {kind:"cloze",prompt:"部屋に猫が＿＿。（在・生物）",answer:"います",choices:["います","あります","です","ません"]},
+      {kind:"cloze",prompt:"机の上に本が＿＿。（有・無生命）",answer:"あります",choices:["あります","います","です","ました"]},
+      {kind:"build",prompt:"並べて：『部屋に椅子があります。』",target:["部屋に","椅子が","あります"],pool:["部屋に","椅子が","あります","います"]},
+      {kind:"dictation",jp:"ねこ",accept:["ねこ"],hint:"貓（ひらがな）"},
+      {kind:"translate",prompt:"用日文說：「房間裡有貓。」",model:"部屋に猫がいます。",notes:"生物用います。"},
+    ]},
+  { id:"a1-masu", stage:"学生編", domain:"行", cefr:"A1", cost:15, aff:[],
+    title:"朝のルーティン", sub:"Daily verbs (-masu)", setting:"毎朝のすること。動詞のます形で言う。",
+    grammar:{point:"〜を＋動詞ます",gloss:"丁寧形の動詞＋目的語助詞を",example:"パンを食べます。"},
+    teach:[
+      {jp:"起きます",reading:"おきます",meaning:"起床"},{jp:"食べます",reading:"たべます",meaning:"吃"},
+      {jp:"行きます",reading:"いきます",meaning:"去"},{jp:"飲みます",reading:"のみます",meaning:"喝"},
+      {jp:"〜を",reading:"〜を",meaning:"目的語助詞（受詞）"},{jp:"毎朝",reading:"まいあさ",meaning:"每天早上"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「食べます」は？",answer:"吃",choices:["吃","喝","睡","去"]},
+      {kind:"mc",prompt:"「起きます」は？",answer:"起床",choices:["起床","睡覺","出門","回家"]},
+      {kind:"cloze",prompt:"ご飯＿＿食べます。（受詞）",answer:"を",choices:["を","は","に","で"]},
+      {kind:"cloze",prompt:"毎朝7時に＿＿。（起床）",answer:"起きます",choices:["起きます","食べます","行きます","飲みます"]},
+      {kind:"build",prompt:"並べて：『パンを食べます。』",target:["パンを","食べ","ます"],pool:["パンを","食べ","ます","ました"]},
+      {kind:"mc",prompt:"「飲みます」は？",answer:"喝",choices:["喝","吃","看","聽"]},
+      {kind:"dictation",jp:"たべます",accept:["たべます"],hint:"吃（ます形）"},
+      {kind:"translate",prompt:"用日文說：「我喝咖啡。」",model:"コーヒーを飲みます。",notes:"〜を＝受詞助詞。"},
+    ]},
+  { id:"a1-mashita", stage:"学生編", domain:"楽", cefr:"A1", cost:15, aff:["tomo"],
+    title:"昨日のこと", sub:"Past tense (-mashita)", setting:"友達に、昨日したことを話す。",
+    grammar:{point:"〜ました／〜ませんでした",gloss:"丁寧形の過去・過去否定",example:"昨日、映画を見ました。"},
+    teach:[
+      {jp:"〜ました",reading:"〜ました",meaning:"做了（過去）"},{jp:"〜ませんでした",reading:"〜ませんでした",meaning:"沒做（過去否定）"},
+      {jp:"昨日",reading:"きのう",meaning:"昨天"},{jp:"今日",reading:"きょう",meaning:"今天"},
+      {jp:"見ます",reading:"みます",meaning:"看"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「〜ました」が表すのは？",answer:"過去（做了）",choices:["過去（做了）","未來","現在進行","現在否定"]},
+      {kind:"mc",prompt:"「ませんでした」が表すのは？",answer:"過去否定（沒做）",choices:["過去否定（沒做）","過去肯定","現在肯定","邀約"]},
+      {kind:"cloze",prompt:"昨日、映画を見＿＿。（看了）",answer:"ました",choices:["ました","ます","ません","ましょう"]},
+      {kind:"cloze",prompt:"昨日は何も食べ＿＿。（沒吃）",answer:"ませんでした",choices:["ませんでした","ました","ます","たい"]},
+      {kind:"build",prompt:"並べて：『昨日、本を読みました。』",target:["昨日","本を","読みました"],pool:["昨日","本を","読みました","読みます"]},
+      {kind:"mc",prompt:"「昨日」は？",answer:"昨天",choices:["昨天","今天","明天","後天"]},
+      {kind:"dictation",jp:"きのう",accept:["きのう"],hint:"昨天（ひらがな）"},
+      {kind:"translate",prompt:"用日文說：「我昨天看了電影。」",model:"昨日、映画を見ました。",notes:"〜ました＝過去。"},
+    ]},
+  { id:"a1-iadj", stage:"学生編", domain:"衣", cefr:"A1", cost:15, aff:["ten"],
+    title:"どんな服？", sub:"i-adjectives", setting:"服屋で、服の感想を言う。",
+    grammar:{point:"い形容詞＋です／〜くないです",gloss:"い形容詞的肯定與否定",example:"このかばんは新しいです。"},
+    teach:[
+      {jp:"大きい",reading:"おおきい",meaning:"大"},{jp:"小さい",reading:"ちいさい",meaning:"小"},
+      {jp:"新しい",reading:"あたらしい",meaning:"新"},{jp:"古い",reading:"ふるい",meaning:"舊"},
+      {jp:"〜くないです",reading:"〜くないです",meaning:"不〜（い形容詞否定）"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「大きい」は？",answer:"大",choices:["大","小","新","舊"]},
+      {kind:"mc",prompt:"「新しい」は？",answer:"新",choices:["新","舊","貴","便宜"]},
+      {kind:"cloze",prompt:"この服は＿＿です。（大）",answer:"大きい",choices:["大きい","小さい","静か","便利"]},
+      {kind:"cloze",prompt:"この本は新し＿＿です。（不新）",answer:"くない",choices:["くない","じゃない","ない","くて"]},
+      {kind:"build",prompt:"並べて：『小さいかばんです。』",target:["小さい","かばん","です"],pool:["小さい","かばん","です","な"]},
+      {kind:"mc",prompt:"い形容詞の否定の形は？",answer:"〜くないです",choices:["〜くないです","〜じゃないです","〜なです","〜ません"]},
+      {kind:"dictation",jp:"おおきい",accept:["おおきい"],hint:"大（ひらがな）"},
+      {kind:"translate",prompt:"用日文說：「這個包包很新。」",model:"このかばんは新しいです。",notes:"い形容詞直接＋です。"},
+    ]},
+  { id:"a1-naadj", stage:"学生編", domain:"住", cefr:"A1", cost:15, aff:[],
+    title:"どんな町？", sub:"na-adjectives", setting:"住んでいる町について話す。",
+    grammar:{point:"な形容詞＋です／名詞の前は〜な",gloss:"な形容詞的用法",example:"きれいな部屋です。"},
+    teach:[
+      {jp:"静か",reading:"しずか",meaning:"安靜"},{jp:"にぎやか",reading:"にぎやか",meaning:"熱鬧"},
+      {jp:"きれい",reading:"きれい",meaning:"漂亮／乾淨"},{jp:"便利",reading:"べんり",meaning:"方便"},
+      {jp:"〜じゃないです",reading:"〜じゃないです",meaning:"不〜（な形容詞否定）"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「静か」は？",answer:"安靜",choices:["安靜","熱鬧","方便","危險"]},
+      {kind:"mc",prompt:"「便利」は？",answer:"方便",choices:["方便","不便","漂亮","安靜"]},
+      {kind:"cloze",prompt:"この町は＿＿です。（熱鬧）",answer:"にぎやか",choices:["にぎやか","大きい","新しい","小さい"]},
+      {kind:"cloze",prompt:"ここは静か＿＿です。（不安靜）",answer:"じゃない",choices:["じゃない","くない","ない","では"]},
+      {kind:"build",prompt:"並べて：『きれいな部屋です。』",target:["きれいな","部屋","です"],pool:["きれいな","部屋","です","い"]},
+      {kind:"mc",prompt:"な形容詞＋名詞の正しい形は？",answer:"きれいな部屋",choices:["きれいな部屋","きれい部屋","きれいの部屋","きれく部屋"]},
+      {kind:"dictation",jp:"しずか",accept:["しずか"],hint:"安靜（ひらがな）"},
+      {kind:"translate",prompt:"用日文說：「這個城市很方便。」",model:"この町は便利です。",notes:"な形容詞＋です；接名詞時用〜な。"},
+    ]},
+  { id:"a1-tai", stage:"学生編", domain:"食", cefr:"A1", cost:15, aff:["ten"],
+    title:"何が食べたい？", sub:"Want to (-tai)", setting:"お昼、何が食べたいかを言う。",
+    grammar:{point:"ます形＋たいです",gloss:"想做〜（願望）",example:"ラーメンが食べたいです。"},
+    teach:[
+      {jp:"食べたい",reading:"たべたい",meaning:"想吃"},{jp:"飲みたい",reading:"のみたい",meaning:"想喝"},
+      {jp:"行きたい",reading:"いきたい",meaning:"想去"},{jp:"〜が",reading:"〜が",meaning:"願望對象常用が"},
+      {jp:"何",reading:"なに",meaning:"什麼"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「食べたい」は？",answer:"想吃",choices:["想吃","吃了","在吃","不吃"]},
+      {kind:"cloze",prompt:"お昼は何が食べ＿＿ですか。（想）",answer:"たい",choices:["たい","ます","ました","ない"]},
+      {kind:"cloze",prompt:"日本へ行き＿＿です。（想去）",answer:"たい",choices:["たい","ます","ました","ません"]},
+      {kind:"mc",prompt:"「飲みたい」は？",answer:"想喝",choices:["想喝","喝了","別喝","在喝"]},
+      {kind:"build",prompt:"並べて：『ラーメンが食べたいです。』",target:["ラーメンが","食べたい","です"],pool:["ラーメンが","食べたい","です","ました"]},
+      {kind:"mc",prompt:"「〜たい」が表すのは？",answer:"願望（想做）",choices:["願望（想做）","過去","命令","邀約"]},
+      {kind:"dictation",jp:"たべたい",accept:["たべたい"],hint:"想吃（ひらがな）"},
+      {kind:"translate",prompt:"用日文說：「我想喝咖啡。」",model:"コーヒーが飲みたいです。",notes:"ます形去ます＋たいです。"},
+    ]},
+  { id:"a1-mashou", stage:"学生編", domain:"楽", cefr:"A1", cost:15, aff:["tomo"],
+    title:"一緒にどう？", sub:"Let's / shall we", setting:"友達を、丁寧に誘ってみる。",
+    grammar:{point:"〜ましょう／〜ませんか",gloss:"邀約：一起～吧／要不要～",example:"一緒に行きましょう。"},
+    teach:[
+      {jp:"〜ましょう",reading:"〜ましょう",meaning:"一起～吧"},{jp:"〜ませんか",reading:"〜ませんか",meaning:"要不要～（禮貌邀約）"},
+      {jp:"一緒に",reading:"いっしょに",meaning:"一起"},{jp:"行きましょう",reading:"いきましょう",meaning:"一起去吧"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「〜ましょう」は？",answer:"一起～吧",choices:["一起～吧","做了","不做","想做"]},
+      {kind:"mc",prompt:"丁寧に誘う「〜ませんか」は？",answer:"要不要～",choices:["要不要～","不要～","做完了","正在做"]},
+      {kind:"cloze",prompt:"一緒にお茶を飲み＿＿。（～吧）",answer:"ましょう",choices:["ましょう","ました","たい","ません"]},
+      {kind:"cloze",prompt:"映画を見＿＿か。（要不要）",answer:"ません",choices:["ません","ました","ましょ","たい"]},
+      {kind:"build",prompt:"並べて：『一緒に行きましょう。』",target:["一緒に","行き","ましょう"],pool:["一緒に","行き","ましょう","ました"]},
+      {kind:"mc",prompt:"「行きましょう」は？",answer:"一起去吧",choices:["一起去吧","去了","不去","想去"]},
+      {kind:"translate",prompt:"用日文說：「一起吃午餐吧。」",model:"一緒にお昼を食べましょう。",notes:"ます形→ましょう＝勸誘。"},
+      {kind:"dictation",jp:"いっしょに",accept:["いっしょに"],hint:"一起（ひらがな）"},
+    ]},
+  { id:"a1-counter", stage:"学生編", domain:"食", cefr:"A1", cost:15, aff:["ten"],
+    title:"いくつ買う？", sub:"Counters", setting:"店で、個数を言って買う。",
+    grammar:{point:"数＋助数詞",gloss:"ひとつ・ふたつ／〜個・〜人・〜枚",example:"りんごをふたつください。"},
+    teach:[
+      {jp:"ひとつ",reading:"ひとつ",meaning:"一個"},{jp:"ふたつ",reading:"ふたつ",meaning:"兩個"},
+      {jp:"〜個",reading:"〜こ",meaning:"〜個（小東西）"},{jp:"〜人",reading:"〜にん",meaning:"〜人"},
+      {jp:"〜枚",reading:"〜まい",meaning:"〜張／片（薄物）"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「ひとつ」は？",answer:"一個",choices:["一個","兩個","三個","一人"]},
+      {kind:"mc",prompt:"紙やシャツを数える助数詞は？",answer:"〜枚",choices:["〜枚","〜個","〜人","〜本"]},
+      {kind:"mc",prompt:"人を数える助数詞は？",answer:"〜人",choices:["〜人","〜枚","〜個","〜本"]},
+      {kind:"cloze",prompt:"りんごを＿＿ください。（兩個）",answer:"ふたつ",choices:["ふたつ","ひとつ","ふたり","にまい"]},
+      {kind:"cloze",prompt:"切符を2＿＿ください。（張）",answer:"枚",choices:["枚","個","人","本"]},
+      {kind:"mc",prompt:"「ふたつ」は？",answer:"兩個",choices:["兩個","一個","二人","二樓"]},
+      {kind:"dictation",jp:"ひとつ",accept:["ひとつ"],hint:"一個（ひらがな）"},
+      {kind:"translate",prompt:"用日文說：「請給我一個。」",model:"ひとつください。",notes:"和語数詞 ひとつ／ふたつ。"},
+    ]},
+  { id:"a1-jikan", stage:"学生編", domain:"行", cefr:"A1", cost:15, aff:[],
+    title:"何時に起きる？", sub:"Telling time", setting:"朝。起きる時間や予定の時刻を言う。",
+    grammar:{point:"時間＋に〜ます",gloss:"時間點後加助詞に",example:"7時に起きます。"},
+    teach:[
+      {jp:"〜時",reading:"〜じ",meaning:"〜點（鐘）"},{jp:"〜に",reading:"〜に",meaning:"在（時間點）"},
+      {jp:"朝",reading:"あさ",meaning:"早上"},{jp:"何時",reading:"なんじ",meaning:"幾點"},
+      {jp:"起きます",reading:"おきます",meaning:"起床"},
+    ],
+    quiz:[
+      {kind:"mc",prompt:"「何時」は？",answer:"幾點",choices:["幾點","幾個","哪裡","誰"]},
+      {kind:"cloze",prompt:"7時＿＿起きます。（時間點）",answer:"に",choices:["に","を","は","で"]},
+      {kind:"cloze",prompt:"毎朝、何＿＿に起きますか。（點）",answer:"時",choices:["時","分","人","枚"]},
+      {kind:"mc",prompt:"「朝」は？",answer:"早上",choices:["早上","晚上","中午","半夜"]},
+      {kind:"build",prompt:"並べて：『8時に行きます。』",target:["8時に","行き","ます"],pool:["8時に","行き","ます","ました"]},
+      {kind:"mc",prompt:"時刻の後につく助詞は？",answer:"に",choices:["に","を","へ","も"]},
+      {kind:"dictation",jp:"あさ",accept:["あさ"],hint:"早上（ひらがな）"},
+      {kind:"translate",prompt:"用日文說：「我七點起床。」",model:"7時に起きます。",notes:"時間點＋に。"},
+    ]},
 ];
 /*DATA_END*/
 
@@ -595,17 +870,18 @@ function sampleCards(lessonIds,n){
   return shuffle(pool).slice(0,n).map(id=>({...CARD_INDEX[id],_id:id}));
 }
 function freshSave(){
-  return { name:"あなた", lv:1, xp:0, gold:60, day:1, slot:0, energy:100, phase:"学生", justPromoted:false,
+  return { name:"あなた", lv:1, xp:0, gold:60, dayIdx:0, slot:0, energy:100, seenJob:false, showJob:false,
     done:{}, srs:{}, codex:{}, aff:{}, inv:{}, created:Date.now() };
 }
 function normalize(s){
   if(!s) return s;
   s.done=s.done||{}; s.srs=s.srs||{}; s.codex=s.codex||{}; s.aff=s.aff||{}; s.inv=s.inv||{};
   if(typeof s.gold!=="number")s.gold=0; if(typeof s.lv!=="number")s.lv=1; if(typeof s.xp!=="number")s.xp=0;
-  if(typeof s.day!=="number")s.day=1; if(typeof s.slot!=="number")s.slot=0;
+  if(typeof s.dayIdx!=="number")s.dayIdx=(typeof s.day==="number"?s.day-1:0); if(s.dayIdx<0)s.dayIdx=0;
+  if(typeof s.slot!=="number")s.slot=0;
   if(typeof s.energy!=="number")s.energy=100;
-  if(s.phase!=="社会人")s.phase="学生";
-  if(typeof s.justPromoted!=="boolean")s.justPromoted=false;
+  if(typeof s.seenJob!=="boolean")s.seenJob=false;
+  if(typeof s.showJob!=="boolean")s.showJob=false;
   if(!s.name)s.name="あなた";
   return s;
 }
@@ -897,6 +1173,17 @@ function Scene({node,save,update,onDone,onBack}){
           </div>
           <div className="mincho" style={{fontSize:14.5,lineHeight:1.8,color:"var(--ink)"}}>{node.setting}</div>
         </div>
+        {(() => { const g=node.grammar||GRAMMAR[node.id]; if(!g)return null; return (
+          <div className="card fade" style={{padding:16,marginBottom:14,border:"1px solid rgba(232,198,107,.45)",background:"linear-gradient(180deg,rgba(232,198,107,.08),var(--bg2))"}}>
+            <div className="eyebrow" style={{marginBottom:8,color:"var(--gold)"}}>📌 今日の文型</div>
+            <div className="brush" style={{fontSize:20}}>{g.point}</div>
+            <div className="mincho" style={{fontSize:13,color:"var(--muted)",marginTop:4}}>{g.gloss}</div>
+            {g.example&&<div style={{marginTop:10,paddingTop:10,borderTop:"1px solid var(--line)",display:"flex",alignItems:"center",justifyContent:"space-between",gap:10}}>
+              <span className="mincho" style={{fontSize:15}}>{g.example}</span>
+              <button className="btn-dark" onClick={()=>speak(g.example)} style={{width:32,height:32,borderRadius:9,display:"flex",alignItems:"center",justifyContent:"center",border:"1px solid var(--line)",cursor:"pointer",flex:"none"}}><Volume2 size={14}/></button>
+            </div>}
+          </div>
+        ); })()}
         {node.reading&&node.passage&&(
           <div className="card fade" style={{padding:18,marginBottom:14}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
@@ -1057,6 +1344,7 @@ function ActionCard({node,save,onPick}){
   const lk=actionLock(node,save);
   const done=!!(save.done||{})[node.id];
   const locked=lk.locked;
+  const g=node.grammar||GRAMMAR[node.id];
   return (
     <button disabled={locked} onClick={()=>onPick(node)} className="card"
       style={{padding:14,display:"flex",alignItems:"center",gap:13,textAlign:"left",cursor:locked?"default":"pointer",width:"100%",
@@ -1074,6 +1362,7 @@ function ActionCard({node,save,onPick}){
           {done&&!locked&&<Check size={14} color="var(--good)"/>}
           <span style={{fontWeight:700,fontSize:15}} className="brush">{node.title}</span>
         </div>
+        {g&&!locked&&<div style={{fontSize:11.5,color:"var(--gold)",marginTop:3}}>📌 {g.point}</div>}
         <div className="eyebrow" style={{marginTop:3}}>{node.sub}</div>
         {locked&&<div style={{fontSize:11,color:"var(--hp)",marginTop:4}}>🔒 {lk.reason}</div>}
       </div>
@@ -1087,29 +1376,30 @@ function ActionCard({node,save,onPick}){
 function DayView({save,update,onPick}){
   const energy=save.energy||0;
   const slot=(save.slot||0);
-  const phase=save.phase||"学生";
+  const idx=clamp(save.dayIdx||0,0,DAYS.length);
+  const finishedAll = idx>=DAYS.length;
+  const day = finishedAll ? null : DAYS[idx];
+  const stage = day ? day.stage : "社会人";
   const affKeys=Object.keys(save.aff||{}).filter(k=>AFF[k]&&(save.aff[k]||0)>0);
   const ownedItems=ITEMS.filter(it=>(save.inv[it.id]||0)>0);
-  const sdc=studentDoneCount(save);
   function useItem(it){ update(s=>({...s, energy:clamp((s.energy||0)+it.heal,0,100), inv:{...s.inv,[it.id]:(s.inv[it.id]||0)-1}})); }
   function rest(){ update(s=>({...s, energy:clamp((s.energy||0)+30,0,100), slot:(s.slot||0)+1})); }
   function nextDay(){ update(s=>{
-    let ph=s.phase||"学生", promoted=false;
-    if(ph==="学生" && studentDoneCount(s)>=PROMOTE_AT){ ph="社会人"; promoted=true; }
-    return {...s, day:(s.day||1)+1, slot:0, energy:100, phase:ph, justPromoted:promoted||s.justPromoted};
+    const cur=clamp(s.dayIdx||0,0,DAYS.length); const nxt=cur+1;
+    const crossing = DAYS[nxt] && DAYS[nxt].stage==="社会人" && (!DAYS[cur]||DAYS[cur].stage==="学生") && !s.seenJob;
+    return {...s, dayIdx:nxt, slot:0, energy:100, showJob:crossing?true:s.showJob, seenJob:s.seenJob||crossing};
   }); }
-  function clearBanner(){ update(s=>({...s, justPromoted:false})); }
+  function clearBanner(){ update(s=>({...s, showJob:false})); }
 
   const Header=(
     <div className="card" style={{padding:14,marginBottom:14}}>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
-        <span style={{display:"flex",alignItems:"center",gap:8}}><Calendar size={16} color="var(--gold)"/><b>{save.day||1} 日目</b><span className="badge">{phase}編</span></span>
-        <span style={{display:"flex",gap:5,alignItems:"center"}}>{SLOT_NAMES.map((sl,n)=>(
-          <span key={n} style={{fontSize:13,opacity:n<Math.min(slot,4)?1:(n===slot?1:.3),filter:n<Math.min(slot,4)?"grayscale(0)":"none"}}>
-            <span style={{color:n<slot?"var(--gold)":(n===slot?"var(--ink)":"var(--muted)"),fontWeight:n===slot?800:400,fontSize:12}}>{SLOT_ICON[sl]}</span>
-          </span>
-        ))}</span>
+        <span style={{display:"flex",alignItems:"center",gap:8}}><Calendar size={16} color="var(--gold)"/><b>{day?day.label:"完"}</b><span className="badge">{stage}編</span></span>
+        {day&&<span style={{display:"flex",gap:6,alignItems:"center"}}>{SLOT_NAMES.map((sl,n)=>(
+          <span key={n} style={{color:n<slot?"var(--gold)":(n===slot?"var(--ink)":"var(--muted)"),fontWeight:n===slot?800:400,fontSize:13}}>{SLOT_ICON[sl]}</span>
+        ))}</span>}
       </div>
+      {day&&<div className="eyebrow" style={{marginBottom:10}}>{day.theme}</div>}
       <div style={{display:"flex",alignItems:"center",gap:8}}>
         <Heart size={15} color="var(--hp)"/>
         <div className="bar" style={{flex:1}}><i className="enf" style={{width:energy+"%"}}/></div>
@@ -1131,17 +1421,27 @@ function DayView({save,update,onPick}){
     </div>
   );
 
-  // day-end summary
+  if(finishedAll){
+    return (
+      <div style={{padding:"4px 16px 24px"}}>
+        {Header}
+        <div className="card fade" style={{padding:24,textAlign:"center"}}>
+          <div style={{fontSize:46}}>🎓</div>
+          <div className="brush glint" style={{fontSize:24,marginTop:8}}>ここまで、おつかれさま</div>
+          <div className="mincho" style={{color:"var(--muted)",marginTop:10,fontSize:13.5,lineHeight:1.7}}>今ある日々はすべて生き抜いた。続きの日々は今後の更新で増えていく。<br/>それまでは「復習」で言葉を定着させよう。</div>
+        </div>
+      </div>
+    );
+  }
+
   if(slot>=4){
     return (
       <div style={{padding:"4px 16px 24px"}}>
         {Header}
         <div className="card fade" style={{padding:22,textAlign:"center"}}>
           <div style={{fontSize:44}}>🌙</div>
-          <div className="brush glint" style={{fontSize:24,marginTop:6}}>{save.day||1} 日目、おつかれさま</div>
-          <div className="mincho" style={{color:"var(--muted)",marginTop:8,fontSize:13.5,lineHeight:1.7}}>
-            今日も一日を生き抜いた。{phase==="学生"&&sdc<PROMOTE_AT?<><br/>学生編の場面をあと {Math.max(0,PROMOTE_AT-sdc)} つこなすと、就職して社会人編へ。</>:null}
-          </div>
+          <div className="brush glint" style={{fontSize:24,marginTop:6}}>{day.label}、おつかれさま</div>
+          <div className="mincho" style={{color:"var(--muted)",marginTop:8,fontSize:13.5,lineHeight:1.7}}>今日も一日を生き抜いた。{DAYS[idx+1]?<><br/>明日は「{DAYS[idx+1].theme}」。</>:<><br/>これが今ある最後の一日。</>}</div>
           <button className="btn" style={{marginTop:18,minWidth:200}} onClick={nextDay}>🌅 翌日へ（体力全回復）</button>
         </div>
       </div>
@@ -1149,13 +1449,13 @@ function DayView({save,update,onPick}){
   }
 
   const slotName=SLOT_NAMES[slot];
-  const flow=DAYFLOW[phase][slotName];
+  const flow=day.slots[slotName];
   const actions=flow.actions.map(sceneById).filter(Boolean);
 
   return (
     <div style={{padding:"4px 16px 24px"}}>
       {Header}
-      {save.justPromoted&&(
+      {save.showJob&&(
         <div className="card fade" style={{padding:16,marginBottom:14,border:"1px solid var(--gold)",background:"linear-gradient(180deg,rgba(232,198,107,.12),var(--bg2))"}}>
           <div className="brush glint" style={{fontSize:18}}>🎉 就職おめでとう</div>
           <div style={{fontSize:13,color:"var(--muted)",marginTop:6,lineHeight:1.6}}>学生生活を終え、社会人編へ。ここから敬語・ビジネス場面が中心になる。</div>
