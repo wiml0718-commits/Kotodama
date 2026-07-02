@@ -3,6 +3,26 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<meta name="theme-color" content="#0e0b1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="言ノ葉日記">
+<link rel="apple-touch-icon" id="ati" href="">
+<link rel="icon" id="fav" href="">
+<link rel="manifest" id="man" href="">
+<script>
+(function(){
+  var ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAJJUlEQVR42u2dfVAU5x3Hd/fewbvj7eRF5CXI6xFE8M4DzOEpUYMxI001Fe1ozbTUxCBqUg0dFEW02opvIJI4ZjJpfGlw1MbEJimtxBlHak01qdOWpMWo+IKiJb7wdi/9A6dDAOHg9nb32f1+hj9gOdjleT78fr+952VpnW8YBcBAMGgCADkA5ACQA0AOADkA5ACQA0AOIHbkvJy18bM8NP1wiXv2KMdnpDl7+xxCECeK1+WAE+Ra4i054IQILGFghjjwRpuzHDncvETuayvpdD+LbcumHINfPYTgTBS2mpodOaCFKBVhQY4nXSKc4N0SD7uAgRkivlXxsEr1KHIMeG5oIbQQMuIeYWCG6EPIiOMHAzPgB5tywAyJ+MF472qAAEtU78rRX0CYQYofww0eDMyAH15JKzBD3PllGHJgrFUcuN+PzIh/I8KG6JMLw9b5gPiSC2afA8/kQLUhzcpjJJEDOUUimQVpBXggR5/4g7AhmuAxZGZB5ACQA0AOHlHIGWnJgYLDTRJj9Kfen/G8LVxMZQciBwsE+av2lmUYAtQVxabylWkalQxpBVAURamUsuoNGaEGTc+Xc5+LrK2cMi5SCzkAVb5ywvgE/95HYqN0R6psc56NgBySZml+/AvTxvY/rlHJtv4ivaxoglLBQA4pMuOZsKLFSYO84KVZUYd3Zo8N9YUc0sIY67d19USaHvplR/fYss0hkEMqGALU1estbt6V6EYpajZafj4/nrg/U07W5X709rTYKB15/4I0vXJJkjHWb/Wvzz9qtyNyeIXPz90iukZZtjABacVb1P+FVDmabz06+umVmkONSCve4uyF28m5x4kzw+Wiuu1O1Bxep6ubvFbGrSyAHIAl1CrZwe3WmdYxkAP0ZeOKCenJgbtKzGsKkmUyGnKAx/x4Tsz/B2WW/DD23a2TA/1UkANQ6cmBbxYk9z5iTgk6Vm3rM7oLOSSHIUC9q8Qs7zenMDhI836F9cUZkZBDosjlzO61ZkOAesDvKhXM5tfTSl5NEUgJAjk45ZdLn04zBg5Zjry7dXKAXgU5JMScnIgFLzzlzivNKUFCmGsIOTgiMUa/oSjV/deHh/gc3pmdlT6azyTIy1kVcuZsba7WVwFpBkHrq9hXnrm+8uKhE00Sihzdduefzt5E9w+JTEZvWJ4aPXaUtNLKJ6eb0feD09nluPCPu6W7LjRdfSChtEJRVN2ZGyQOvnOJ3e5yulySqzkoinK5MPgudHC3AiAHV6jFslAWcrDMvNyoD9+alvCUHnKA75Ec57922fjIMN8PdmfPfS4ScoDH+OmUu9eae1bGqpSy8pVpm19PIz3FQA42GpGmK4pNY4J9eh98cUbk4Z3Z4SE+kEPSLF+cOHmgQZDEGP3RPTarKRhySJSplpBB1sHqtcq3yjNeWRBP05BDYkSE+Q651p6h6aLFSVXrLD4aOeTwIjKGFs6Hj0ZetW6SbpRbY8s5WaG/I60EIczl43unxkXrCA0zcdG6I5W2wrKGhot3EDnYh9yF1D3465W7SibJCdmxlLgtGAieBXK3rfNUw81l6xvshCyqJiytNFy8g41yETkA5ACQA0AOybcmTW8vNuVOCRfHnyNHj7LIGz81zrKFz7KFm1OCNlV/Sfo8SEQO1vjB9IiX58b2fJ4/O5rovYshB5ukGQPLVkzofcQY63es2paTGQo5JE3YaJ+q0kn9n9Sk9VVUlVpWvWyUMTTkkCIatWxvmeVJ+/LQNFXwo7h3tmQJcOMeyOFdaJratsY05IxiS6rhWLXt6Xh/yOFFBDVkL2PoFT9Jyslyq6oIDtIc3G7Nm07SE3oIu5V9e1PmZF53JfAEpYLZ8kZ60ji/X9V85XC4EDlYpr6B+LX5i/JiZk8di7TiBTlIns9htzsvff3fmoONJ/58DWmFfS43P8CQPSIHgBwAcgDIASAHGIpVS4yWVAPk4I7EGD0RI1jLFiYUzI97Z0tWwfw4moYcnLD6Z8n1B2YuX5TYZz27oJiXG1W4KJGiKBlDr1pirCnL0GuVkIMLRgeqX12YUPfe9H3lmTlZoUJ7hk1OZuj65am9j0yZFELikBvBNQdD01Zz8J5Sy+cHZhYtThJIIEkzBlYUm/onvjHBPod2WN3c9RxysIYhQP3Kgvi696bv28RzIBkXqa3ZmPGkrXwUcmbda+Mrik1kLbQXwwRjhqatpmCrKfj23Y7aP3z7wcnLN1raubyAEINm/+Ys/VDL7Z+3hSfG6F/b0PDNt/chBw+BZGl+/NL8eMFeYUyE9kilrWTH335fdxVpBfRFo5b9Zs3E0sLUnt3lIAfoS/7s6EM7rEK+J6fEt6jp9t2OrJdOcn9ec0rQb7c9M6wf0WuVKqUMcoC+Bh/4sGl/7dftHQ7IAR7T3umYV1jf2NTmImAKKeTglu5u57/+00bMewToMAA5AOQAkANADgA5AOQAkANADgA5AOQAAHIAyAEgB4AcAHIAQSG2yT6GAHXjZ3noV0QOADkA0gor3Gvrmlt4ivvzjk8I2PbmRMghaOwO55XrD7k/b0iQBmkFoOYgFiLWgyCt8MP+2m8Ee22NTd9t238JcvDA5eYHZZVfnv6rsDZHd7mof1+5f/rcrY/rr1385z1EDk7ptjvPfNFy/I9XT9Y3O5y8JRW7w/Xdg26Kou4/7G5p7Whp7bh28+H5S63n/956r60LaYWrbrA7r7e0X295dO3mo3Nf3ak7c6OnV/jli0utE/NOoObgjYKSswxDdXY6nSg7hXC30uf5FfwOW3R2Odo7HDDDo6L4+z04+PNJ8D4HgBwAcgBO5RBU2QE4KzgQOQDbciB4iCBssCYHHsgoPtzpU6QVwLYcyCyizynDkKN/FIIf5JrhZp0wjMiBykM61QYLNQeCh1gTykjkQHKRSEIZYeSAHxIxg7VbWfghpmzikRwDCgg/BG7GCO4nRhg54IfozfAorcAPcZtBURSt8w3zRm7DmyICKTI86QhPC9InnRshhHQzWIgc7qiAKMLLLYnnzc6OHFBEZFqwL4f72QSiENG2LMuBgoNHWP+XY4i4SsBLm3slciCKEO0Ed3LAEnJjM3dyQBTikjU/cgAiwOxzADkA5ACQA0AOADkA5ACQA4iF/wGF+s06/nexIgAAAABJRU5ErkJggg==";
+  document.getElementById("ati").href=ICON;
+  document.getElementById("fav").href=ICON;
+  try{
+    var man={name:"言ノ葉日記 / Kotodama Life",short_name:"言ノ葉",display:"standalone",start_url:".",background_color:"#0e0b1a",theme_color:"#0e0b1a",icons:[{src:ICON,sizes:"180x180",type:"image/png"}]};
+    var blob=new Blob([JSON.stringify(man)],{type:"application/manifest+json"});
+    document.getElementById("man").href=URL.createObjectURL(blob);
+  }catch(e){}
+})();
+</script>
 <meta name="theme-color" content="#15101f" />
 <title>言ノ葉日記 — Kotodama Life</title>
 <script type="importmap">
@@ -104,7 +124,7 @@ if(typeof window!=="undefined"&&window.speechSynthesis){
   window.addEventListener("pointerdown",unlockTTS,{passive:true});
   window.addEventListener("touchstart",unlockTTS,{passive:true});
 }
-function speak(text){
+function speak(text,rate){
   try{
     const s=window.speechSynthesis; if(!s||!text)return;
     if(!JP_VOICE)pickVoice();
@@ -112,9 +132,16 @@ function speak(text){
     if(s.paused)s.resume();
     s.cancel();
     const u=new SpeechSynthesisUtterance(text);
-    u.lang="ja-JP"; u.rate=0.88; u.pitch=1.0;
+    u.lang="ja-JP"; u.rate=rate||0.88; u.pitch=1.0;
     if(JP_VOICE)u.voice=JP_VOICE; s.speak(u);
   }catch(e){}
+}
+function clozeTTS(card){
+  let p=String(card.prompt||"").replace(/（[^）]*）/g,"");
+  const ci=p.indexOf("："); if(ci>=0&&ci<14)p=p.slice(ci+1);
+  const ans=String(card.answer||"").replace(/（[^）]*）/g,"");
+  p=p.replace(/[＿_]+/g,ans);
+  return p.trim();
 }
 
 /* ===================== storage ===================== */
@@ -214,7 +241,7 @@ const DAYS=[
     "朝":{prompt:"朝。された側から言う。",actions:["b1-passive"]},
     "昼":{prompt:"昼。させる側から言う。",actions:["b1-causative"]},
     "夕":{prompt:"夕方。成長と変化を話す。",actions:["b1-youninaru"]},
-    "夜":{prompt:"夜。敬語の入り口。",actions:["b1-keigo"]},
+    "夜":{prompt:"夜。敬語の入り口。",actions:["b1-keigo","e-senpai"]},
   }},
   {id:"d13",label:"13日目",stage:"学生",theme:"論理の表現",slots:{
     "朝":{prompt:"朝。程度の比例を述べる。",actions:["b2-bahodo"]},
@@ -256,7 +283,7 @@ const DAYS=[
     "朝":{prompt:"朝。ドラッグストアで買い物。",actions:["theme2-drugstore"]},
     "昼":{prompt:"昼。スーパーのレジで会計。",actions:["theme2-checkout"]},
     "夕":{prompt:"夕方。クリーニングに出す。",actions:["theme2-cleaning"]},
-    "夜":{prompt:"夜。出前を注文する。",actions:["theme2-demae"]},
+    "夜":{prompt:"夜。出前を注文する。",actions:["theme2-demae","e-ten"]},
   }},
   {id:"d20",label:"20日目",stage:"実用",theme:"手続きと移動",slots:{
     "朝":{prompt:"朝。ホテルにチェックイン。",actions:["theme2-hotel"]},
@@ -280,7 +307,7 @@ const DAYS=[
     "朝":{prompt:"朝。出張へ出発。",actions:["w-trip"]},
     "昼":{prompt:"昼。先方とやりとり。",actions:["w-phone"]},
     "夕":{prompt:"夕方。事務処理。",actions:["w-mail"]},
-    "夜":{prompt:"夜。出張先の夜。",actions:["w-conbini","w-nomikai"]},
+    "夜":{prompt:"夜。出張先の夜。",actions:["w-conbini","w-nomikai","e-douryou"]},
   }},
   {id:"d24",label:"24日目",stage:"社会人",theme:"難しい一日",slots:{
     "朝":{prompt:"朝。報連相から。",actions:["w-morning","w-trip"]},
@@ -418,7 +445,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "東京＿＿の電車に乗る。（開往東京）",
+        "prompt": "東京＿＿の電車（でんしゃ）に乗る（のる）。（開往東京）",
         "answer": "行き（ゆき）",
         "choices": [
           "行き（ゆき）",
@@ -429,7 +456,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "次の駅で＿＿ます。（下車）",
+        "prompt": "次（つぎ）の駅（えき）で＿＿ます。（下車）",
         "answer": "降り",
         "choices": [
           "降り",
@@ -467,7 +494,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入助詞：次の電車＿＿乗ります。（搭乘）",
+        "prompt": "填入助詞：次（つぎ）の電車（でんしゃ）＿＿乗ります。（搭乘）",
         "answer": "に",
         "choices": [
           "に",
@@ -481,6 +508,18 @@ const SCENES=[
         "prompt": "用日文問：「下一班電車是幾點？」",
         "model": "次の電車は何時ですか。",
         "notes": "何時（なんじ）＝幾點。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "次は、桜大学前、桜大学前です。",
+        "cn": "（車內廣播）下一站，櫻大學前。",
+        "answer": "あ、降ります。すみません。",
+        "choices": [
+          "あ、降ります。すみません。",
+          "切符を二枚ください。",
+          "おかえりなさい。",
+          "いただきます。"
+        ]
       }
     ]
   },
@@ -607,7 +646,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "今日の＿＿を出してください。（作業）",
+        "prompt": "今日（きょう）の＿＿を出し（だし）てください。（作業）",
         "answer": "宿題（しゅくだい）",
         "choices": [
           "宿題（しゅくだい）",
@@ -618,7 +657,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "毎日きちんと＿＿します。（出席）",
+        "prompt": "毎日（まいにち）きちんと＿＿します。（出席）",
         "answer": "出席（しゅっせき）",
         "choices": [
           "出席（しゅっせき）",
@@ -629,7 +668,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入：質問して＿＿いいですか。（請求許可）",
+        "prompt": "填入：質問（しつもん）して＿＿いいですか。（請求許可）",
         "answer": "も",
         "choices": [
           "も",
@@ -640,7 +679,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入（過去）：すみません、遅れ＿＿。（遲到了）",
+        "prompt": "填入（過去）：すみません、遅れ（おくれ）＿＿。（遲到了）",
         "answer": "ました",
         "choices": [
           "ました",
@@ -668,6 +707,18 @@ const SCENES=[
         "prompt": "用日文說：「請再說一次。」",
         "model": "もう一度お願いします。",
         "notes": "もう一度＝再一次。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "何か質問はありますか。",
+        "cn": "（老師）有什麼問題嗎？",
+        "answer": "すみません、もう一度お願いします。",
+        "choices": [
+          "すみません、もう一度お願いします。",
+          "お先に失礼します。",
+          "ただいま。",
+          "おめでとうございます。"
+        ]
       }
     ]
   },
@@ -794,7 +845,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "全部で＿＿ですか。（多少錢）",
+        "prompt": "全部（ぜんぶ）で＿＿ですか。（多少錢）",
         "answer": "いくら",
         "choices": [
           "いくら",
@@ -805,7 +856,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "お＿＿お願いします。（結帳）",
+        "prompt": "お＿＿お願い（おねがい）します。（結帳）",
         "answer": "会計（かいけい）",
         "choices": [
           "会計（かいけい）",
@@ -852,6 +903,18 @@ const SCENES=[
         "prompt": "用日文說：「請幫我加熱。」",
         "model": "温めてください。",
         "notes": "て形＋ください＝請求。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "店内でお召し上がりですか。",
+        "cn": "請問內用嗎？",
+        "answer": "いいえ、持ち帰りでお願いします。",
+        "choices": [
+          "いいえ、持ち帰りでお願いします。",
+          "もう一度お願いします。",
+          "お先に失礼します。",
+          "いってらっしゃい。"
+        ]
       }
     ]
   },
@@ -978,7 +1041,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "もう少し＿＿のはありますか。（大一點）",
+        "prompt": "もう少し（すこし）＿＿のはありますか。（大一點）",
         "answer": "大きい（おおきい）",
         "choices": [
           "大きい（おおきい）",
@@ -989,7 +1052,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "この服は＿＿です。（貴）",
+        "prompt": "この服（ふく）は＿＿です。（貴）",
         "answer": "高い（たかい）",
         "choices": [
           "高い（たかい）",
@@ -1000,7 +1063,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入：試着して＿＿いいですか。（可以試穿嗎）",
+        "prompt": "填入：試着（しちゃく）して＿＿いいですか。（可以試穿嗎）",
         "answer": "も",
         "choices": [
           "も",
@@ -1011,7 +1074,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入：もう少し安い＿＿ありますか。（有便宜一點的嗎）",
+        "prompt": "填入：もう少し安い（やすい）＿＿ありますか。（有便宜一點的嗎）",
         "answer": "のは",
         "choices": [
           "のは",
@@ -1039,6 +1102,18 @@ const SCENES=[
         "prompt": "用日文問：「這個多少錢？」",
         "model": "これはいくらですか。",
         "notes": "いくら＝多少錢。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "ご試着なさいますか。",
+        "cn": "（店員）要試穿嗎？",
+        "answer": "はい、お願いします。",
+        "choices": [
+          "はい、お願いします。",
+          "はい、いただきます。",
+          "おやすみなさい。",
+          "いってきます。"
+        ]
       }
     ]
   },
@@ -1163,7 +1238,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "ゴミは＿＿してから出す。（分類）",
+        "prompt": "ゴミは＿＿してから出す（だす）。（分類）",
         "answer": "分別（ぶんべつ）",
         "choices": [
           "分別（ぶんべつ）",
@@ -1174,7 +1249,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "月曜＿＿に燃えるゴミを出す。（星期）",
+        "prompt": "月曜＿＿に燃えるゴミ（もえるゴミ）を出す（だす）。（星期）",
         "answer": "日",
         "choices": [
           "日",
@@ -1185,7 +1260,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "＿＿をなくして家に入れない。（鑰匙）",
+        "prompt": "＿＿をなくして家（いえ）に入れ（いれ）ない。（鑰匙）",
         "answer": "鍵（かぎ）",
         "choices": [
           "鍵（かぎ）",
@@ -1196,7 +1271,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入（て形）：ゴミを＿＿出します。（分類後丟出）",
+        "prompt": "填入（て形）：ゴミを＿＿出し（だし）ます。（分類後丟出）",
         "answer": "分別して",
         "choices": [
           "分別して",
@@ -1226,6 +1301,18 @@ const SCENES=[
         "prompt": "用日文問：「垃圾星期幾丟？」",
         "model": "ゴミは何曜日に出しますか。",
         "notes": "何曜日（なんようび）＝星期幾。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "ゴミは何曜日に出せばいいですか。",
+        "cn": "垃圾要星期幾丟？",
+        "answer": "燃えるゴミは月曜日ですよ。",
+        "choices": [
+          "燃えるゴミは月曜日ですよ。",
+          "ゴミはおいしいですよ。",
+          "ごめんください。",
+          "おじゃまします。"
+        ]
       }
     ]
   },
@@ -1342,7 +1429,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "今度、＿＿にカラオケ行かない？（一起）",
+        "prompt": "今度、＿＿にカラオケ行か（いか）ない？（一起）",
         "answer": "一緒",
         "choices": [
           "一緒",
@@ -1353,7 +1440,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "今日は＿＿だから遊べる。（有空）",
+        "prompt": "今日（きょう）は＿＿だから遊べる。（有空）",
         "answer": "暇（ひま）",
         "choices": [
           "暇（ひま）",
@@ -1364,7 +1451,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "昨日のパーティー、＿＿かった。（開心）",
+        "prompt": "昨日（きのう）のパーティー、＿＿かった。（開心）",
         "answer": "楽し",
         "choices": [
           "楽し",
@@ -1375,7 +1462,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入：一緒に行か＿＿？（要不要一起去）",
+        "prompt": "填入：一緒に行か（いか）＿＿？（要不要一起去）",
         "answer": "ない",
         "choices": [
           "ない",
@@ -1386,7 +1473,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入（意志形）：また今度、一緒に＿＿。（下次一起去吧）",
+        "prompt": "填入（意志形）：また今度（またこんど）、一緒に（いっしょに）＿＿。（下次一起去吧）",
         "answer": "行こう",
         "choices": [
           "行こう",
@@ -1414,6 +1501,18 @@ const SCENES=[
         "prompt": "用日文問：「明天有空嗎？」",
         "model": "明日、暇ですか。",
         "notes": "暇（ひま）＝有空。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "今夜、カラオケ行かない？",
+        "cn": "今晚要不要去唱卡拉OK？",
+        "answer": "いいね、行こう！",
+        "choices": [
+          "いいね、行こう！",
+          "はい、お世話になっております。",
+          "おかえりなさい。",
+          "ごちそうさまでした。"
+        ]
       }
     ]
   },
@@ -1556,7 +1655,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "進捗に＿＿て報告します。（關於）",
+        "prompt": "進捗に＿＿て報告（ほうこく）します。（關於）",
         "answer": "ついて",
         "choices": [
           "ついて",
@@ -1589,7 +1688,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入：ご相談したい＿＿あります。（有事想商量）",
+        "prompt": "填入：ご相談（そうだん）したい＿＿あります。（有事想商量）",
         "answer": "ことが",
         "choices": [
           "ことが",
@@ -1600,7 +1699,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入（謙讓）：後で報告＿＿。（稍後報告）",
+        "prompt": "填入（謙讓）：後で報告（ほうこく）＿＿。（稍後報告）",
         "answer": "いたします",
         "choices": [
           "いたします",
@@ -1628,6 +1727,18 @@ const SCENES=[
         "prompt": "用日文說：「我了解了，馬上確認。」",
         "model": "承知しました。すぐ確認いたします。",
         "notes": "承知しました＝鄭重應答。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "例の件、どうなっていますか。",
+        "cn": "（上司）那件事進行得如何？",
+        "answer": "後ほどご報告いたします。",
+        "choices": [
+          "後ほどご報告いたします。",
+          "後で報告してあげます。",
+          "いただきます。",
+          "おかえりなさい。"
+        ]
       }
     ]
   },
@@ -1788,7 +1899,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "後ほど＿＿お電話いたします。（回撥）",
+        "prompt": "後ほど＿＿お電話（でんわ）いたします。（回撥）",
         "answer": "折り返し（おりかえし）",
         "choices": [
           "折り返し（おりかえし）",
@@ -1833,6 +1944,18 @@ const SCENES=[
         "wrongIndex": 2,
         "correct": "出かけております",
         "explain": "對外人提自家上司也要用謙讓表現；「お出かけになりました」是尊敬語、不適當。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "恐れ入りますが、田中様はいらっしゃいますか。",
+        "cn": "不好意思，請問田中先生在嗎？",
+        "answer": "ただいま席を外しております。",
+        "choices": [
+          "ただいま席を外しております。",
+          "いってらっしゃい。",
+          "おじゃまします。",
+          "ごちそうさまです。"
+        ]
       }
     ]
   },
@@ -1945,7 +2068,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "ご確認の＿＿、お問い合わせください。",
+        "prompt": "ご確認（かくにん）の＿＿、お問い合わせください。",
         "answer": "うえ",
         "choices": [
           "うえ",
@@ -1967,7 +2090,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "添付ファイル＿＿お送りします。（以）",
+        "prompt": "添付ファイル＿＿お送り（おくり）します。（以）",
         "answer": "にて",
         "choices": [
           "にて",
@@ -2001,6 +2124,18 @@ const SCENES=[
         "wrongIndex": 2,
         "correct": "ご覧",
         "explain": "比起「見てください」、更有敬意的「ご覧ください」較合適。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "資料は確認していただけましたか。",
+        "cn": "資料您確認過了嗎？",
+        "answer": "はい、拝見しました。",
+        "choices": [
+          "はい、拝見しました。",
+          "はい、ご覧になりました。",
+          "いってらっしゃい。",
+          "おやすみなさい。"
+        ]
       }
     ]
   },
@@ -2139,7 +2274,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "乾杯の前に「お疲れさま＿＿」と言う。",
+        "prompt": "乾杯（かんぱい）の前に「お疲れさま＿＿」と言う。",
         "answer": "です",
         "choices": [
           "です",
@@ -2150,7 +2285,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "お酒を＿＿します。（倒）",
+        "prompt": "お酒（さけ）を＿＿します。（倒）",
         "answer": "お注ぎ",
         "choices": [
           "お注ぎ",
@@ -2161,7 +2296,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入：お先に失礼＿＿。（我先告辭）",
+        "prompt": "填入：お先（おさき）に失礼（しつれい）＿＿。（我先告辭）",
         "answer": "します",
         "choices": [
           "します",
@@ -2172,7 +2307,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入：今日はご馳走に＿＿。（承蒙招待）",
+        "prompt": "填入：今日（きょう）はご馳走（ごちそう）に＿＿。（承蒙招待）",
         "answer": "なります",
         "choices": [
           "なります",
@@ -2193,6 +2328,18 @@ const SCENES=[
         "wrongIndex": 3,
         "correct": "召し上がりますか",
         "explain": "對方的動作要用尊敬語「召し上がる」；自己喝才用「いただく」。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "まあまあ、一杯どうぞ。",
+        "cn": "來來來，請喝一杯。",
+        "answer": "ありがとうございます。いただきます。",
+        "choices": [
+          "ありがとうございます。いただきます。",
+          "ごめんください。",
+          "いってきます。",
+          "おかえりなさい。"
+        ]
       }
     ]
   },
@@ -2202,7 +2349,9 @@ const SCENES=[
     "domain": "行",
     "cefr": "B2",
     "cost": 25,
-    "aff": [],
+    "aff": [
+      "douryou"
+    ],
     "title": "出張・新幹線",
     "sub": "Business trip",
     "setting": "早上。出差搭新幹線。劃對號座，並轉車。",
@@ -2317,7 +2466,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "経費で落とすので＿＿をください。（收據）",
+        "prompt": "経費（けいひ）で落とす（おとす）ので＿＿をください。（收據）",
         "answer": "領収書（りょうしゅうしょ）",
         "choices": [
           "領収書（りょうしゅうしょ）",
@@ -2328,7 +2477,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "＿＿で大阪へ行きます。（新幹線）",
+        "prompt": "＿＿で大阪へ行きます（いきます）。（新幹線）",
         "answer": "新幹線（しんかんせん）",
         "choices": [
           "新幹線（しんかんせん）",
@@ -2355,7 +2504,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入助詞：指定席＿＿予約します。（預約對號座）",
+        "prompt": "填入助詞：指定席（していせき）＿＿予約（よやく）します。（預約對號座）",
         "answer": "を",
         "choices": [
           "を",
@@ -2369,6 +2518,18 @@ const SCENES=[
         "prompt": "用日文說：「請給我收據。」",
         "model": "領収書をください。",
         "notes": "経費精算でよく使う。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "ご乗車ありがとうございます。まもなく発車します。",
+        "cn": "（車內廣播）感謝搭乘，列車即將發車。",
+        "answer": "間に合った…よかった。",
+        "choices": [
+          "間に合った…よかった。",
+          "お世話になっております。",
+          "ごちそうさまでした。",
+          "ごめんください。"
+        ]
       }
     ]
   },
@@ -2503,7 +2664,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "そういう＿＿もあるかと存じます。（看法）",
+        "prompt": "そういう＿＿もあるかと存じます（かとぞんじます）。（看法）",
         "answer": "見方",
         "choices": [
           "見方",
@@ -2537,6 +2698,18 @@ const SCENES=[
         "wrongIndex": 2,
         "correct": "再考の余地があるかと",
         "explain": "「だめ」太過斷定、改成柔和的說法。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "この案について、ご意見はありますか。",
+        "cn": "（會議）對這個提案有什麼意見嗎？",
+        "answer": "よろしいでしょうか。一点だけ確認させてください。",
+        "choices": [
+          "よろしいでしょうか。一点だけ確認させてください。",
+          "だめです、その案。",
+          "いただきます。",
+          "おかえりなさい。"
+        ]
       }
     ]
   },
@@ -2661,7 +2834,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "ご迷惑を＿＿し、申し訳ございません。（添麻煩）",
+        "prompt": "ご迷惑を＿＿し、申し訳ございません（もうしわけございません）。（添麻煩）",
         "answer": "おかけ",
         "choices": [
           "おかけ",
@@ -2672,7 +2845,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "深く＿＿申し上げます。（致歉）",
+        "prompt": "深く＿＿申し上（うえ）げます。（致歉）",
         "answer": "お詫び",
         "choices": [
           "お詫び",
@@ -2683,7 +2856,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "＿＿確認いたします。（立刻）",
+        "prompt": "＿＿確認（かくにん）いたします。（立刻）",
         "answer": "さっそく",
         "choices": [
           "さっそく",
@@ -2717,6 +2890,18 @@ const SCENES=[
         "wrongIndex": 2,
         "correct": "お話を伺います",
         "explain": "客訴更要傾聽；拒絕的態度絕對禁止。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "おたくの商品、壊れていたんですけど！",
+        "cn": "（客訴）你們的商品是壞的！",
+        "answer": "大変申し訳ございません。すぐに確認いたします。",
+        "choices": [
+          "大変申し訳ございません。すぐに確認いたします。",
+          "それはお客様のせいです。",
+          "いってきます。",
+          "おやすみなさい。"
+        ]
       }
     ]
   },
@@ -2822,7 +3007,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "＿＿でお願いします。（外帶）",
+        "prompt": "＿＿でお願い（おねがい）します（でおねがいします）。（外帶）",
         "answer": "持ち帰り（もちかえり）",
         "choices": [
           "持ち帰り（もちかえり）",
@@ -2855,6 +3040,18 @@ const SCENES=[
         "prompt": "用日文說：「我要一杯熱咖啡。」",
         "model": "ホットコーヒーをひとつお願いします。",
         "notes": "ひとつ＝一個；お願いします＝麻煩了。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "ご注文はお決まりですか。",
+        "cn": "（店員）決定好餐點了嗎？",
+        "answer": "アイスコーヒーにします。",
+        "choices": [
+          "アイスコーヒーにします。",
+          "アイスコーヒーがあります。",
+          "いってらっしゃい。",
+          "ただいま。"
+        ]
       }
     ]
   },
@@ -2947,7 +3144,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "お肉＿＿どこですか。（主題）",
+        "prompt": "お肉（にく）＿＿どこですか。（主題）",
         "answer": "は",
         "choices": [
           "は",
@@ -2958,7 +3155,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "今日は卵が＿＿です。（特價）",
+        "prompt": "今日（きょう）は卵（たまご）が＿＿です。（特價）",
         "answer": "特売（とくばい）",
         "choices": [
           "特売（とくばい）",
@@ -2980,7 +3177,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入助詞：お肉＿＿どこですか。（肉在哪裡）",
+        "prompt": "填入助詞：お肉（にく）＿＿どこですか。（肉在哪裡）",
         "answer": "は",
         "choices": [
           "は",
@@ -2994,6 +3191,18 @@ const SCENES=[
         "prompt": "用日文問：「這個多少錢？」",
         "model": "これはいくらですか。",
         "notes": "いくら＝多少錢。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "何かお探しですか。",
+        "cn": "（店員）在找什麼嗎？",
+        "answer": "牛乳はどこですか。",
+        "choices": [
+          "牛乳はどこですか。",
+          "牛乳でございます。",
+          "おやすみなさい。",
+          "おめでとうございます。"
+        ]
       }
     ]
   },
@@ -3102,7 +3311,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "野菜を＿＿。（切）",
+        "prompt": "野菜（やさい）を＿＿。（切）",
         "answer": "切る（きる）",
         "choices": [
           "切る（きる）",
@@ -3113,7 +3322,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "肉を＿＿。（炒）",
+        "prompt": "肉（にく）を＿＿。（炒）",
         "answer": "炒める（いためる）",
         "choices": [
           "炒める（いためる）",
@@ -3124,7 +3333,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "＿＿を見て作る。（食譜）",
+        "prompt": "＿＿を見（み）て作る。（食譜）",
         "answer": "レシピ",
         "choices": [
           "レシピ",
@@ -3135,7 +3344,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入（て形）：野菜を＿＿炒めます。（切完再炒）",
+        "prompt": "填入（て形）：野菜（やさい）を＿＿炒め（いため）ます。（切完再炒）",
         "answer": "切って",
         "choices": [
           "切って",
@@ -3149,6 +3358,18 @@ const SCENES=[
         "prompt": "用日文說：「今天我自己煮。」",
         "model": "今日は自炊します。",
         "notes": "自炊（じすい）＝自己下廚。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "夕飯、どうする？",
+        "cn": "晚餐怎麼辦？",
+        "answer": "今日は自分で作るよ。",
+        "choices": [
+          "今日は自分で作るよ。",
+          "今日は自分を食べるよ。",
+          "ごめんください。",
+          "いってきます。"
+        ]
       }
     ]
   },
@@ -3241,7 +3462,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "今日も＿＿で遅くなった。（加班）",
+        "prompt": "今日（きょう）も＿＿で遅く（おそく）なった。（加班）",
         "answer": "残業（ざんぎょう）",
         "choices": [
           "残業（ざんぎょう）",
@@ -3252,7 +3473,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "お弁当を＿＿ますか。（加熱）",
+        "prompt": "お弁当（おべんとう）を＿＿ますか。（加熱）",
         "answer": "温め",
         "choices": [
           "温め",
@@ -3263,7 +3484,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "＿＿はカードでお願いします。（付款）",
+        "prompt": "＿＿はカードでお願い（おねがい）します（でおねがいします）。（付款）",
         "answer": "支払い（しはらい）",
         "choices": [
           "支払い（しはらい）",
@@ -3274,7 +3495,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入（て形）：お弁当を＿＿ください。（請加熱便當）",
+        "prompt": "填入（て形）：お弁当（おべんとう）を＿＿ください。（請加熱便當）",
         "answer": "温めて",
         "choices": [
           "温めて",
@@ -3288,6 +3509,18 @@ const SCENES=[
         "prompt": "用日文說：「我要用卡付款。」",
         "model": "カードで払います。",
         "notes": "〜で＝手段；払う（はらう）＝付款。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "お弁当、温めますか。",
+        "cn": "（店員）便當要加熱嗎？",
+        "answer": "はい、お願いします。",
+        "choices": [
+          "はい、お願いします。",
+          "はい、冷やしてください。",
+          "おじゃまします。",
+          "おめでとうございます。"
+        ]
       }
     ]
   },
@@ -3389,14 +3622,15 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "私は田中＿＿。（是）",
+        "prompt": "私（わたし）は田中＿＿。（是）",
         "answer": "です",
         "choices": [
           "です",
           "ます",
           "でした",
           "ました"
-        ]
+        ],
+        "explain": "名詞句的丁寧斷定用です；ます只接動詞。"
       },
       {
         "kind": "cloze",
@@ -3407,11 +3641,12 @@ const SCENES=[
           "学生（がくせい）",
           "私（わたし）",
           "先生"
-        ]
+        ],
+        "explain": "問「什麼」的主題：名前は何ですか＝名字是什麼。"
       },
       {
         "kind": "cloze",
-        "prompt": "填入：私は学生＿＿。（我是學生）",
+        "prompt": "填入：私（わたし）は学生（がくせい）＿＿。（我是學生）",
         "answer": "です",
         "choices": [
           "です",
@@ -3433,6 +3668,18 @@ const SCENES=[
         "prompt": "用日文說：「我是學生。」",
         "model": "私は学生です。",
         "notes": "〜は〜です＝X 是 Y。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "はじめまして。田中です。",
+        "cn": "初次見面，我是田中。",
+        "answer": "よろしくお願いします。",
+        "choices": [
+          "よろしくお願いします。",
+          "いただきます。",
+          "ただいま。",
+          "おやすみなさい。"
+        ]
       }
     ]
   },
@@ -3545,7 +3792,8 @@ const SCENES=[
           "そこ",
           "あそこ",
           "だれ"
-        ]
+        ],
+        "explain": "問自己手邊的東西用これ（近己）；そこ/あそこ是場所詞。"
       },
       {
         "kind": "cloze",
@@ -3556,11 +3804,12 @@ const SCENES=[
           "かばん",
           "私（わたし）",
           "学生（がくせい）"
-        ]
+        ],
+        "explain": "それは本です：それ指對方手邊，答案填名詞「書」。"
       },
       {
         "kind": "cloze",
-        "prompt": "填入：これは本＿＿。（這是書）",
+        "prompt": "填入：これは本（ほん）＿＿。（這是書）",
         "answer": "です",
         "choices": [
           "です",
@@ -3585,6 +3834,18 @@ const SCENES=[
         "prompt": "用日文問：「那個（遠）是什麼？」",
         "model": "あれは何ですか。",
         "notes": "あれ＝離雙方都遠的「那個」。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "それは何ですか。",
+        "cn": "那（你手上的）是什麼？",
+        "answer": "これは本です。",
+        "choices": [
+          "これは本です。",
+          "いってきます。",
+          "おやすみなさい。",
+          "ごちそうさまでした。"
+        ]
       }
     ]
   },
@@ -3670,29 +3931,31 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "これはコーヒー＿＿。お茶です。（不是）",
+        "prompt": "これはコーヒー＿＿。お茶（おちゃ）です。（不是）",
         "answer": "じゃありません",
         "choices": [
           "じゃありません",
           "です",
           "でした",
           "ました"
-        ]
+        ],
+        "explain": "名詞句否定＝じゃありません；でした是過去肯定。"
       },
       {
         "kind": "cloze",
-        "prompt": "「お茶ですか」「いいえ、＿＿」（不是）",
+        "prompt": "「お茶（おちゃ）ですか」「いいえ、＿＿」（不是）",
         "answer": "違います（ちがいます）",
         "choices": [
           "違います（ちがいます）",
           "そうです",
           "お願いします",
           "いただきます"
-        ]
+        ],
+        "explain": "被問「是嗎」而否定時的口頭回應：いいえ、違います。"
       },
       {
         "kind": "cloze",
-        "prompt": "填入（否定）：これはお茶＿＿。（這不是茶）",
+        "prompt": "填入（否定）：これはお茶（おちゃ）＿＿。（這不是茶）",
         "answer": "じゃありません",
         "choices": [
           "じゃありません",
@@ -3725,6 +3988,18 @@ const SCENES=[
         "prompt": "用日文說：「我不是學生。」",
         "model": "私は学生じゃありません。",
         "notes": "〜じゃありません＝不是〜。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "これはお茶ですか。",
+        "cn": "這是茶嗎？",
+        "answer": "いいえ、違います。コーヒーです。",
+        "choices": [
+          "いいえ、違います。コーヒーです。",
+          "おかえりなさい。",
+          "いただきます。",
+          "よろしくお願いします。"
+        ]
       }
     ]
   },
@@ -3828,29 +4103,31 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "部屋に猫が＿＿。（在・生物）",
+        "prompt": "部屋（へや）に猫が＿＿。（在・生物）",
         "answer": "います",
         "choices": [
           "います",
           "あります",
           "です",
           "ません"
-        ]
+        ],
+        "explain": "貓是生物→います；あります限無生命物。"
       },
       {
         "kind": "cloze",
-        "prompt": "机の上に本が＿＿。（有・無生命）",
+        "prompt": "机の上（うえ）に本（ほん）が＿＿。（有・無生命）",
         "answer": "あります",
         "choices": [
           "あります",
           "います",
           "です",
           "ました"
-        ]
+        ],
+        "explain": "書是無生命物→あります；います限人・動物。"
       },
       {
         "kind": "cloze",
-        "prompt": "填入（存在）：部屋に椅子が＿＿。（房間有椅子）",
+        "prompt": "填入（存在）：部屋（へや）に椅子（いす）が＿＿。（房間有椅子）",
         "answer": "あります",
         "choices": [
           "あります",
@@ -3872,6 +4149,18 @@ const SCENES=[
         "prompt": "用日文說：「房間裡有貓。」",
         "model": "部屋に猫がいます。",
         "notes": "生物用います。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "部屋に何がありますか。",
+        "cn": "房間裡有什麼？",
+        "answer": "机と椅子があります。",
+        "choices": [
+          "机と椅子があります。",
+          "はじめまして。",
+          "ただいま。",
+          "おじゃまします。"
+        ]
       }
     ]
   },
@@ -3960,29 +4249,31 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "ご飯＿＿食べます。（受詞）",
+        "prompt": "ご飯（ごはん）＿＿食べます（たべます）。（受詞）",
         "answer": "を",
         "choices": [
           "を",
           "は",
           "に",
           "で"
-        ]
+        ],
+        "explain": "動作的受詞用を：ご飯を食べます。は是主題、に是方向/時點。"
       },
       {
         "kind": "cloze",
-        "prompt": "毎朝7時に＿＿。（起床）",
+        "prompt": "毎朝（まいあさ）7時（じ）に＿＿。（起床）",
         "answer": "起きます（おきます）",
         "choices": [
           "起きます（おきます）",
           "食べます（たべます）",
           "行きます（いきます）",
           "飲みます（のみます）"
-        ]
+        ],
+        "explain": "對應提示「起床」＝起きます；配時刻7時に。"
       },
       {
         "kind": "cloze",
-        "prompt": "填入助詞：パン＿＿食べます。（吃麵包）",
+        "prompt": "填入助詞：パン＿＿食べます（たべます）。（吃麵包）",
         "answer": "を",
         "choices": [
           "を",
@@ -4015,6 +4306,18 @@ const SCENES=[
         "prompt": "用日文說：「我喝咖啡。」",
         "model": "コーヒーを飲みます。",
         "notes": "〜を＝受詞助詞。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "朝ごはんは何を食べますか。",
+        "cn": "早餐吃什麼？",
+        "answer": "パンを食べます。",
+        "choices": [
+          "パンを食べます。",
+          "おやすみなさい。",
+          "いってらっしゃい。",
+          "すみませんでした。"
+        ]
       }
     ]
   },
@@ -4100,29 +4403,31 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "昨日、映画を見＿＿。（看了）",
+        "prompt": "昨日（きのう）、映画（えいが）を見（み）＿＿。（看了）",
         "answer": "ました",
         "choices": [
           "ました",
           "ます",
           "ません",
           "ましょう"
-        ]
+        ],
+        "explain": "昨天的事＝過去丁寧ました；ます是現在/習慣。"
       },
       {
         "kind": "cloze",
-        "prompt": "昨日は何も食べ＿＿。（沒吃）",
+        "prompt": "昨日（きのう）は何も食べ（たべ）＿＿。（沒吃）",
         "answer": "ませんでした",
         "choices": [
           "ませんでした",
           "ました",
           "ます",
           "たい"
-        ]
+        ],
+        "explain": "過去否定「沒吃」＝ませんでした；ました意思相反。"
       },
       {
         "kind": "cloze",
-        "prompt": "填入（過去）：昨日、本を＿＿。（昨天讀了書）",
+        "prompt": "填入（過去）：昨日（きのう）、本（ほん）を＿＿。（昨天讀了書）",
         "answer": "読みました",
         "choices": [
           "読みました",
@@ -4155,6 +4460,18 @@ const SCENES=[
         "prompt": "用日文說：「我昨天看了電影。」",
         "model": "昨日、映画を見ました。",
         "notes": "〜ました＝過去。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "昨日、何をしましたか。",
+        "cn": "昨天做了什麼？",
+        "answer": "映画を見ました。",
+        "choices": [
+          "映画を見ました。",
+          "映画を見ます。",
+          "はじめまして。",
+          "いってきます。"
+        ]
       }
     ]
   },
@@ -4244,25 +4561,27 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "この服は＿＿です。（大）",
+        "prompt": "この服（ふく）は＿＿です。（大）",
         "answer": "大きい（おおきい）",
         "choices": [
           "大きい（おおきい）",
           "小さい（ちいさい）",
           "静か（しずか）",
           "便利（べんり）"
-        ]
+        ],
+        "explain": "い形容詞直接接です；静か・便利是な形容詞。"
       },
       {
         "kind": "cloze",
-        "prompt": "この本は新し＿＿です。（不新）",
+        "prompt": "この本（ほん）は新し＿＿です。（不新）",
         "answer": "くない",
         "choices": [
           "くない",
           "じゃない",
           "ない",
           "くて"
-        ]
+        ],
+        "explain": "い形否定：去い＋くない（新しくない）；じゃない用於な形/名詞。"
       },
       {
         "kind": "cloze",
@@ -4299,6 +4618,18 @@ const SCENES=[
         "prompt": "用日文說：「這個包包很新。」",
         "model": "このかばんは新しいです。",
         "notes": "い形容詞直接＋です。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "そのかばん、どうですか。",
+        "cn": "那個包包怎麼樣？",
+        "answer": "少し大きいです。",
+        "choices": [
+          "少し大きいです。",
+          "ごちそうさまでした。",
+          "おかえりなさい。",
+          "ただいま。"
+        ]
       }
     ]
   },
@@ -4393,22 +4724,24 @@ const SCENES=[
           "大きい（おおきい）",
           "新しい（あたらしい）",
           "小さい（ちいさい）"
-        ]
+        ],
+        "explain": "形容城鎮「熱鬧」＝にぎやか（な形）；大きい等是い形。"
       },
       {
         "kind": "cloze",
-        "prompt": "ここは静か＿＿です。（不安靜）",
+        "prompt": "ここは静か（しずか）＿＿です。（不安靜）",
         "answer": "じゃない",
         "choices": [
           "じゃない",
           "くない",
           "ない",
           "では"
-        ]
+        ],
+        "explain": "な形否定用じゃない：静かじゃない；くない是い形専用。"
       },
       {
         "kind": "cloze",
-        "prompt": "填入（な形容詞接名詞）：＿＿部屋です。（漂亮的房間）",
+        "prompt": "填入（な形容詞接名詞）：＿＿部屋（へや）です。（漂亮的房間）",
         "answer": "きれいな",
         "choices": [
           "きれいな",
@@ -4441,6 +4774,18 @@ const SCENES=[
         "prompt": "用日文說：「這個城市很方便。」",
         "model": "この町は便利です。",
         "notes": "な形容詞＋です；接名詞時用〜な。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "この町はどうですか。",
+        "cn": "這個城鎮怎麼樣？",
+        "answer": "静かで、便利です。",
+        "choices": [
+          "静かで、便利です。",
+          "いただきます。",
+          "おやすみなさい。",
+          "いってきます。"
+        ]
       }
     ]
   },
@@ -4519,25 +4864,27 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "お昼は何が食べ＿＿ですか。（想）",
+        "prompt": "お昼は何が食べ（たべ）＿＿ですか。（想）",
         "answer": "たい",
         "choices": [
           "たい",
           "ます",
           "ました",
           "ない"
-        ]
+        ],
+        "explain": "願望：ます形去ます＋たい（食べたい）。"
       },
       {
         "kind": "cloze",
-        "prompt": "日本へ行き＿＿です。（想去）",
+        "prompt": "日本（にほん）へ行き（ゆき）＿＿です。（想去）",
         "answer": "たい",
         "choices": [
           "たい",
           "ます",
           "ました",
           "ません"
-        ]
+        ],
+        "explain": "行きます→行き＋たい＝想去；ました是過去。"
       },
       {
         "kind": "mc",
@@ -4585,6 +4932,18 @@ const SCENES=[
         "prompt": "用日文說：「我想喝咖啡。」",
         "model": "コーヒーが飲みたいです。",
         "notes": "ます形去ます＋たいです。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "お昼、何が食べたいですか。",
+        "cn": "中午想吃什麼？",
+        "answer": "ラーメンが食べたいです。",
+        "choices": [
+          "ラーメンが食べたいです。",
+          "ラーメンを食べました。",
+          "おじゃまします。",
+          "おかえりなさい。"
+        ]
       }
     ]
   },
@@ -4665,29 +5024,31 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "一緒にお茶を飲み＿＿。（～吧）",
+        "prompt": "一緒に（いっしょに）お茶（おちゃ）を飲み（のみ）＿＿。（～吧）",
         "answer": "ましょう",
         "choices": [
           "ましょう",
           "ました",
           "たい",
           "ません"
-        ]
+        ],
+        "explain": "勸誘「一起～吧」＝ましょう；ました是過去。"
       },
       {
         "kind": "cloze",
-        "prompt": "映画を見＿＿か。（要不要）",
+        "prompt": "映画（えいが）を見（み）＿＿か。（要不要）",
         "answer": "ません",
         "choices": [
           "ません",
           "ました",
           "ましょ",
           "たい"
-        ]
+        ],
+        "explain": "見ませんか＝要不要看（否定疑問＝禮貌邀約）。"
       },
       {
         "kind": "cloze",
-        "prompt": "填入（邀約）：一緒に行き＿＿。（一起去吧）",
+        "prompt": "填入（邀約）：一緒に行き（ゆき）＿＿。（一起去吧）",
         "answer": "ましょう",
         "choices": [
           "ましょう",
@@ -4720,6 +5081,18 @@ const SCENES=[
           "いっしょに"
         ],
         "hint": "一起（ひらがな）"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "一緒にお昼を食べませんか。",
+        "cn": "要不要一起吃午餐？",
+        "answer": "いいですね。食べましょう。",
+        "choices": [
+          "いいですね。食べましょう。",
+          "ごちそうさまでした。",
+          "おかえりなさい。",
+          "はじめまして。"
+        ]
       }
     ]
   },
@@ -4823,18 +5196,20 @@ const SCENES=[
           "ひとつ",
           "ふたり",
           "にまい"
-        ]
+        ],
+        "explain": "小東西用和語數詞：ふたつ＝兩個；ふたり數人。"
       },
       {
         "kind": "cloze",
-        "prompt": "切符を2＿＿ください。（張）",
+        "prompt": "切符（きっぷ）を2＿＿ください。（張）",
         "answer": "枚（まい）",
         "choices": [
           "枚（まい）",
           "個（こ）",
           "人（にん）",
           "本（ほん）"
-        ]
+        ],
+        "explain": "票、紙等薄物量詞＝枚；個是小物、本是細長物。"
       },
       {
         "kind": "mc",
@@ -4860,6 +5235,18 @@ const SCENES=[
         "prompt": "用日文說：「請給我一個。」",
         "model": "ひとつください。",
         "notes": "和語数詞 ひとつ／ふたつ。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "りんごはいくつ要りますか。",
+        "cn": "蘋果要幾個？",
+        "answer": "ふたつください。",
+        "choices": [
+          "ふたつください。",
+          "ふたりです。",
+          "いただきます。",
+          "ただいま。"
+        ]
       }
     ]
   },
@@ -4932,25 +5319,27 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "7時＿＿起きます。（時間點）",
+        "prompt": "7時（じ）＿＿起きます（おきます）。（時間點）",
         "answer": "に",
         "choices": [
           "に",
           "を",
           "は",
           "で"
-        ]
+        ],
+        "explain": "具體時刻後接に：7時に起きます；「毎朝」等相對時間不加。"
       },
       {
         "kind": "cloze",
-        "prompt": "毎朝、何＿＿に起きますか。（點）",
+        "prompt": "毎朝（まいあさ）、何＿＿に起きます（おきます）か。（點）",
         "answer": "時（じ）",
         "choices": [
           "時（じ）",
           "分",
           "人（にん）",
           "枚（まい）"
-        ]
+        ],
+        "explain": "何時（なんじ）＝幾點；分是分鐘。"
       },
       {
         "kind": "mc",
@@ -4965,14 +5354,15 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "填入助詞：8時＿＿行きます。（八點去）",
+        "prompt": "填入助詞：8時（じ）＿＿行きます（いきます）。（八點去）",
         "answer": "に",
         "choices": [
           "に",
           "を",
           "は",
           "で"
-        ]
+        ],
+        "explain": "時刻＋に＋動詞：8時に行きます。"
       },
       {
         "kind": "mc",
@@ -4998,6 +5388,18 @@ const SCENES=[
         "prompt": "用日文說：「我七點起床。」",
         "model": "7時に起きます。",
         "notes": "時間點＋に。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "毎朝、何時に起きますか。",
+        "cn": "每天早上幾點起床？",
+        "answer": "7時に起きます。",
+        "choices": [
+          "7時に起きます。",
+          "7時です、今。",
+          "おはようございます。",
+          "おやすみなさい。"
+        ]
       }
     ]
   },
@@ -5094,25 +5496,27 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "今、ご飯を食べ＿＿。（正在吃）",
+        "prompt": "今、ご飯（ごはん）を食べ（たべ）＿＿。（正在吃）",
         "answer": "ています",
         "choices": [
           "ています",
           "ました",
           "たいです",
           "ません"
-        ]
+        ],
+        "explain": "正在進行＝て形＋います；ました是已完成。"
       },
       {
         "kind": "cloze",
-        "prompt": "外は雨が降って＿＿。（正在下）",
+        "prompt": "外は雨（あめ）が降っ（ふっ）て＿＿。（正在下）",
         "answer": "います",
         "choices": [
           "います",
           "ました",
           "たい",
           "ない"
-        ]
+        ],
+        "explain": "天氣進行中：雨が降っています。"
       },
       {
         "kind": "cloze",
@@ -5123,7 +5527,8 @@ const SCENES=[
           "あります",
           "きます",
           "みます"
-        ]
+        ],
+        "explain": "住んでいます＝居住狀態（不是動作進行）。"
       },
       {
         "kind": "dictation",
@@ -5138,6 +5543,18 @@ const SCENES=[
         "prompt": "用日文說：「我正在看電視。」",
         "model": "テレビを見ています。",
         "notes": "〜ています＝進行／狀態。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "もしもし、今、何をしていますか。",
+        "cn": "喂，你現在在做什麼？",
+        "answer": "テレビを見ています。",
+        "choices": [
+          "テレビを見ています。",
+          "テレビを見ました。",
+          "いってらっしゃい。",
+          "はじめまして。"
+        ]
       }
     ]
   },
@@ -5238,29 +5655,32 @@ const SCENES=[
           "てもいいです",
           "たいです",
           "ています"
-        ]
+        ],
+        "explain": "禁止＝て形＋はいけません；てもいいです是允許。"
       },
       {
         "kind": "cloze",
-        "prompt": "写真を撮っ＿＿。（不可以）",
+        "prompt": "写真（しゃしん）を撮っ（とっ）＿＿。（不可以）",
         "answer": "てはいけません",
         "choices": [
           "てはいけません",
           "てください",
           "ましょう",
           "ています"
-        ]
+        ],
+        "explain": "撮ってはいけません＝不可拍照；てください意思相反。"
       },
       {
         "kind": "cloze",
-        "prompt": "図書館では静か＿＿してください。（安靜地）",
+        "prompt": "図書館（としょかん）では静か（しずか）＿＿してください。（安靜地）",
         "answer": "に",
         "choices": [
           "に",
           "で",
           "を",
           "と"
-        ]
+        ],
+        "explain": "な形容詞副詞化：静かに＋動詞＝安靜地做。"
       },
       {
         "kind": "dictation",
@@ -5275,6 +5695,18 @@ const SCENES=[
         "prompt": "用日文說：「這裡不可以吃東西。」",
         "model": "ここで食べてはいけません。",
         "notes": "〜てはいけません＝禁止。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "ここで写真を撮ってもいいですか。",
+        "cn": "這裡可以拍照嗎？",
+        "answer": "すみません、撮ってはいけません。",
+        "choices": [
+          "すみません、撮ってはいけません。",
+          "いただきます。",
+          "おかえりなさい。",
+          "おめでとうございます。"
+        ]
       }
     ]
   },
@@ -5370,36 +5802,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "休日は本を読ん＿＿、音楽を聞いたりします。（又…）",
+        "prompt": "休日（きゅうじつ）は本（ほん）を読ん（よん）＿＿、音楽（おんがく）を聞いたりします。（又…）",
         "answer": "だり",
         "choices": [
           "だり",
           "たり",
           "でも",
           "ても"
-        ]
+        ],
+        "explain": "読む→読んだ→読んだり：た形是んだ的動詞，たり也濁化成だり。"
       },
       {
         "kind": "cloze",
-        "prompt": "掃除し＿＿洗濯したりします。（又…）",
+        "prompt": "掃除（そうじ）し＿＿洗濯（せんたく）したりします。（又…）",
         "answer": "たり",
         "choices": [
           "たり",
           "だり",
           "ても",
           "から"
-        ]
+        ],
+        "explain": "する→したり；列舉句尾要收します。"
       },
       {
         "kind": "cloze",
-        "prompt": "週末は映画を見たり、買い物をし＿＿します。（又…）",
+        "prompt": "週末（しゅうまつ）は映画（えいが）を見（み）たり、買い物（かいもの）をし＿＿します。（又…）",
         "answer": "たり",
         "choices": [
           "たり",
           "だり",
           "ます",
           "たい"
-        ]
+        ],
+        "explain": "〜たり〜たりします：第二個例子也要たり。"
       },
       {
         "kind": "dictation",
@@ -5414,6 +5849,18 @@ const SCENES=[
         "prompt": "用日文說：「假日我又看書又聽音樂。」",
         "model": "休日は本を読んだり、音楽を聞いたりします。",
         "notes": "〜たり〜たり＝列舉動作。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "休みの日は何をしますか。",
+        "cn": "休假日都做什麼？",
+        "answer": "本を読んだり、音楽を聞いたりします。",
+        "choices": [
+          "本を読んだり、音楽を聞いたりします。",
+          "本を読んではいけません。",
+          "いってきます。",
+          "ごちそうさまでした。"
+        ]
       }
     ]
   },
@@ -5503,36 +5950,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "私は日本語が話＿＿。（會說）",
+        "prompt": "私（わたし）は日本語（にほんご）が話＿＿。（會說）",
         "answer": "せます",
         "choices": [
           "せます",
           "します",
           "しません",
           "したい"
-        ]
+        ],
+        "explain": "Ⅰ類可能形：話す→話せる（う段→え段＋る）。"
       },
       {
         "kind": "cloze",
-        "prompt": "辛いものが食べ＿＿か。（能吃嗎）",
+        "prompt": "辛いもの（からいもの）が食べ（たべ）＿＿か。（能吃嗎）",
         "answer": "られます",
         "choices": [
           "られます",
           "ました",
           "たい",
           "ません"
-        ]
+        ],
+        "explain": "Ⅱ類可能形：食べる→食べられる；「食べれる」是口語ら抜き。"
       },
       {
         "kind": "cloze",
-        "prompt": "漢字を読むことが＿＿。（能／會）",
+        "prompt": "漢字（かんじ）を読む（よむ）ことが＿＿。（能／會）",
         "answer": "できます",
         "choices": [
           "できます",
           "あります",
           "います",
           "なります"
-        ]
+        ],
+        "explain": "名詞化動作用ことができる：読むことができます。"
       },
       {
         "kind": "dictation",
@@ -5547,6 +5997,18 @@ const SCENES=[
         "prompt": "用日文說：「我會游泳。」",
         "model": "泳げます。",
         "notes": "可能形＝能力／可能。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "日本語が話せますか。",
+        "cn": "你會說日語嗎？",
+        "answer": "はい、少し話せます。",
+        "choices": [
+          "はい、少し話せます。",
+          "はい、話しました。",
+          "おやすみなさい。",
+          "おじゃまします。"
+        ]
       }
     ]
   },
@@ -5638,36 +6100,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "寝坊した＿＿、遅れました。（因為）",
+        "prompt": "寝坊した＿＿、遅れ（おくれ）ました。（因為）",
         "answer": "から",
         "choices": [
           "から",
           "まで",
           "より",
           "でも"
-        ]
+        ],
+        "explain": "陳述自己的主觀理由用から；ので更客觀委婉。"
       },
       {
         "kind": "cloze",
-        "prompt": "雨な＿＿、行きません。（因為，名詞・な形＋）",
+        "prompt": "雨（あめ）な＿＿、行き（ゆき）ません。（因為，名詞・な形＋）",
         "answer": "ので",
         "choices": [
           "ので",
           "から",
           "でも",
           "のに"
-        ]
+        ],
+        "explain": "名詞・な形接ので要加な：雨なので。から則接だ：雨だから。"
       },
       {
         "kind": "cloze",
-        "prompt": "時間がない＿＿、急ぎましょう。（因為）",
+        "prompt": "時間（じかん）がない＿＿、急ぎ（いそぎ）ましょう。（因為）",
         "answer": "から",
         "choices": [
           "から",
           "まで",
           "より",
           "ほど"
-        ]
+        ],
+        "explain": "い形容詞・動詞普通形直接＋から／ので；此處から表主觀急迫。"
       },
       {
         "kind": "dictation",
@@ -5682,6 +6147,18 @@ const SCENES=[
         "prompt": "用日文說：「因為下雨，所以不去。」",
         "model": "雨だから、行きません。",
         "notes": "〜から＝因為（理由）。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "どうして遅れましたか。",
+        "cn": "為什麼遲到了？",
+        "answer": "電車が遅れたからです。",
+        "choices": [
+          "電車が遅れたからです。",
+          "電車はどこですか。",
+          "電車で行きましょう。",
+          "電車に乗りたいです。"
+        ]
       }
     ]
   },
@@ -5771,36 +6248,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "出かける＿＿、鍵を持ちます。（…的時候）",
+        "prompt": "出かけ（でかけ）る＿＿、鍵を持ちます。（…的時候）",
         "answer": "とき",
         "choices": [
           "とき",
           "から",
           "ので",
           "より"
-        ]
+        ],
+        "explain": "動詞辭書形＋とき＝…的時候；から表原因。"
       },
       {
         "kind": "cloze",
-        "prompt": "暇な＿＿、本を読みます。（有空時，な形＋）",
+        "prompt": "暇な＿＿、本（ほん）を読み（よみ）ます。（有空時，な形＋）",
         "answer": "とき",
         "choices": [
           "とき",
           "から",
           "ので",
           "ほう"
-        ]
+        ],
+        "explain": "な形接とき要加な：暇なとき。"
       },
       {
         "kind": "cloze",
-        "prompt": "子供＿＿とき、京都に住んでいました。（名詞＋）",
+        "prompt": "子供（こども）＿＿とき、京都に住んでいました。（名詞＋）",
         "answer": "の",
         "choices": [
           "の",
           "な",
           "が",
           "を"
-        ]
+        ],
+        "explain": "名詞接とき用の：子供のとき＝小時候。"
       },
       {
         "kind": "dictation",
@@ -5815,6 +6295,18 @@ const SCENES=[
         "prompt": "用日文說：「我出門時會帶傘。」",
         "model": "出かけるとき、傘を持ちます。",
         "notes": "〜とき＝…的時候。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "分からないとき、どうしますか。",
+        "cn": "不懂的時候你會怎麼做？",
+        "answer": "先生に聞きます。",
+        "choices": [
+          "先生に聞きます。",
+          "先生でした。",
+          "いってらっしゃい。",
+          "ごめんください。"
+        ]
       }
     ]
   },
@@ -5910,25 +6402,27 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "バスより電車＿＿が速いです。（這邊較）",
+        "prompt": "バスより電車（でんしゃ）＿＿が速い（はやい）です。（這邊較）",
         "answer": "のほう",
         "choices": [
           "のほう",
           "から",
           "ので",
           "とき"
-        ]
+        ],
+        "explain": "比較句指出優勝方：Bのほうが＋形容詞。"
       },
       {
         "kind": "cloze",
-        "prompt": "こっちの服はあっち＿＿安いです。（比）",
+        "prompt": "こっちの服（ふく）はあっち＿＿安い（やすい）です。（比）",
         "answer": "より",
         "choices": [
           "より",
           "から",
           "ので",
           "ほど"
-        ]
+        ],
+        "explain": "比較基準用より：あっちより安い＝比那個便宜。"
       },
       {
         "kind": "cloze",
@@ -5939,7 +6433,8 @@ const SCENES=[
           "は",
           "を",
           "に"
-        ]
+        ],
+        "explain": "疑問詞どちら當主語→助詞用が。"
       },
       {
         "kind": "dictation",
@@ -5954,6 +6449,18 @@ const SCENES=[
         "prompt": "用日文說：「電車比公車快。」",
         "model": "電車はバスより速いです。",
         "notes": "AはBより〜＝A比B…。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "バスと電車と、どちらが速いですか。",
+        "cn": "公車和電車，哪個快？",
+        "answer": "電車のほうが速いです。",
+        "choices": [
+          "電車のほうが速いです。",
+          "電車を降ります。",
+          "おかえりなさい。",
+          "いただきます。"
+        ]
       }
     ]
   },
@@ -6056,18 +6563,20 @@ const SCENES=[
           "くれます",
           "もらいます",
           "います"
-        ]
+        ],
+        "explain": "視點在「我→外」：給出去用あげる；くれる只用於「別人→我方」。"
       },
       {
         "kind": "cloze",
-        "prompt": "母が私に時計を＿＿。（給我）",
+        "prompt": "母（はは）が私（わたし）に時計（とけい）を＿＿。（給我）",
         "answer": "くれました",
         "choices": [
           "くれました",
           "あげました",
           "もらいました",
           "いました"
-        ]
+        ],
+        "explain": "「別人→我（我方）」固定用くれる；あげる方向相反。"
       },
       {
         "kind": "cloze",
@@ -6078,7 +6587,8 @@ const SCENES=[
           "あげました",
           "くれました",
           "いました"
-        ]
+        ],
+        "explain": "主語是「得到的人」時用もらう；給的人用に／から標示。"
       },
       {
         "kind": "dictation",
@@ -6093,6 +6603,18 @@ const SCENES=[
         "prompt": "用日文說：「我送朋友禮物。」",
         "model": "友達にプレゼントをあげます。",
         "notes": "あげる＝給出；くれる＝給我；もらう＝得到。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "これ、誕生日プレゼント。どうぞ。",
+        "cn": "這是生日禮物，請收下。",
+        "answer": "ありがとう。うれしいです。",
+        "choices": [
+          "ありがとう。うれしいです。",
+          "おだいじに。",
+          "いってらっしゃい。",
+          "かしこまりました。"
+        ]
       }
     ]
   },
@@ -6182,36 +6704,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "来週、京都へ行く＿＿です。（打算）",
+        "prompt": "来週（らいしゅう）、京都へ行く（いく）＿＿です。（打算）",
         "answer": "つもり",
         "choices": [
           "つもり",
           "たい",
           "から",
           "とき"
-        ]
+        ],
+        "explain": "辭書形＋つもり＝打算；たい是「想」的願望。"
       },
       {
         "kind": "cloze",
-        "prompt": "三時に会議の＿＿です。（預定，名詞＋の）",
+        "prompt": "三時（さんじ）に会議（かいぎ）の＿＿です。（預定，名詞＋の）",
         "answer": "予定",
         "choices": [
           "予定",
           "つもり",
           "から",
           "ところ"
-        ]
+        ],
+        "explain": "名詞＋の＋予定：会議の予定＝既定安排。"
       },
       {
         "kind": "cloze",
-        "prompt": "夏休みは旅行する＿＿です。（打算）",
+        "prompt": "夏休み（なつやすみ）は旅行（りょこう）する＿＿です。（打算）",
         "answer": "つもり",
         "choices": [
           "つもり",
           "ながら",
           "たり",
           "ので"
-        ]
+        ],
+        "explain": "旅行するつもり：自己的打算用つもり。"
       },
       {
         "kind": "dictation",
@@ -6226,6 +6751,18 @@ const SCENES=[
         "prompt": "用日文說：「我打算下週去旅行。」",
         "model": "来週、旅行するつもりです。",
         "notes": "動詞辭書形＋つもりです。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "週末は何をするつもりですか。",
+        "cn": "週末打算做什麼？",
+        "answer": "京都へ行くつもりです。",
+        "choices": [
+          "京都へ行くつもりです。",
+          "京都へ行きました。",
+          "はじめまして。",
+          "おやすみなさい。"
+        ]
       }
     ]
   },
@@ -6319,36 +6856,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "明日までに宿題を出さ＿＿なりません。（必須）",
+        "prompt": "明日（あした）までに宿題（しゅくだい）を出さ（ださ）＿＿なりません。（必須）",
         "answer": "なければ",
         "choices": [
           "なければ",
           "なくても",
           "たくて",
           "ないで"
-        ]
+        ],
+        "explain": "義務：ない形去い＋ければなりません。なくても是「不用」。"
       },
       {
         "kind": "cloze",
-        "prompt": "パスポートを持って行か＿＿なりません。（必須）",
+        "prompt": "パスポートを持って行か（いか）＿＿なりません。（必須）",
         "answer": "なければ",
         "choices": [
           "なければ",
           "なくても",
           "ながら",
           "たり"
-        ]
+        ],
+        "explain": "持って行かなければ＝必須帶去。"
       },
       {
         "kind": "cloze",
-        "prompt": "今日は来＿＿もいいです。（不用來）",
+        "prompt": "今日（きょう）は来＿＿もいいです。（不用來）",
         "answer": "なくて",
         "choices": [
           "なくて",
           "なければ",
           "たくて",
           "ないで"
-        ]
+        ],
+        "explain": "許可不做＝なくてもいいです：不來也可以。"
       },
       {
         "kind": "dictation",
@@ -6363,6 +6903,18 @@ const SCENES=[
         "prompt": "用日文說：「明天以前必須交報告。」",
         "model": "明日までにレポートを出さなければなりません。",
         "notes": "〜なければなりません＝必須。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "レポートはいつまでですか。",
+        "cn": "報告的期限到什麼時候？",
+        "answer": "明日までに出さなければなりません。",
+        "choices": [
+          "明日までに出さなければなりません。",
+          "明日は雨でしょう。",
+          "いってきます。",
+          "おめでとうございます。"
+        ]
       }
     ]
   },
@@ -6462,36 +7014,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "日本へ行っ＿＿ことがあります。（去過）",
+        "prompt": "日本（にほん）へ行っ（いっ）＿＿ことがあります。（去過）",
         "answer": "た",
         "choices": [
           "た",
           "て",
           "る",
           "ない"
-        ]
+        ],
+        "explain": "經驗句固定用た形：行った＋ことがあります。"
       },
       {
         "kind": "cloze",
-        "prompt": "寿司を食べたこと＿＿ありません。（沒…過）",
+        "prompt": "寿司を食べ（たべ）たこと＿＿ありません。（沒…過）",
         "answer": "が",
         "choices": [
           "が",
           "は",
           "を",
           "に"
-        ]
+        ],
+        "explain": "ことがありません的が：經驗的有無用が標示。"
       },
       {
         "kind": "cloze",
-        "prompt": "お酒を飲んだ＿＿がありますか。（…過嗎）",
+        "prompt": "お酒（さけ）を飲ん（のん）だ＿＿がありますか。（…過嗎）",
         "answer": "こと",
         "choices": [
           "こと",
           "とき",
           "つもり",
           "ところ"
-        ]
+        ],
+        "explain": "〜たこと＝「做過…這件事」；とき是時候。"
       },
       {
         "kind": "dictation",
@@ -6506,6 +7061,18 @@ const SCENES=[
         "prompt": "用日文說：「我去過日本。」",
         "model": "日本へ行ったことがあります。",
         "notes": "〜たことがあります＝經驗。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "日本へ行ったことがありますか。",
+        "cn": "你去過日本嗎？",
+        "answer": "はい、一度行ったことがあります。",
+        "choices": [
+          "はい、一度行ったことがあります。",
+          "はい、明日行きます。",
+          "ごちそうさまでした。",
+          "おじゃまします。"
+        ]
       }
     ]
   },
@@ -6597,36 +7164,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "明日は雨だ＿＿思います。（覺得）",
+        "prompt": "明日（あした）は雨（あめ）だ＿＿思います。（覺得）",
         "answer": "と",
         "choices": [
           "と",
           "を",
           "に",
           "で"
-        ]
+        ],
+        "explain": "想法引用用と：雨だと思います（名詞＋だ＋と）。"
       },
       {
         "kind": "cloze",
-        "prompt": "この案がいい＿＿思います。（覺得好）",
+        "prompt": "この案（あん）がいい＿＿思います。（覺得好）",
         "answer": "と",
         "choices": [
           "と",
           "を",
           "が",
           "は"
-        ]
+        ],
+        "explain": "い形直接＋と思います：いいと思う。"
       },
       {
         "kind": "cloze",
-        "prompt": "たぶん来る＿＿。（大概會吧）",
+        "prompt": "たぶん来る（くる）＿＿。（大概會吧）",
         "answer": "でしょう",
         "choices": [
           "でしょう",
           "ました",
           "たい",
           "ない"
-        ]
+        ],
+        "explain": "推量「大概…吧」＝でしょう，常配たぶん。"
       },
       {
         "kind": "dictation",
@@ -6641,6 +7211,18 @@ const SCENES=[
         "prompt": "用日文說：「我覺得明天會下雨。」",
         "model": "明日は雨だと思います。",
         "notes": "〜と思います＝表達意見。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "明日の天気、どう思いますか。",
+        "cn": "你覺得明天天氣如何？",
+        "answer": "雨だと思います。",
+        "choices": [
+          "雨だと思います。",
+          "雨をください。",
+          "おかえりなさい。",
+          "いってらっしゃい。"
+        ]
       }
     ]
   },
@@ -6730,7 +7312,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "財布をなくし＿＿。（弄丟了・遺憾）",
+        "prompt": "財布（さいふ）をなくし＿＿。（弄丟了・遺憾）",
         "answer": "てしまいました",
         "choices": [
           "てしまいました",
@@ -6752,7 +7334,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "宿題はもう終わっ＿＿。（做完了）",
+        "prompt": "宿題（しゅくだい）はもう終わっ＿＿。（做完了）",
         "answer": "てしまいました",
         "choices": [
           "てしまいました",
@@ -6774,6 +7356,18 @@ const SCENES=[
         "prompt": "用日文說：「我把傘弄丟了。」",
         "model": "傘をなくしてしまいました。",
         "notes": "〜てしまう＝完成／遺憾。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "どうしたんですか。顔色が悪いですよ。",
+        "cn": "怎麼了？你臉色不太好。",
+        "answer": "財布をなくしてしまったんです。",
+        "choices": [
+          "財布をなくしてしまったんです。",
+          "財布を買っておきます。",
+          "おめでとうございます。",
+          "いただきます。"
+        ]
       }
     ]
   },
@@ -6863,7 +7457,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "客が来る前に部屋を掃除し＿＿。（先打掃好）",
+        "prompt": "客が来る前に部屋（へや）を掃除（そうじ）し＿＿。（先打掃好）",
         "answer": "ておきます",
         "choices": [
           "ておきます",
@@ -6874,7 +7468,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "ビールを冷蔵庫に入れ＿＿。（先冰起來）",
+        "prompt": "ビールを冷蔵庫（れいぞうこ）に入れ（いれ）＿＿。（先冰起來）",
         "answer": "ておく",
         "choices": [
           "ておく",
@@ -6885,7 +7479,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "ホテルを早めに予約し＿＿ましょう。（先預約）",
+        "prompt": "ホテルを早め（はやめ）に予約（よやく）し＿＿ましょう。（先預約）",
         "answer": "ておき",
         "choices": [
           "ておき",
@@ -6907,6 +7501,18 @@ const SCENES=[
         "prompt": "用日文說：「我先把飲料買好。」",
         "model": "飲み物を買っておきます。",
         "notes": "〜ておく＝事先準備。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "パーティーの飲み物、どうしますか。",
+        "cn": "派對的飲料要怎麼辦？",
+        "answer": "私が買っておきます。",
+        "choices": [
+          "私が買っておきます。",
+          "私が飲んでしまいました。",
+          "おやすみなさい。",
+          "ごめんください。"
+        ]
       }
     ]
   },
@@ -6987,7 +7593,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "この新しいラーメン屋に行っ＿＿。（去去看）",
+        "prompt": "この新しい（あたらしい）ラーメン屋に行っ（いっ）＿＿。（去去看）",
         "answer": "てみます",
         "choices": [
           "てみます",
@@ -6998,7 +7604,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "まず一口、食べ＿＿ください。（吃一口看看）",
+        "prompt": "まず一口、食べ（たべ）＿＿ください。（吃一口看看）",
         "answer": "てみて",
         "choices": [
           "てみて",
@@ -7042,6 +7648,18 @@ const SCENES=[
         "prompt": "用日文說：「我想試試這道菜。」",
         "model": "この料理を食べてみたいです。",
         "notes": "〜てみる＝試試看。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "すみません、これ、試着してもいいですか。",
+        "cn": "不好意思，這件可以試穿嗎？",
+        "answer": "はい、どうぞ。こちらへ。",
+        "choices": [
+          "はい、どうぞ。こちらへ。",
+          "いただきます。",
+          "おやすみなさい。",
+          "お大事に。"
+        ]
       }
     ]
   },
@@ -7120,25 +7738,27 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "駅に着い＿＿、電話してください。（到了的話）",
+        "prompt": "駅（えき）に着い（つい）＿＿、電話（でんわ）してください。（到了的話）",
         "answer": "たら",
         "choices": [
           "たら",
           "ても",
           "ながら",
           "ので"
-        ]
+        ],
+        "explain": "「到了之後就…」一次性的前後關係用たら；と偏規律、ば偏假設條件。"
       },
       {
         "kind": "cloze",
-        "prompt": "お金があっ＿＿、旅行したいです。（有的話）",
+        "prompt": "お金（かね）があっ＿＿、旅行（りょこう）したいです。（有的話）",
         "answer": "たら",
         "choices": [
           "たら",
           "ても",
           "から",
           "のに"
-        ]
+        ],
+        "explain": "與現實相反的假想「有錢的話」用たら最自然；なら是接對方話題。"
       },
       {
         "kind": "cloze",
@@ -7149,7 +7769,8 @@ const SCENES=[
           "ても",
           "ながら",
           "より"
-        ]
+        ],
+        "explain": "未來可能情況的假定：〜なかったら＝如果（到時）不懂的話。"
       },
       {
         "kind": "mc",
@@ -7175,6 +7796,18 @@ const SCENES=[
         "prompt": "用日文說：「下雨的話就不去。」",
         "model": "雨が降ったら、行きません。",
         "notes": "〜たら＝如果／…的話。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "駅に着いたら、どうすればいいですか。",
+        "cn": "到了車站之後要怎麼做？",
+        "answer": "着いたら、電話してください。",
+        "choices": [
+          "着いたら、電話してください。",
+          "着きましたか、昨日。",
+          "いってきます。",
+          "ごちそうさまでした。"
+        ]
       }
     ]
   },
@@ -7264,36 +7897,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "電車で足を踏＿＿。（被踩）",
+        "prompt": "電車（でんしゃ）で足（あし）を踏＿＿。（被踩）",
         "answer": "まれました",
         "choices": [
           "まれました",
           "みました",
           "ませました",
           "めました"
-        ]
+        ],
+        "explain": "受害被動：主語是受害者，被踩＝踏まれる。"
       },
       {
         "kind": "cloze",
-        "prompt": "先生＿＿名前を呼ばれました。（被…，動作者用）",
+        "prompt": "先生＿＿名前（なまえ）を呼ばれました。（被…，動作者用）",
         "answer": "に",
         "choices": [
           "に",
           "を",
           "が",
           "へ"
-        ]
+        ],
+        "explain": "被動句的動作者標記用に：先生に呼ばれる。"
       },
       {
         "kind": "cloze",
-        "prompt": "弟にケーキを食べ＿＿。（被吃掉，受害）",
+        "prompt": "弟（おとうと）にケーキを食べ（たべ）＿＿。（被吃掉，受害）",
         "answer": "られました",
         "choices": [
           "られました",
           "ました",
           "させました",
           "ています"
-        ]
+        ],
+        "explain": "「被吃掉」＝受害被動られる；させる是「讓人吃」方向相反。"
       },
       {
         "kind": "dictation",
@@ -7308,6 +7944,18 @@ const SCENES=[
         "prompt": "用日文說：「我被老師稱讚了。」",
         "model": "先生に褒められました。",
         "notes": "受身＝被…；動作者用に。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "うれしそうですね。何かあったんですか。",
+        "cn": "你看起來很開心，發生什麼事了？",
+        "answer": "先生に褒められたんです。",
+        "choices": [
+          "先生に褒められたんです。",
+          "先生を褒めてはいけません。",
+          "おじゃまします。",
+          "おかえりなさい。"
+        ]
       }
     ]
   },
@@ -7386,36 +8034,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "母は私に部屋を掃除＿＿。（叫我打掃）",
+        "prompt": "母（はは）は私（わたし）に部屋（へや）を掃除（そうじ）＿＿。（叫我打掃）",
         "answer": "させました",
         "choices": [
           "させました",
           "しました",
           "されました",
           "していました"
-        ]
+        ],
+        "explain": "使役＝上位者叫下位者做：させる；される是「被…」。"
       },
       {
         "kind": "cloze",
-        "prompt": "子供＿＿宿題をさせます。（對象用）",
+        "prompt": "子供（こども）＿＿宿題（しゅくだい）をさせます。（對象用）",
         "answer": "に",
         "choices": [
           "に",
           "を",
           "が",
           "へ"
-        ]
+        ],
+        "explain": "使役對象（被叫的人）用に：子供に〜させる。"
       },
       {
         "kind": "cloze",
-        "prompt": "すみません、お待た＿＿しました。（讓您久等・套語）",
+        "prompt": "すみません、お待た（また）＿＿しました。（讓您久等・套語）",
         "answer": "せ",
         "choices": [
           "せ",
           "さ",
           "し",
           "れ"
-        ]
+        ],
+        "explain": "套語「お待たせしました」＝使役せ＋謙讓：讓您久等了。"
       },
       {
         "kind": "mc",
@@ -7441,6 +8092,18 @@ const SCENES=[
         "prompt": "用日文說：「我讓孩子吃蔬菜。」",
         "model": "子供に野菜を食べさせます。",
         "notes": "使役＝讓／叫某人做。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "すみません、遅くなりました。",
+        "cn": "抱歉，我來晚了。",
+        "answer": "いえいえ。お待たせしましたはこちらこそ。",
+        "choices": [
+          "いえいえ。お待たせしましたはこちらこそ。",
+          "はい、待たせてください。",
+          "いってらっしゃい。",
+          "おめでとうございます。"
+        ]
       }
     ]
   },
@@ -7526,29 +8189,32 @@ const SCENES=[
           "らしい",
           "という",
           "そうだ"
-        ]
+        ],
+        "explain": "樣態そう接い形去い：おいし＋そう＝看起來好吃；らしい是聽來的。"
       },
       {
         "kind": "cloze",
-        "prompt": "空が暗い。雨が降り＿＿です。（看起來要下）",
+        "prompt": "空（そら）が暗い（くらい）。雨（あめ）が降り＿＿です。（看起來要下）",
         "answer": "そう",
         "choices": [
           "そう",
           "らしい",
           "という",
           "ない"
-        ]
+        ],
+        "explain": "樣態そう接ます形語幹：降り＋そう＝眼看要下了。"
       },
       {
         "kind": "cloze",
-        "prompt": "彼は元気＿＿です。（看起來有精神，な形直接＋）",
+        "prompt": "彼（かれ）は元気＿＿です。（看起來有精神，な形直接＋）",
         "answer": "そう",
         "choices": [
           "そう",
           "くそう",
           "いそう",
           "なそう"
-        ]
+        ],
+        "explain": "な形容詞直接＋そう：元気そう；「なそう」是常見錯誤。"
       },
       {
         "kind": "mc",
@@ -7574,6 +8240,18 @@ const SCENES=[
         "prompt": "用日文說：「看起來很好吃。」",
         "model": "おいしそうです。",
         "notes": "樣態そう＝憑外觀判斷。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "見て、あのケーキ。",
+        "cn": "你看那個蛋糕。",
+        "answer": "わあ、おいしそうですね。",
+        "choices": [
+          "わあ、おいしそうですね。",
+          "はい、おいしかったそうです。",
+          "ただいま。",
+          "ごめんください。"
+        ]
       }
     ]
   },
@@ -7658,36 +8336,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "天気予報による＿、明日は雨だそうです。（根據）",
+        "prompt": "天気予報（てんきよほう）による＿、明日（あした）は雨（あめ）だそうです。（根據）",
         "answer": "と",
         "choices": [
           "と",
           "で",
           "に",
           "から"
-        ]
+        ],
+        "explain": "「根據…」固定搭配によると，後接傳聞そうだ。"
       },
       {
         "kind": "cloze",
-        "prompt": "田中さんは来ない＿＿です。（聽說不來，普通形＋）",
+        "prompt": "田中さんは来ない（こない）＿＿です。（聽說不來，普通形＋）",
         "answer": "そう",
         "choices": [
           "そう",
           "よう",
           "たい",
           "ながら"
-        ]
+        ],
+        "explain": "傳聞そうだ接普通形不變形：来ないそうだ；樣態則是来なさそう。"
       },
       {
         "kind": "cloze",
-        "prompt": "あの店は安い＿＿よ。（聽說／好像便宜）",
+        "prompt": "あの店は安い（やすい）＿＿よ。（聽說／好像便宜）",
         "answer": "らしい",
         "choices": [
           "らしい",
           "たい",
           "ない",
           "ながら"
-        ]
+        ],
+        "explain": "らしい＝有根據的推測／傳聞，接普通形：安いらしい。"
       },
       {
         "kind": "mc",
@@ -7713,6 +8394,18 @@ const SCENES=[
         "prompt": "用日文說：「聽說田中先生不來。」",
         "model": "田中さんは来ないそうです。",
         "notes": "傳聞そうだ＝聽說（接普通形）。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "田中さん、今日は来ますか。",
+        "cn": "田中先生今天會來嗎？",
+        "answer": "来ないそうですよ。",
+        "choices": [
+          "来ないそうですよ。",
+          "来てはいけませんよ。",
+          "いただきます。",
+          "おやすみなさい。"
+        ]
       }
     ]
   },
@@ -7793,7 +8486,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "練習して、泳げる＿＿になりました。（變得會）",
+        "prompt": "練習（れんしゅう）して、泳げ（およげ）る＿＿になりました。（變得會）",
         "answer": "よう",
         "choices": [
           "よう",
@@ -7804,7 +8497,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "最近、野菜が食べられる＿＿になった。（變得敢吃）",
+        "prompt": "最近、野菜（やさい）が食べ（たべ）られる＿＿になった。（變得敢吃）",
         "answer": "よう",
         "choices": [
           "よう",
@@ -7815,7 +8508,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "朝、早く起きる＿＿になりました。（變成習慣）",
+        "prompt": "朝、早く起き（おき）る＿＿になりました。（變成習慣）",
         "answer": "よう",
         "choices": [
           "よう",
@@ -7848,6 +8541,18 @@ const SCENES=[
         "prompt": "用日文說：「我變得會說日語了。」",
         "model": "日本語が話せるようになりました。",
         "notes": "〜ようになる＝能力／習慣的變化。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "日本語、上手になりましたね。",
+        "cn": "你的日語變好了呢。",
+        "answer": "はい、少し話せるようになりました。",
+        "choices": [
+          "はい、少し話せるようになりました。",
+          "はい、話してはいけません。",
+          "いってきます。",
+          "おじゃまします。"
+        ]
       }
     ]
   },
@@ -7926,36 +8631,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "約束したから、彼は来る＿＿です。（應該）",
+        "prompt": "約束（やくそく）したから、彼（かれ）は来る（くる）＿＿です。（應該）",
         "answer": "はず",
         "choices": [
           "はず",
           "そう",
           "たい",
           "ながら"
-        ]
+        ],
+        "explain": "有根據（約好了）的推論用はず；つもり是自己的打算。"
       },
       {
         "kind": "cloze",
-        "prompt": "電車はもう着いている＿＿です。（應該）",
+        "prompt": "電車（でんしゃ）はもう着い（つい）ている＿＿です。（應該）",
         "answer": "はず",
         "choices": [
           "はず",
           "つもり",
           "ながら",
           "ように"
-        ]
+        ],
+        "explain": "はず＝照理應該（有根據）；かもしれない把握度低得多。"
       },
       {
         "kind": "cloze",
-        "prompt": "そんなに簡単な＿＿がない。（不可能那麼簡單，な形＋な＋）",
+        "prompt": "そんなに簡単（かんたん）な＿＿がない。（不可能那麼簡單，な形＋な＋）",
         "answer": "はず",
         "choices": [
           "はず",
           "つもり",
           "よう",
           "そう"
-        ]
+        ],
+        "explain": "はずがない＝不可能；な形接續：簡単な＋はず。"
       },
       {
         "kind": "mc",
@@ -7981,6 +8689,18 @@ const SCENES=[
         "prompt": "用日文說：「他應該已經到了。」",
         "model": "彼はもう着いているはずです。",
         "notes": "〜はず＝有根據的推測「應該」。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "彼、まだ来ませんね。",
+        "cn": "他還沒來呢。",
+        "answer": "約束したから、来るはずです。",
+        "choices": [
+          "約束したから、来るはずです。",
+          "約束を食べました。",
+          "おかえりなさい。",
+          "ごちそうさまでした。"
+        ]
       }
     ]
   },
@@ -8059,36 +8779,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "渋滞で、少し遅れる＿＿。（可能會）",
+        "prompt": "渋滞（じゅうたい）で、少し遅れる（おくれる）＿＿。（可能會）",
         "answer": "かもしれません",
         "choices": [
           "かもしれません",
           "はずです",
           "つもりです",
           "ようになりました"
-        ]
+        ],
+        "explain": "沒把握的可能用かもしれません；はず要有根據。"
       },
       {
         "kind": "cloze",
-        "prompt": "彼はもう帰った＿＿。（說不定回去了，普通形＋）",
+        "prompt": "彼（かれ）はもう帰っ（かえっ）た＿＿。（說不定回去了，普通形＋）",
         "answer": "かもしれない",
         "choices": [
           "かもしれない",
           "はずがない",
           "つもり",
           "ながら"
-        ]
+        ],
+        "explain": "かもしれない接普通形（含た形）：帰ったかもしれない。"
       },
       {
         "kind": "cloze",
-        "prompt": "明日は雪＿＿しれません。（可能下雪，名詞直接＋）",
+        "prompt": "明日（あした）は雪（ゆき）＿＿しれません。（可能下雪，名詞直接＋）",
         "answer": "かも",
         "choices": [
           "かも",
           "だかも",
           "なかも",
           "ではかも"
-        ]
+        ],
+        "explain": "名詞直接＋かも：雪かもしれない；不加だ。"
       },
       {
         "kind": "mc",
@@ -8114,6 +8837,18 @@ const SCENES=[
         "prompt": "用日文說：「明天可能會下雨。」",
         "model": "明日は雨かもしれません。",
         "notes": "〜かもしれない＝不確定的可能。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "間に合いますか。",
+        "cn": "來得及嗎？",
+        "answer": "渋滞で、少し遅れるかもしれません。",
+        "choices": [
+          "渋滞で、少し遅れるかもしれません。",
+          "渋滞はおいしいです。",
+          "おめでとうございます。",
+          "ただいま。"
+        ]
       }
     ]
   },
@@ -8225,7 +8960,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "私が荷物をお持ち＿＿。（謙讓：我來拿）",
+        "prompt": "私（わたし）が荷物をお持ち＿＿。（謙讓：我來拿）",
         "answer": "します",
         "choices": [
           "します",
@@ -8236,7 +8971,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "どうぞ＿＿上がってください。（請吃，尊敬）",
+        "prompt": "どうぞ＿＿上（うえ）がってください。（請吃，尊敬）",
         "answer": "召し",
         "choices": [
           "召し",
@@ -8258,6 +8993,18 @@ const SCENES=[
         "prompt": "用日文說：「我來幫您拿。」",
         "model": "お持ちします。",
         "notes": "お＋ます形語幹＋する＝謙讓。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "荷物、重そうですね。",
+        "cn": "行李看起來很重呢。",
+        "answer": "私がお持ちします。",
+        "choices": [
+          "私がお持ちします。",
+          "私がお持ちになります。",
+          "いってらっしゃい。",
+          "おやすみなさい。"
+        ]
       }
     ]
   },
@@ -8336,7 +9083,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "考えれ＿＿考えるほど分からなくなる。（越…越…）",
+        "prompt": "考え（かんがえ）れ＿＿考え（かんがえ）るほど分からなくなる。（越…越…）",
         "answer": "ば",
         "choices": [
           "ば",
@@ -8347,7 +9094,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "安けれ＿＿安いほどいい。（越便宜越好，い形）",
+        "prompt": "安けれ（やすけれ）＿＿安い（やすい）ほどいい。（越便宜越好，い形）",
         "answer": "ば",
         "choices": [
           "ば",
@@ -8358,7 +9105,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "練習すれば＿＿ほど上手になる。（越…越，動詞）",
+        "prompt": "練習（れんしゅう）すれば＿＿ほど上手（じょうず）になる。（越…越，動詞）",
         "answer": "する",
         "choices": [
           "する",
@@ -8391,6 +9138,18 @@ const SCENES=[
         "prompt": "用日文說：「越練習就越進步。」",
         "model": "練習すればするほど上手になります。",
         "notes": "〜ば〜ほど＝越…越…。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "日本語、難しいですね。",
+        "cn": "日語好難啊。",
+        "answer": "ええ。でも、練習すればするほど上手になりますよ。",
+        "choices": [
+          "ええ。でも、練習すればするほど上手になりますよ。",
+          "ええ、練習してはいけません。",
+          "ごめんください。",
+          "いただきます。"
+        ]
       }
     ]
   },
@@ -8469,36 +9228,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "雪が降っている。寒い＿＿だ。（難怪冷）",
+        "prompt": "雪（ゆき）が降っ（ふっ）ている。寒い＿＿だ。（難怪冷）",
         "answer": "わけ",
         "choices": [
           "わけ",
           "はず",
           "つもり",
           "そう"
-        ]
+        ],
+        "explain": "有前提（下雪）導出的必然結論＝わけだ「難怪」。"
       },
       {
         "kind": "cloze",
-        "prompt": "彼は10年日本にいた。日本語が上手な＿＿だ。（難怪，な形＋な＋）",
+        "prompt": "彼（かれ）は10年日本にいた。日本語（にほんご）が上手（じょうず）な＿＿だ。（難怪，な形＋な＋）",
         "answer": "わけ",
         "choices": [
           "わけ",
           "つもり",
           "ながら",
           "ように"
-        ]
+        ],
+        "explain": "な形＋な＋わけ：上手なわけだ＝（住了十年）當然厲害。"
       },
       {
         "kind": "cloze",
-        "prompt": "つまり、君は行かないという＿＿ですね。（也就是說）",
+        "prompt": "つまり、君（きみ）は行か（いか）ないという＿＿ですね。（也就是說）",
         "answer": "わけ",
         "choices": [
           "わけ",
           "はず",
           "つもり",
           "そう"
-        ]
+        ],
+        "explain": "〜というわけだ＝「也就是說…」，向對方確認結論。"
       },
       {
         "kind": "mc",
@@ -8524,6 +9286,18 @@ const SCENES=[
         "prompt": "用日文說：「難怪這麼冷。」",
         "model": "道理で寒いわけだ。",
         "notes": "〜わけだ＝必然的結論。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "彼、日本に10年住んでいたんですよ。",
+        "cn": "他在日本住過十年喔。",
+        "answer": "道理で日本語が上手なわけだ。",
+        "choices": [
+          "道理で日本語が上手なわけだ。",
+          "日本語を住みました。",
+          "おかえりなさい。",
+          "いってきます。"
+        ]
       }
     ]
   },
@@ -8606,36 +9380,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "全部が嫌いな＿＿ではない。（並非全都討厭）",
+        "prompt": "全部（ぜんぶ）が嫌い（きらい）な＿＿ではない。（並非全都討厭）",
         "answer": "わけ",
         "choices": [
           "わけ",
           "はず",
           "つもり",
           "そう"
-        ]
+        ],
+        "explain": "部分否定：並非（全都）討厭；全面否定則直接說嫌いだ。"
       },
       {
         "kind": "cloze",
-        "prompt": "明日は試験だから、休む＿＿にはいかない。（不能請假）",
+        "prompt": "明日（あした）は試験（しけん）だから、休む（やすむ）＿＿にはいかない。（不能請假）",
         "answer": "わけ",
         "choices": [
           "わけ",
           "はず",
           "つもり",
           "よう"
-        ]
+        ],
+        "explain": "わけにはいかない＝情理上不能；できない是能力上做不到。"
       },
       {
         "kind": "cloze",
-        "prompt": "飲めない＿＿ではないが、あまり飲まない。（並非不能喝）",
+        "prompt": "飲め（のめ）ない＿＿ではないが、あまり飲まない。（並非不能喝）",
         "answer": "わけ",
         "choices": [
           "わけ",
           "はず",
           "つもり",
           "ながら"
-        ]
+        ],
+        "explain": "雙重否定＝部分肯定：不是不能喝（只是不太喝）。"
       },
       {
         "kind": "mc",
@@ -8661,6 +9438,18 @@ const SCENES=[
         "prompt": "用日文說：「我並不是討厭（它）。」",
         "model": "嫌いなわけではありません。",
         "notes": "〜わけではない＝部分否定。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "お酒、嫌いなんですか。",
+        "cn": "你討厭酒嗎？",
+        "answer": "嫌いなわけではないんですが、あまり飲みません。",
+        "choices": [
+          "嫌いなわけではないんですが、あまり飲みません。",
+          "はい、大好きで飲みません。",
+          "おじゃまします。",
+          "おやすみなさい。"
+        ]
       }
     ]
   },
@@ -8732,7 +9521,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "免許は持っている＿＿、ほとんど運転しない。（雖然…但）",
+        "prompt": "免許（めんきょ）は持っている＿＿、ほとんど運転（うんてん）しない。（雖然…但）",
         "answer": "ものの",
         "choices": [
           "ものの",
@@ -8743,7 +9532,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "約束した＿＿、彼は来なかった。（雖然約好但…）",
+        "prompt": "約束（やくそく）した＿＿、彼（かれ）は来なかった。（雖然約好但…）",
         "answer": "ものの",
         "choices": [
           "ものの",
@@ -8754,7 +9543,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "高い＿＿、質はよくない。（雖然貴但…，い形＋）",
+        "prompt": "高い（たかい）＿＿、質（しつ）はよくない。（雖然貴但…，い形＋）",
         "answer": "ものの",
         "choices": [
           "ものの",
@@ -8798,6 +9587,18 @@ const SCENES=[
         "prompt": "用日文說：「雖然買了，但沒在用。」",
         "model": "買ったものの、使っていません。",
         "notes": "〜ものの＝雖然…但是。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "車の免許、持っていますよね。",
+        "cn": "你有駕照對吧？",
+        "answer": "持っているものの、ほとんど運転しません。",
+        "choices": [
+          "持っているものの、ほとんど運転しません。",
+          "持ってはいけませんでした。",
+          "ごちそうさまでした。",
+          "おめでとうございます。"
+        ]
       }
     ]
   },
@@ -8880,36 +9681,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "上司に毎日残業＿＿。（被迫加班）",
+        "prompt": "上司（じょうし）に毎日残業＿＿。（被迫加班）",
         "answer": "させられます",
         "choices": [
           "させられます",
           "させます",
           "されます",
           "できます"
-        ]
+        ],
+        "explain": "「被上司迫使加班」＝使役受身させられる；させます是自己叫別人。"
       },
       {
         "kind": "cloze",
-        "prompt": "飲み会で、お酒を飲ま＿＿た。（被迫喝）",
+        "prompt": "飲み会で、お酒（さけ）を飲ま＿＿た。（被迫喝）",
         "answer": "され",
         "choices": [
           "され",
           "せ",
           "れ",
           "られ"
-        ]
+        ],
+        "explain": "Ⅰ類縮約：飲ませられる→飲まされる，被灌酒。"
       },
       {
         "kind": "cloze",
-        "prompt": "子供のころ、ピアノを習わ＿＿た。（被迫學）",
+        "prompt": "子供（こども）のころ、ピアノを習わ（ならわ）＿＿た。（被迫學）",
         "answer": "され",
         "choices": [
           "され",
           "せ",
           "れ",
           "い"
-        ]
+        ],
+        "explain": "小時候「被迫學」＝習わされる；不情願是使役受身核心語感。"
       },
       {
         "kind": "mc",
@@ -8935,6 +9739,18 @@ const SCENES=[
         "prompt": "用日文說：「我被迫加班了。」",
         "model": "残業させられました。",
         "notes": "使役受身＝被迫做。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "疲れた顔ですね。",
+        "cn": "你一臉疲憊呢。",
+        "answer": "ええ、毎日残業させられているんです。",
+        "choices": [
+          "ええ、毎日残業させられているんです。",
+          "ええ、残業がおいしいです。",
+          "いってらっしゃい。",
+          "ただいま。"
+        ]
       }
     ]
   },
@@ -9013,7 +9829,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "あの様子だと、彼は怒っている＿＿違いない。（一定）",
+        "prompt": "あの様子（ようす）だと、彼（かれ）は怒っ（おこっ）ている＿＿違いない。（一定）",
         "answer": "に",
         "choices": [
           "に",
@@ -9024,7 +9840,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "これは本物＿＿違いない。（一定是真品，名詞直接＋）",
+        "prompt": "これは本物（ほんもの）＿＿違いない。（一定是真品，名詞直接＋）",
         "answer": "に",
         "choices": [
           "に",
@@ -9035,7 +9851,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "こんなに簡単なら、できる＿＿違いない。（一定能）",
+        "prompt": "こんなに簡単（かんたん）なら、できる＿＿違いない。（一定能）",
         "answer": "に",
         "choices": [
           "に",
@@ -9068,6 +9884,18 @@ const SCENES=[
         "prompt": "用日文說：「他一定是犯人。」",
         "model": "彼は犯人に違いない。",
         "notes": "〜に違いない＝強烈確信。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "あの様子、怒っていますよね。",
+        "cn": "看那樣子，他在生氣吧。",
+        "answer": "ええ、怒っているに違いありません。",
+        "choices": [
+          "ええ、怒っているに違いありません。",
+          "ええ、怒ってください。",
+          "おはようございます。",
+          "ごめんください。"
+        ]
       }
     ]
   },
@@ -9135,7 +9963,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "雨なので、中止せ＿＿を得ない。（不得不取消，する→せ）",
+        "prompt": "雨（あめ）なので、中止（ちゅうし）せ＿＿を得ない（えない）。（不得不取消，する→せ）",
         "answer": "ざる",
         "choices": [
           "ざる",
@@ -9146,7 +9974,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "証拠があるので、認め＿＿を得ない。（不得不承認）",
+        "prompt": "証拠（しょうこ）があるので、認め（みとめ）＿＿を得ない（えない）。（不得不承認）",
         "answer": "ざる",
         "choices": [
           "ざる",
@@ -9157,7 +9985,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "上司の命令だから、従わ＿＿を得ない。（不得不服從）",
+        "prompt": "上司（じょうし）の命令（めいれい）だから、従わ（したがわ）＿＿を得ない（えない）。（不得不服從）",
         "answer": "ざる",
         "choices": [
           "ざる",
@@ -9201,6 +10029,18 @@ const SCENES=[
         "prompt": "用日文說：「不得不承認。」",
         "model": "認めざるを得ない。",
         "notes": "〜ざるを得ない＝不得不（書面）。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "明日の試合、雨ですよ。",
+        "cn": "明天的比賽會下雨喔。",
+        "answer": "じゃあ、中止せざるを得ませんね。",
+        "choices": [
+          "じゃあ、中止せざるを得ませんね。",
+          "じゃあ、雨をください。",
+          "おじゃまします。",
+          "おやすみなさい。"
+        ]
       }
     ]
   },
@@ -9279,36 +10119,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "留学する＿＿に、お金をためる。（為了，動詞辭書形＋）",
+        "prompt": "留学（りゅうがく）する＿＿に、お金（かね）をためる。（為了，動詞辭書形＋）",
         "answer": "ため",
         "choices": [
           "ため",
           "よう",
           "はず",
           "から"
-        ]
+        ],
+        "explain": "意志動詞的目的用ために；留学是自己要做的事。"
       },
       {
         "kind": "cloze",
-        "prompt": "健康の＿＿に、毎日歩きます。（為了，名詞＋の＋）",
+        "prompt": "健康（けんこう）の＿＿に、毎日歩きます。（為了，名詞＋の＋）",
         "answer": "ため",
         "choices": [
           "ため",
           "よう",
           "から",
           "ので"
-        ]
+        ],
+        "explain": "名詞＋の＋ため：健康のために。"
       },
       {
         "kind": "cloze",
-        "prompt": "日本語が話せる＿＿に、毎日練習する。（為了能，可能形＋）",
+        "prompt": "日本語（にほんご）が話せる＿＿に、毎日練習する。（為了能，可能形＋）",
         "answer": "よう",
         "choices": [
           "よう",
           "ため",
           "はず",
           "から"
-        ]
+        ],
+        "explain": "可能形（非意志）＋ように：為了「能」說→ように，不用ため。"
       },
       {
         "kind": "mc",
@@ -9334,6 +10177,18 @@ const SCENES=[
         "prompt": "用日文說：「為了健康，我每天運動。」",
         "model": "健康のために運動します。",
         "notes": "〜ために＝目的（意志）；〜ように＝為了能（非意志）。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "どうして毎日走っているんですか。",
+        "cn": "你為什麼每天跑步？",
+        "answer": "健康のために走っています。",
+        "choices": [
+          "健康のために走っています。",
+          "健康が走りました。",
+          "いってきます。",
+          "ごちそうさまでした。"
+        ]
       }
     ]
   },
@@ -9416,36 +10271,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "熱い＿＿に食べてください。（趁熱，い形＋）",
+        "prompt": "熱い（あつい）＿＿に食べ（たべ）てください。（趁熱，い形＋）",
         "answer": "うち",
         "choices": [
           "うち",
           "とき",
           "まで",
           "から"
-        ]
+        ],
+        "explain": "趁狀態改變前＝うちに；とき只說時點、沒有「趁」的急迫感。"
       },
       {
         "kind": "cloze",
-        "prompt": "明るい＿＿に帰りましょう。（趁天還亮）",
+        "prompt": "明るい（あかるい）＿＿に帰り（かえり）ましょう。（趁天還亮）",
         "answer": "うち",
         "choices": [
           "うち",
           "あいだ",
           "まで",
           "ながら"
-        ]
+        ],
+        "explain": "趁天還亮（暗之前）→うちに；あいだに偏「期間內某點」。"
       },
       {
         "kind": "cloze",
-        "prompt": "忘れない＿＿にメモします。（趁還沒忘，否定＋）",
+        "prompt": "忘れ（わすれ）ない＿＿にメモします。（趁還沒忘，否定＋）",
         "answer": "うち",
         "choices": [
           "うち",
           "とき",
           "まで",
           "ように"
-        ]
+        ],
+        "explain": "ない形＋うちに＝趁還沒…：忘れないうちにメモ。"
       },
       {
         "kind": "mc",
@@ -9471,6 +10329,18 @@ const SCENES=[
         "prompt": "用日文說：「請趁熱吃。」",
         "model": "熱いうちに食べてください。",
         "notes": "〜うちに＝趁（變化前）。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "料理、できましたよ。",
+        "cn": "菜做好囉。",
+        "answer": "じゃあ、熱いうちに食べましょう。",
+        "choices": [
+          "じゃあ、熱いうちに食べましょう。",
+          "じゃあ、冷たいでした。",
+          "おかえりなさい。",
+          "おめでとうございます。"
+        ]
       }
     ]
   },
@@ -9549,36 +10419,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "ご飯を食べた＿＿だから、お腹がいっぱい。（剛吃完）",
+        "prompt": "ご飯（ごはん）を食べ（たべ）た＿＿だから、お腹がいっぱい。（剛吃完）",
         "answer": "ばかり",
         "choices": [
           "ばかり",
           "ながら",
           "つもり",
           "ように"
-        ]
+        ],
+        "explain": "た形＋ばかり＝剛…完不久；てばかり是「老是」。"
       },
       {
         "kind": "cloze",
-        "prompt": "弟はゲームをして＿＿いる。（老是只玩）",
+        "prompt": "弟（おとうと）はゲームをして＿＿いる。（老是只玩）",
         "answer": "ばかり",
         "choices": [
           "ばかり",
           "ながら",
           "たり",
           "ように"
-        ]
+        ],
+        "explain": "て形＋ばかりいる＝淨是…（帶批評）；たばかり是「剛做完」。"
       },
       {
         "kind": "cloze",
-        "prompt": "甘い物＿＿食べると太るよ。（光吃甜食）",
+        "prompt": "甘い物（あまいもの）＿＿食べ（たべ）ると太る（ふとる）よ。（光吃甜食）",
         "answer": "ばかり",
         "choices": [
           "ばかり",
           "ながら",
           "までに",
           "ように"
-        ]
+        ],
+        "explain": "名詞＋ばかり＝光吃…；だけ中性、ばかり帶「太偏」語感。"
       },
       {
         "kind": "mc",
@@ -9604,6 +10477,18 @@ const SCENES=[
         "prompt": "用日文說：「我剛吃完。」",
         "model": "食べたばかりです。",
         "notes": "〜たばかり＝剛…完。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "一緒に食べませんか。",
+        "cn": "要不要一起吃？",
+        "answer": "すみません、さっき食べたばかりなんです。",
+        "choices": [
+          "すみません、さっき食べたばかりなんです。",
+          "すみません、明日食べたばかりです。",
+          "いってらっしゃい。",
+          "ごめんください。"
+        ]
       }
     ]
   },
@@ -9682,36 +10567,39 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "このボタンを押す＿＿、ドアが開きます。（一…就）",
+        "prompt": "このボタンを押す（おす）＿＿、ドアが開きます。（一…就）",
         "answer": "と",
         "choices": [
           "と",
           "たら",
           "ば",
           "なら"
-        ]
+        ],
+        "explain": "機器操作＝必然結果用と；後句不能接命令・意志。"
       },
       {
         "kind": "cloze",
-        "prompt": "まっすぐ行く＿＿、駅があります。（一直走就…）",
+        "prompt": "まっすぐ行く（いく）＿＿、駅（えき）があります。（一直走就…）",
         "answer": "と",
         "choices": [
           "と",
           "ても",
           "のに",
           "から"
-        ]
+        ],
+        "explain": "報路是恆常事實（走就會到）→と；たら偏「某一次」。"
       },
       {
         "kind": "cloze",
-        "prompt": "春になる＿＿、桜が咲きます。（一到春天就）",
+        "prompt": "春（はる）になる＿＿、桜（さくら）が咲き（さき）ます。（一到春天就）",
         "answer": "と",
         "choices": [
           "と",
           "ても",
           "のに",
           "ながら"
-        ]
+        ],
+        "explain": "自然規律（每年如此）用と；たら偏「某一次」。"
       },
       {
         "kind": "mc",
@@ -9737,6 +10625,18 @@ const SCENES=[
         "prompt": "用日文說：「一按這個按鈕，門就會開。」",
         "model": "このボタンを押すと、ドアが開きます。",
         "notes": "〜と＝必然／規律的結果。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "すみません、駅はどう行けばいいですか。",
+        "cn": "不好意思，車站要怎麼走？",
+        "answer": "まっすぐ行くと、右にありますよ。",
+        "choices": [
+          "まっすぐ行くと、右にありますよ。",
+          "まっすぐはおいしいですよ。",
+          "おやすみなさい。",
+          "いただきます。"
+        ]
       }
     ]
   },
@@ -9847,7 +10747,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "恐れ入りますが、お名前を教え＿＿か。（能否請您告知）",
+        "prompt": "恐れ入りますが（おそれいりますが）、お名前（なまえ）を教え＿＿か。（能否請您告知）",
         "answer": "ていただけます",
         "choices": [
           "ていただけます",
@@ -9858,7 +10758,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "資料を拝見させ＿＿ますか。（能否讓我拜讀）",
+        "prompt": "資料（しりょう）を拝見させ＿＿ますか。（能否讓我拜讀）",
         "answer": "ていただけ",
         "choices": [
           "ていただけ",
@@ -9880,6 +10780,18 @@ const SCENES=[
         "prompt": "用日文說：「能否請您稍候？」",
         "model": "少々お待ちいただけますか。",
         "notes": "〜ていただけますか＝最禮貌的請託。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "少々お待ちいただけますか。",
+        "cn": "能否請您稍候？",
+        "answer": "はい、大丈夫です。",
+        "choices": [
+          "はい、大丈夫です。",
+          "はい、お待ちになります。",
+          "いってきます。",
+          "ごちそうさまでした。"
+        ]
       }
     ]
   },
@@ -9983,7 +10895,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "頭＿＿痛いです。（…痛，主語助詞）",
+        "prompt": "頭（あたま）＿＿痛い（いたい）です。（…痛，主語助詞）",
         "answer": "が",
         "choices": [
           "が",
@@ -9994,7 +10906,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "昨日から熱＿＿あります。（有發燒）",
+        "prompt": "昨日（きのう）から熱＿＿あります。（有發燒）",
         "answer": "が",
         "choices": [
           "が",
@@ -10005,7 +10917,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "お腹が痛い＿＿です。（好像…，婉轉）",
+        "prompt": "お腹が痛い（いたい）＿＿です。（好像…，婉轉）",
         "answer": "みたい",
         "choices": [
           "みたい",
@@ -10027,6 +10939,18 @@ const SCENES=[
         "prompt": "用日文說：「我頭痛。」",
         "model": "頭が痛いです。",
         "notes": "身體部位＋が＋痛い。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "今日はどうしましたか。",
+        "cn": "（醫師）今天怎麼了？",
+        "answer": "頭が痛いんです。",
+        "choices": [
+          "頭が痛いんです。",
+          "頭がいいですね。",
+          "お大事に。",
+          "こちらこそ。"
+        ]
       }
     ]
   },
@@ -10128,7 +11052,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "風邪＿＿効く薬をください。（對…有效）",
+        "prompt": "風邪（かぜ）＿＿効く薬をください。（對…有效）",
         "answer": "に",
         "choices": [
           "に",
@@ -10139,7 +11063,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "一日三回、食後＿＿飲んでください。（在…時點）",
+        "prompt": "一日三回（いちにちさんかい）、食後（しょくご）＿＿飲ん（のん）でください。（在…時點）",
         "answer": "に",
         "choices": [
           "に",
@@ -10172,6 +11096,18 @@ const SCENES=[
         "prompt": "用日文問：「有對感冒有效的藥嗎？」",
         "model": "風邪に効く薬はありますか。",
         "notes": "〜に効く＝對…有效。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "どんな症状ですか。",
+        "cn": "（藥師）是什麼症狀？",
+        "answer": "熱があって、のども痛いです。",
+        "choices": [
+          "熱があって、のども痛いです。",
+          "熱がおいしいです。",
+          "いってらっしゃい。",
+          "ごちそうさまでした。"
+        ]
       }
     ]
   },
@@ -10275,7 +11211,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "口座を開き＿＿んですが。（我想開戶，委婉）",
+        "prompt": "口座（こうざ）を開き＿＿んですが。（我想開戶，委婉）",
         "answer": "たい",
         "choices": [
           "たい",
@@ -10286,7 +11222,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "ATMでお金を引き出し＿＿。（想提款）",
+        "prompt": "ATMでお金（かね）を引き出し（だし）＿＿。（想提款）",
         "answer": "たいです",
         "choices": [
           "たいです",
@@ -10319,6 +11255,18 @@ const SCENES=[
         "prompt": "用日文說：「我想開戶。」",
         "model": "口座を開きたいんですが。",
         "notes": "〜たいんですが＝委婉提出需求。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "本日はどのようなご用件ですか。",
+        "cn": "（行員）今天要辦什麼業務？",
+        "answer": "口座を開きたいんですが。",
+        "choices": [
+          "口座を開きたいんですが。",
+          "口座を食べたいんですが。",
+          "おやすみなさい。",
+          "ただいま。"
+        ]
       }
     ]
   },
@@ -10420,7 +11368,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "これを台湾＿＿送りたいです。（寄到…）",
+        "prompt": "これを台湾（たいわん）＿＿送り（おくり）たいです。（寄到…）",
         "answer": "へ",
         "choices": [
           "へ",
@@ -10431,7 +11379,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "船便＿＿送ると安いです。（用…手段）",
+        "prompt": "船便（ふなびん）＿＿送る（おくる）と安い（やすい）です。（用…手段）",
         "answer": "で",
         "choices": [
           "で",
@@ -10464,6 +11412,18 @@ const SCENES=[
         "prompt": "用日文說：「我想用航空寄。」",
         "model": "航空便で送りたいです。",
         "notes": "〜で＝手段（用…寄）。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "どちらまでお送りしますか。",
+        "cn": "（郵局）要寄到哪裡？",
+        "answer": "台湾までお願いします。",
+        "choices": [
+          "台湾までお願いします。",
+          "台湾から来ました、昨日。",
+          "おかえりなさい。",
+          "いただきます。"
+        ]
       }
     ]
   },
@@ -10563,7 +11523,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "家賃は管理費＿＿ですか。（含…）",
+        "prompt": "家賃（やちん）は管理費＿＿ですか。（含…）",
         "answer": "込み（こみ）",
         "choices": [
           "込み（こみ）",
@@ -10574,7 +11534,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "駅から近い部屋＿＿探しています。（受詞）",
+        "prompt": "駅（えき）から近い部屋（へや）＿＿探しています。（受詞）",
         "answer": "を",
         "choices": [
           "を",
@@ -10607,6 +11567,18 @@ const SCENES=[
         "prompt": "用日文問：「房租含管理費嗎？」",
         "model": "家賃は管理費込みですか。",
         "notes": "〜込み＝含…在內。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "ご希望の条件はありますか。",
+        "cn": "（房仲）有希望的條件嗎？",
+        "answer": "駅から近い部屋を探しています。",
+        "choices": [
+          "駅から近い部屋を探しています。",
+          "駅を食べたいです。",
+          "ごめんください。",
+          "おめでとうございます。"
+        ]
       }
     ]
   },
@@ -10710,7 +11682,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "引っ越しの手続き＿＿したいです。（受詞）",
+        "prompt": "引っ越しの手続き（てつづき）＿＿したいです。（受詞）",
         "answer": "を",
         "choices": [
           "を",
@@ -10721,7 +11693,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "パスポートと写真＿＿必要です。（主語）",
+        "prompt": "パスポートと写真（しゃしん）＿＿必要です。（主語）",
         "answer": "が",
         "choices": [
           "が",
@@ -10754,6 +11726,18 @@ const SCENES=[
         "prompt": "用日文說：「我想辦居民登記。」",
         "model": "住民登録の手続きをしたいです。",
         "notes": "〜の手続きをする＝辦…手續。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "番号札を取って、お待ちください。",
+        "cn": "（公所）請抽號碼牌稍候。",
+        "answer": "はい、分かりました。",
+        "choices": [
+          "はい、分かりました。",
+          "いいえ、違います。",
+          "いってきます。",
+          "ごちそうさまでした。"
+        ]
       }
     ]
   },
@@ -10864,7 +11848,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "毎月のデータ＿＿どのくらいですか。（主題）",
+        "prompt": "毎月（まいつき）のデータ＿＿どのくらいですか。（主題）",
         "answer": "は",
         "choices": [
           "は",
@@ -10897,6 +11881,18 @@ const SCENES=[
         "prompt": "用日文說：「我要這個方案。」",
         "model": "このプランにします。",
         "notes": "〜にする＝做出選擇。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "データは月にどのくらい使いますか。",
+        "cn": "（門市）每月大概用多少流量？",
+        "answer": "あまり使わないので、一番安いプランにします。",
+        "choices": [
+          "あまり使わないので、一番安いプランにします。",
+          "データがおいしいです。",
+          "おじゃまします。",
+          "おやすみなさい。"
+        ]
       }
     ]
   },
@@ -10991,7 +11987,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "前髪を少し短く＿＿ください。（剪短）",
+        "prompt": "前髪（まえがみ）を少し短く（みじかく）＿＿ください。（剪短）",
         "answer": "して",
         "choices": [
           "して",
@@ -11002,7 +11998,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "このくらい＿＿お願いします。（這個長度）",
+        "prompt": "このくらい＿＿お願い（おねがい）します。（這個長度）",
         "answer": "で",
         "choices": [
           "で",
@@ -11046,6 +12042,18 @@ const SCENES=[
         "prompt": "用日文說：「請剪短一點。」",
         "model": "少し短くしてください。",
         "notes": "い形容詞＋く＋してください。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "今日はどうなさいますか。",
+        "cn": "（美容師）今天想怎麼弄？",
+        "answer": "少し短くしてください。",
+        "choices": [
+          "少し短くしてください。",
+          "少し食べてください。",
+          "いってらっしゃい。",
+          "おかえりなさい。"
+        ]
       }
     ]
   },
@@ -11149,7 +12157,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "次の角＿＿右に曲がってください。（在…轉，經過點）",
+        "prompt": "次（つぎ）の角＿＿右に曲がってください。（在…轉，經過點）",
         "answer": "を",
         "choices": [
           "を",
@@ -11160,7 +12168,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "信号を左＿＿曲がります。（往…方向）",
+        "prompt": "信号（しんごう）を左＿＿曲がります。（往…方向）",
         "answer": "に",
         "choices": [
           "に",
@@ -11193,6 +12201,18 @@ const SCENES=[
         "prompt": "用日文說：「請在下個轉角右轉。」",
         "model": "次の角を右に曲がってください。",
         "notes": "〜を〜に曲がる＝在…往…轉。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "すみません、駅はどこですか。",
+        "cn": "不好意思，車站在哪裡？",
+        "answer": "次の角を右に曲がってください。",
+        "choices": [
+          "次の角を右に曲がってください。",
+          "三枚ください。",
+          "お待たせしました。",
+          "お腹がすきました。"
+        ]
       }
     ]
   },
@@ -11296,7 +12316,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "財布を落とし＿＿。（弄丟了，遺憾）",
+        "prompt": "財布（さいふ）を落とし（おとし）＿＿。（弄丟了，遺憾）",
         "answer": "てしまいました",
         "choices": [
           "てしまいました",
@@ -11340,6 +12360,18 @@ const SCENES=[
         "prompt": "用日文說：「我把錢包弄丟了。」",
         "model": "財布をなくしてしまいました。",
         "notes": "〜てしまいました＝（不小心）…了。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "どうしましたか。",
+        "cn": "（警察）怎麼了嗎？",
+        "answer": "財布を落としてしまったんです。",
+        "choices": [
+          "財布を落としてしまったんです。",
+          "財布はおいしかったです。",
+          "おめでとうございます。",
+          "ただいま。"
+        ]
       }
     ]
   },
@@ -11445,7 +12477,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "7時に二名で予約し＿＿んですが。（想訂位，委婉）",
+        "prompt": "7時（じ）に二名（にめい）で予約（よやく）し＿＿んですが。（想訂位，委婉）",
         "answer": "たい",
         "choices": [
           "たい",
@@ -11456,7 +12488,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "卵のアレルギーが＿＿んですが。（有…，委婉鋪陳）",
+        "prompt": "卵（たまご）のアレルギーが＿＿んですが。（有…，委婉鋪陳）",
         "answer": "ある",
         "choices": [
           "ある",
@@ -11489,6 +12521,18 @@ const SCENES=[
         "prompt": "用日文說：「我想訂七點兩位。」",
         "model": "7時に二名で予約したいんですが。",
         "notes": "〜たいんですが＝委婉提出。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "お電話ありがとうございます。レストラン桜です。",
+        "cn": "（電話）感謝來電，這裡是櫻餐廳。",
+        "answer": "7時に二名で予約したいんですが。",
+        "choices": [
+          "7時に二名で予約したいんですが。",
+          "7時ですね、ただいま。",
+          "おやすみなさい。",
+          "いってきます。"
+        ]
       }
     ]
   },
@@ -11577,7 +12621,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "空が暗い。雨が降り＿＿です。（看起來要下）",
+        "prompt": "空（そら）が暗い（くらい）。雨（あめ）が降り＿＿です。（看起來要下）",
         "answer": "そう",
         "choices": [
           "そう",
@@ -11588,7 +12632,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "秋になって、涼しく＿＿ました。（變得…，い形＋く＋）",
+        "prompt": "秋（あき）になって、涼しく＿＿ました。（變得…，い形＋く＋）",
         "answer": "なり",
         "choices": [
           "なり",
@@ -11632,6 +12676,18 @@ const SCENES=[
         "prompt": "用日文說：「看起來要下雨了。」",
         "model": "雨が降りそうです。",
         "notes": "樣態〜そう＝看起來要…。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "空、暗くなってきましたね。",
+        "cn": "天色暗下來了呢。",
+        "answer": "ええ、雨が降りそうですね。",
+        "choices": [
+          "ええ、雨が降りそうですね。",
+          "ええ、雨がおいしそうですね。",
+          "ごめんください。",
+          "ごちそうさまでした。"
+        ]
       }
     ]
   },
@@ -11752,7 +12808,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "歯ブラシ＿＿探しています。（受詞）",
+        "prompt": "歯ブラシ（はブラシ）＿＿探しています。（受詞）",
         "answer": "を",
         "choices": [
           "を",
@@ -11785,6 +12841,18 @@ const SCENES=[
         "prompt": "用日文問：「洗髮精在哪裡？」",
         "model": "シャンプーはどこにありますか。",
         "notes": "〜はどこにありますか＝…在哪裡。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "いらっしゃいませ。何かお探しですか。",
+        "cn": "（店員）歡迎光臨，在找什麼嗎？",
+        "answer": "シャンプーはどこにありますか。",
+        "choices": [
+          "シャンプーはどこにありますか。",
+          "シャンプーをいただきます。",
+          "おかえりなさい。",
+          "いってらっしゃい。"
+        ]
       }
     ]
   },
@@ -11875,7 +12943,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "支払いはカード＿＿お願いします。（用…）",
+        "prompt": "支払い（しはらい）はカード＿＿お願い（おねがい）します。（用…）",
         "answer": "で",
         "choices": [
           "で",
@@ -11930,6 +12998,18 @@ const SCENES=[
         "prompt": "用日文說：「我要刷卡。」",
         "model": "カードでお願いします。",
         "notes": "〜でお願いします＝指定方式。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "お支払いはどうなさいますか。",
+        "cn": "請問要怎麼付款？",
+        "answer": "カードでお願いします。",
+        "choices": [
+          "カードでお願いします。",
+          "いらっしゃいませ。",
+          "おつりをどうぞ。",
+          "おすすめですよ。"
+        ]
       }
     ]
   },
@@ -12046,7 +13126,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "金曜＿＿にできますか。（在…之前）",
+        "prompt": "金曜（きんよう）＿＿にできますか。（在…之前）",
         "answer": "まで",
         "choices": [
           "まで",
@@ -12079,6 +13159,18 @@ const SCENES=[
         "prompt": "用日文問：「星期五前能好嗎？」",
         "model": "金曜までにできますか。",
         "notes": "〜までに＝在…之前（期限）。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "仕上がりは金曜日になります。",
+        "cn": "（店員）週五可以取件。",
+        "answer": "分かりました。金曜日に取りに来ます。",
+        "choices": [
+          "分かりました。金曜日に取りに来ます。",
+          "金曜日はおいしいです。",
+          "おじゃまします。",
+          "おやすみなさい。"
+        ]
       }
     ]
   },
@@ -12178,7 +13270,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "本を3冊借り＿＿。（想借）",
+        "prompt": "本（ほん）を3冊借り＿＿。（想借）",
         "answer": "たいです",
         "choices": [
           "たいです",
@@ -12189,7 +13281,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "返却は来週＿＿です。（到…為止）",
+        "prompt": "返却は来週（らいしゅう）＿＿です。（到…為止）",
         "answer": "まで",
         "choices": [
           "まで",
@@ -12222,6 +13314,18 @@ const SCENES=[
         "prompt": "用日文問：「能借幾本？」",
         "model": "何冊まで借りられますか。",
         "notes": "〜まで＝到…為止；可能形 借りられる。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "貸出は二週間、五冊までです。",
+        "cn": "（館員）借期兩週，最多五本。",
+        "answer": "分かりました。この三冊をお願いします。",
+        "choices": [
+          "分かりました。この三冊をお願いします。",
+          "五冊を食べます。",
+          "いってきます。",
+          "おめでとうございます。"
+        ]
       }
     ]
   },
@@ -12321,7 +13425,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "地震のときはエレベーターを使わ＿＿ください。（請不要用）",
+        "prompt": "地震（じしん）のときはエレベーターを使わ＿＿ください。（請不要用）",
         "answer": "ないで",
         "choices": [
           "ないで",
@@ -12332,7 +13436,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "まず落ち着い＿＿、頭を守ってください。（先…然後，て形）",
+        "prompt": "まず落ち着い（つい）＿＿、頭（あたま）を守っ（まもっ）てください。（先…然後，て形）",
         "answer": "て",
         "choices": [
           "て",
@@ -12365,6 +13469,18 @@ const SCENES=[
         "prompt": "用日文說：「請不要搭電梯。」",
         "model": "エレベーターを使わないでください。",
         "notes": "〜ないでください＝請不要…。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "地震です。落ち着いて行動してください。",
+        "cn": "（廣播）發生地震，請冷靜行動。",
+        "answer": "はい。まず頭を守ります。",
+        "choices": [
+          "はい。まず頭を守ります。",
+          "はい、エレベーターで逃げます。",
+          "ごちそうさまでした。",
+          "おかえりなさい。"
+        ]
       }
     ]
   },
@@ -12464,7 +13580,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "山田の名前で予約し＿＿。（已預約，狀態）",
+        "prompt": "山田の名前（なまえ）で予約（よやく）し＿＿。（已預約，狀態）",
         "answer": "ています",
         "choices": [
           "ています",
@@ -12508,6 +13624,18 @@ const SCENES=[
         "prompt": "用日文說：「我要辦入住。」",
         "model": "チェックインをお願いします。",
         "notes": "予約しています＝已預約（狀態）。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "ご予約のお名前をお願いします。",
+        "cn": "請問訂房大名？",
+        "answer": "山田です。予約しています。",
+        "choices": [
+          "山田です。予約しています。",
+          "いってきます。",
+          "ごちそうさまでした。",
+          "どういたしまして。"
+        ]
       }
     ]
   },
@@ -12611,7 +13739,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "円をドル＿＿両替したいです。（換成…）",
+        "prompt": "円をドル＿＿両替（りょうがえ）したいです。（換成…）",
         "answer": "に",
         "choices": [
           "に",
@@ -12622,7 +13750,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "今日のレート＿＿いくらですか。（主題）",
+        "prompt": "今日（きょう）のレート＿＿いくらですか。（主題）",
         "answer": "は",
         "choices": [
           "は",
@@ -12655,6 +13783,18 @@ const SCENES=[
         "prompt": "用日文說：「我想把日圓換成美元。」",
         "model": "円をドルに両替したいです。",
         "notes": "〜を〜に両替＝把…換成…。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "本日のレートはこちらです。",
+        "cn": "（櫃台）今天的匯率在這裡。",
+        "answer": "じゃあ、円をドルに両替してください。",
+        "choices": [
+          "じゃあ、円をドルに両替してください。",
+          "レートをください、二枚。",
+          "いってらっしゃい。",
+          "おやすみなさい。"
+        ]
       }
     ]
   },
@@ -12758,7 +13898,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "電車に傘を忘れ＿＿んですが。（不小心忘了，鋪陳）",
+        "prompt": "電車（でんしゃ）に傘（かさ）を忘れ（わすれ）＿＿んですが。（不小心忘了，鋪陳）",
         "answer": "てしまった",
         "choices": [
           "てしまった",
@@ -12769,7 +13909,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "遅延証明＿＿ほしいんですが。（受詞，想要）",
+        "prompt": "遅延証明（ちえんしょうめい）＿＿ほしいんですが。（受詞，想要）",
         "answer": "が",
         "choices": [
           "が",
@@ -12802,6 +13942,18 @@ const SCENES=[
         "prompt": "用日文說：「我把傘忘在電車上了。」",
         "model": "電車に傘を忘れてしまいました。",
         "notes": "〜てしまう＝（不小心）…了。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "お忘れ物ですか。特徴を教えてください。",
+        "cn": "（站務員）遺失物嗎？請描述特徵。",
+        "answer": "黒い傘です。さっきの電車に忘れてしまって。",
+        "choices": [
+          "黒い傘です。さっきの電車に忘れてしまって。",
+          "黒い傘がおいしいです。",
+          "ごめんください。",
+          "おめでとうございます。"
+        ]
       }
     ]
   },
@@ -12916,7 +14068,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "この美術館は学生＿＿安いです。（針對學生，主題）",
+        "prompt": "この美術館は学生（がくせい）＿＿安い（やすい）です。（針對學生，主題）",
         "answer": "は",
         "choices": [
           "は",
@@ -12949,6 +14101,18 @@ const SCENES=[
         "prompt": "用日文說：「請給我兩張大人票。」",
         "model": "大人二枚ください。",
         "notes": "数＋枚＝張（票）。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "何名様ですか。",
+        "cn": "（售票口）請問幾位？",
+        "answer": "大人二枚ください。",
+        "choices": [
+          "大人二枚ください。",
+          "二人はおいしいです。",
+          "おじゃまします。",
+          "ただいま。"
+        ]
       }
     ]
   },
@@ -13052,7 +14216,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "ジムに入会し＿＿んですが。（我想入會）",
+        "prompt": "ジムに入会（にゅうかい）し＿＿んですが。（我想入會）",
         "answer": "たい",
         "choices": [
           "たい",
@@ -13063,7 +14227,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "一度、体験＿＿したいです。（受詞）",
+        "prompt": "一度、体験（たいけん）＿＿したいです。（受詞）",
         "answer": "を",
         "choices": [
           "を",
@@ -13096,6 +14260,18 @@ const SCENES=[
         "prompt": "用日文說：「我想入會。」",
         "model": "入会したいんですが。",
         "notes": "〜たいんですが＝委婉提出。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "まず、体験してみますか。",
+        "cn": "（櫃台）要先體驗一次嗎？",
+        "answer": "はい、ぜひお願いします。",
+        "choices": [
+          "はい、ぜひお願いします。",
+          "はい、二枚ください。",
+          "いってきます。",
+          "おやすみなさい。"
+        ]
       }
     ]
   },
@@ -13199,7 +14375,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "明日、再配達して＿＿ますか。（能請您…）",
+        "prompt": "明日（あした）、再配達（さいはいたつ）して＿＿ますか。（能請您…）",
         "answer": "もらえ",
         "choices": [
           "もらえ",
@@ -13210,7 +14386,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "午後6時＿＿指定したいです。（指定…時點）",
+        "prompt": "午後（ごご）6時（じ）＿＿指定（してい）したいです。（指定…時點）",
         "answer": "に",
         "choices": [
           "に",
@@ -13243,6 +14419,18 @@ const SCENES=[
         "prompt": "用日文說：「能幫我重新配送嗎？」",
         "model": "再配達してもらえますか。",
         "notes": "〜てもらえますか＝請對方做某事。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "お荷物のお届けに参りましたが、ご不在でした。",
+        "cn": "（語音）配送時您不在家。",
+        "answer": "すみません、再配達してもらえますか。",
+        "choices": [
+          "すみません、再配達してもらえますか。",
+          "荷物をいただきます、今。",
+          "おかえりなさい。",
+          "ごちそうさまでした。"
+        ]
       }
     ]
   },
@@ -13342,7 +14530,7 @@ const SCENES=[
       },
       {
         "kind": "cloze",
-        "prompt": "配達は30分＿＿かかります。（左右）",
+        "prompt": "配達（はいたつ）は30分＿＿かかります。（左右）",
         "answer": "くらい",
         "choices": [
           "くらい",
@@ -13386,8 +14574,99 @@ const SCENES=[
         "prompt": "用日文說：「麻煩給我一個披薩。」",
         "model": "ピザを一枚お願いします。",
         "notes": "〜をお願いします＝麻煩給我…。"
+      },
+      {
+        "kind": "listen_reply",
+        "jp": "ご注文をどうぞ。",
+        "cn": "（電話）請說您要點的餐。",
+        "answer": "ピザを一枚お願いします。",
+        "choices": [
+          "ピザを一枚お願いします。",
+          "ピザはどこにありますか。",
+          "いってらっしゃい。",
+          "おめでとうございます。"
+        ]
       }
     ]
+  },
+  {
+    "id": "e-senpai",
+    "stage": "学生編",
+    "domain": "育",
+    "cefr": "B1",
+    "cost": 25,
+    "aff": [
+      "senpai"
+    ],
+    "event": true,
+    "title": "先輩と放課後",
+    "sub": "After class with senpai（好感度イベント）",
+    "setting": "和學長姐的好感度加深了。放學後被約去咖啡廳，用學過的表達暢聊。",
+    "affGate": {
+      "key": "senpai",
+      "val": 60
+    },
+    "sample": [
+      "s-class",
+      "b1-keigo",
+      "a2-toomou",
+      "b1-rashii",
+      "b2-keigo2"
+    ],
+    "quiz": []
+  },
+  {
+    "id": "e-ten",
+    "stage": "実用編",
+    "domain": "食",
+    "cefr": "B1",
+    "cost": 25,
+    "aff": [
+      "ten"
+    ],
+    "event": true,
+    "title": "常連さんですね",
+    "sub": "Regular customer（好感度イベント）",
+    "setting": "成了店家的常客。今天店員記得你的喜好，多聊了幾句。",
+    "affGate": {
+      "key": "ten",
+      "val": 60
+    },
+    "sample": [
+      "s-cafe",
+      "s-clothes",
+      "theme-salon",
+      "theme2-checkout",
+      "theme-restaurant",
+      "theme2-demae"
+    ],
+    "quiz": []
+  },
+  {
+    "id": "e-douryou",
+    "stage": "社会人編",
+    "domain": "職",
+    "cefr": "B2",
+    "cost": 25,
+    "aff": [
+      "douryou"
+    ],
+    "event": true,
+    "title": "同期と一杯",
+    "sub": "Drinks with coworkers（好感度イベント）",
+    "setting": "和同期同事處熟了。下班後的一杯，把職場學到的話都用上。",
+    "affGate": {
+      "key": "douryou",
+      "val": 40
+    },
+    "sample": [
+      "w-morning",
+      "w-phone",
+      "w-mail",
+      "w-nomikai",
+      "w-conbini"
+    ],
+    "quiz": []
   }
 ];
 /*DATA_END*/
@@ -13488,8 +14767,21 @@ function Question({card,onGrade}){
   const [hintUsed,setHintUsed]=useState(false);
   const [chosen,setChosen]=useState([]);
   const [typed,setTyped]=useState("");
-  const [choices]=useState(()=> (k==="mc"||k==="cloze")?shuffle(card.choices||[]):[]);
-  const [pool]=useState(()=> k==="build"?shuffle((card.pool||[]).map((w,i)=>({w,i}))):[]);
+  const [choices]=useState(()=> (k==="mc"||k==="cloze"||k==="listen_reply")?shuffle(card.choices||[]):[]);
+  const [pool]=useState(()=>{
+    if(k==="build") return shuffle((card.pool||[]).map((w,i)=>({w,i})));
+    if(k==="dictation"){
+      const ans=String((card.accept&&card.accept[0])||"").split("");
+      const kata=/[\u30a1-\u30fa\u30fc]/.test(ans.join(""));
+      const bank=(kata
+        ?"アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポーッャュョ"
+        :"あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽっゃゅょー").split("");
+      const used=new Set(ans);
+      const extra=shuffle(bank.filter(c=>!used.has(c))).slice(0,4);
+      return shuffle([...ans,...extra].map((w,i)=>({w,i})));
+    }
+    return [];
+  });
 
   function grade(){ onGrade(ok?(hintUsed?"hard":"good"):"again"); }
   function useHint(){
@@ -13518,6 +14810,50 @@ function Question({card,onGrade}){
             );
           })}
         </div>
+        {done&&k==="cloze"&&<div style={{display:"flex",justifyContent:"center",marginTop:12}}>
+          <button className="btn btn-dark btn-sm" onClick={()=>speak(clozeTTS(card))}><Volume2 size={14}/> 全文を聞く</button>
+        </div>}
+        {done&&card.explain&&<div className="card pop" style={{padding:14,marginTop:12}}>
+          <div style={{fontSize:12,color:"var(--gold)",fontWeight:700,marginBottom:4}}>💡 なぜ</div>
+          <div className="mincho" style={{fontSize:13.5,lineHeight:1.7}}>{card.explain}</div>
+        </div>}
+        <Footer done={done} ok={ok} onNext={grade} onHint={!done?useHint:null} hintUsed={hintUsed}/>
+      </div>
+    );
+  }
+
+  if(k==="listen_reply"){
+    return (
+      <div className="fade">
+        <div className="card" style={{padding:20,marginBottom:14,textAlign:"center"}}>
+          <div className="eyebrow" style={{marginBottom:6}}>聴いて応える</div>
+          <div style={{fontSize:13,color:"var(--muted)",marginBottom:12}}>聽一句，選出合適的回應</div>
+          <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap"}}>
+            <button className="btn" onClick={()=>speak(card.jp)}><Volume2 size={18}/> 音を聞く</button>
+            <button className="btn btn-dark" onClick={()=>speak(card.jp,0.62)}>🐢 ゆっくり</button>
+          </div>
+        </div>
+        <div style={{display:"grid",gap:10}}>
+          {choices.map((c,idx)=>{
+            const isAns=c===card.answer; let cls="opt";
+            if(done){ if(isAns)cls+=" good"; else if(picked===c)cls+=" bad"; else cls+=" dim"; }
+            else if(dim.includes(idx))cls+=" dim";
+            return (
+              <button key={idx} className={cls} disabled={done||dim.includes(idx)} onClick={()=>{ if(done)return; setPicked(c); setOk(c===card.answer); setDone(true); }}>
+                <span className="optkey">{String.fromCharCode(65+idx)}</span>
+                <span style={{flex:1}} className="mincho">{c}</span>
+                {done&&isAns&&<Check size={18} color="var(--good)"/>}
+              </button>
+            );
+          })}
+        </div>
+        {done&&<div className="card pop" style={{padding:14,marginTop:12}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10}}>
+            <span className="mincho" style={{fontSize:15,lineHeight:1.6}}>{card.jp}</span>
+            <button className="btn-dark" onClick={()=>speak(card.jp)} style={{width:32,height:32,borderRadius:9,display:"flex",alignItems:"center",justifyContent:"center",border:"1px solid var(--line)",cursor:"pointer",flex:"none"}}><Volume2 size={14}/></button>
+          </div>
+          <div style={{fontSize:12.5,color:"var(--muted)",marginTop:6}}>{card.cn}</div>
+        </div>}
         <Footer done={done} ok={ok} onNext={grade} onHint={!done?useHint:null} hintUsed={hintUsed}/>
       </div>
     );
@@ -13578,19 +14914,37 @@ function Question({card,onGrade}){
   }
 
   if(k==="dictation"){
-    function check(){ setOk(card.accept.map(normKana).includes(normKana(typed))); setDone(true); }
+    const usedIdx=chosen.map(c=>c.i);
+    const built=chosen.map(c=>c.w).join("");
+    function check(){ setOk(card.accept.map(normKana).includes(normKana(built))); setDone(true); }
     return (
       <div className="fade">
-        <div className="card" style={{padding:22,marginBottom:14,textAlign:"center"}}>
+        <div className="card" style={{padding:20,marginBottom:14,textAlign:"center"}}>
           <div className="eyebrow" style={{marginBottom:12}}>聞いて書き取る</div>
-          <button className="btn" onClick={()=>speak(card.jp)} style={{margin:"0 auto"}}><Volume2 size={18}/> 音を聞く</button>
+          <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap"}}>
+            <button className="btn" onClick={()=>speak(card.jp)}><Volume2 size={18}/> 音を聞く</button>
+            <button className="btn btn-dark" onClick={()=>speak(card.jp,0.62)}>🐢 ゆっくり</button>
+          </div>
           {card.hint&&<div style={{fontSize:12,color:"var(--muted)",marginTop:12}}>ヒント：{card.hint}</div>}
         </div>
-        <input className="field" value={typed} onChange={e=>setTyped(e.target.value)} placeholder="かなで入力" disabled={done} autoCapitalize="off" autoCorrect="off" spellCheck={false} style={{textAlign:"center"}}/>
-        {!done&&<div style={{display:"flex",justifyContent:"center",marginTop:16}}>
-          <button className="btn" disabled={!typed.trim()} onClick={check}><Check size={16}/> 確認</button>
+        <div style={{minHeight:52,display:"flex",flexWrap:"wrap",gap:8,padding:12,border:"1.5px dashed var(--line)",borderRadius:12,marginBottom:12,background:"#0e0b1a",justifyContent:"center"}}>
+          {chosen.length===0&&<span style={{color:"var(--muted)",fontSize:13,alignSelf:"center"}}>下から仮名を選んで組み立てる</span>}
+          {chosen.map((c,n)=>{
+            let cls="tok"; if(done)cls+=(ok?" ok":" err");
+            return <button key={n} className={cls} disabled={done} onClick={()=>setChosen(chosen.filter((_,m)=>m!==n))}>{c.w}</button>;
+          })}
+        </div>
+        <div style={{display:"flex",flexWrap:"wrap",gap:8,justifyContent:"center",marginBottom:12}}>
+          {pool.map((t,n)=>{
+            const used=usedIdx.includes(t.i);
+            return <button key={n} className={"tok"+(used?" dim":"")} disabled={done||used} onClick={()=>setChosen([...chosen,t])}>{t.w}</button>;
+          })}
+        </div>
+        {!done&&<div style={{display:"flex",justifyContent:"center",gap:10}}>
+          <button className="btn btn-dark" disabled={!chosen.length} onClick={()=>setChosen(chosen.slice(0,-1))}>一字消す</button>
+          <button className="btn" disabled={!chosen.length} onClick={check}><Check size={16}/> 確認</button>
         </div>}
-        {done&&<div className="card pop" style={{padding:14,marginTop:12,textAlign:"center"}}>
+        {done&&<div className="card pop" style={{padding:14,marginTop:4,textAlign:"center"}}>
           <div style={{fontSize:14,color:ok?"var(--good)":"var(--bad)",fontWeight:700}}>{ok?"正解！":"正しくは"}</div>
           {!ok&&<div className="brush" style={{fontSize:24,marginTop:6}}>{card.accept[0]}</div>}
         </div>}
@@ -13808,12 +15162,22 @@ function Scene({node,save,update,onDone,onBack}){
 }
 
 /* ===================== Review (SRS) ===================== */
+function isWeak(st){ return st && ((st.lapses||0)>=2 || (st.ease||2.5)<=2.1); }
 function Review({save,update,onBack}){
-  const [queue,setQueue]=useState(()=>shuffle(dueCards(save)));
+  const [queue,setQueue]=useState([]);
+  const [started,setStarted]=useState(false);
   const [i,setI]=useState(0);
   const [k,setK]=useState(0);
   const [count,setCount]=useState(0);
-  const [done,setDone]=useState(()=>dueCards(save).length===0);
+  const [done,setDone]=useState(false);
+
+  const dueAll=dueCards(save);
+  const weakAll=Object.keys(save.srs||{}).filter(id=>CARD_INDEX[id]&&isWeak(save.srs[id]));
+  function start(mode){
+    const q=shuffle(mode==="weak"?weakAll:dueAll);
+    if(q.length===0){ setDone(true); setStarted(true); return; }
+    setQueue(q); setI(0); setK(0); setCount(0); setDone(false); setStarted(true);
+  }
 
   function onGrade(g){
     const id=queue[i];
@@ -13826,6 +15190,24 @@ function Review({save,update,onBack}){
     let q=queue;
     if(g==="again"){ q=[...queue,id]; setQueue(q); }
     if(i+1>=q.length)setDone(true); else { setI(i+1); setK(k+1); }
+  }
+
+  if(!started){
+    return (
+      <div className="wrap" style={{padding:16}}>
+        <TopBar title="思い出す部屋" sub="Retrieval · 檢索練習" onBack={onBack}/>
+        <div className="card" style={{padding:18,marginBottom:12}}>
+          <div className="brush" style={{fontSize:17,marginBottom:6}}>🧠 期限が来た言葉</div>
+          <div style={{fontSize:12.5,color:"var(--muted)",lineHeight:1.6,marginBottom:12}}>依 SM-2 間隔到期的卡。答對 +6xp。</div>
+          <button className="btn" disabled={dueAll.length===0} onClick={()=>start("all")} style={{width:"100%"}}>はじめる（{dueAll.length} 枚）</button>
+        </div>
+        <div className="card" style={{padding:18}}>
+          <div className="brush" style={{fontSize:17,marginBottom:6}}>🔥 苦手だけ</div>
+          <div style={{fontSize:12.5,color:"var(--muted)",lineHeight:1.6,marginBottom:12}}>錯過兩次以上、或記憶度偏低的卡。錯誤驅動，效率最高。</div>
+          <button className="btn btn-dark" disabled={weakAll.length===0} onClick={()=>start("weak")} style={{width:"100%",border:"1px solid var(--line)"}}>苦手をつぶす（{weakAll.length} 枚）</button>
+        </div>
+      </div>
+    );
   }
 
   if(done){
@@ -13894,12 +15276,118 @@ function Shop({save,update,onBack}){
 }
 
 /* ===================== Codex ===================== */
+const COMPARE=[
+  {t:"は vs が",note:"疑問詞當主語必用が（誰が来た？）。",rows:[
+    ["は","主題・對比（已知話題）","私は学生です"],
+    ["が","主語・新資訊・排他","私が行きます"]]},
+  {t:"と・たら・ば・なら",note:"と後面不能接命令・意志。",rows:[
+    ["と","必然・規律（一…就）","春になると咲く"],
+    ["たら","一次性・…之後","着いたら電話して"],
+    ["ば","假設條件（偏書面）","安ければ買う"],
+    ["なら","承接對方的話題","行くなら電車がいい"]]},
+  {t:"ために vs ように",note:"「為了能…」（可能形）→ように。",rows:[
+    ["ために","意志動詞的目的","留学するために貯金する"],
+    ["ように","非意志・可能形","話せるように練習する"]]},
+  {t:"そう（樣態）vs そうだ（傳聞）vs らしい",note:"降りそう＝快下了；降るそうだ＝聽說會下。",rows:[
+    ["樣態そう","看起來（ます形幹／去い）","おいしそう・降りそう"],
+    ["傳聞そうだ","聽說（接普通形）","降るそうだ"],
+    ["らしい","有根據的推測／傳聞","休みらしい"]]},
+  {t:"あげる・くれる・もらう",note:"視點決定動詞；對象用に標示。",rows:[
+    ["あげる","我／某人 → 別人","友達にあげる"],
+    ["くれる","別人 → 我方","母がくれた"],
+    ["もらう","我方 ← 別人","先輩にもらった"]]},
+  {t:"推測的把握度",note:"由低到高排列。",rows:[
+    ["かもしれない","50%↓ 也許","雨かもしれない"],
+    ["でしょう","70% 大概","雨でしょう"],
+    ["はずだ","有根據・應該","来るはずだ"],
+    ["に違いない","90%↑ 一定","犯人に違いない"],
+    ["わけだ","結論・難怪","寒いわけだ"]]},
+];
 function Codex({save,onBack}){
   const entries=Object.values(save.codex||{});
+  const [tab,setTab]=useState("words");
   return (
     <div className="wrap" style={{padding:16}}>
       <TopBar title="言ノ葉帳" sub={"Glossary · "+entries.length+"語"} onBack={onBack}/>
-      {entries.length===0
+      <div style={{display:"flex",gap:8,marginBottom:14}}>
+        <button className={tab==="words"?"btn btn-sm":"btn btn-dark btn-sm"} onClick={()=>setTab("words")}>集めた言葉</button>
+        <button className={tab==="cmp"?"btn btn-sm":"btn btn-dark btn-sm"} onClick={()=>setTab("cmp")}>文型対比</button>
+        <button className={tab==="stats"?"btn btn-sm":"btn btn-dark btn-sm"} onClick={()=>setTab("stats")}>統計</button>
+      </div>
+      {tab==="stats"&&(()=>{
+        const doneIds=Object.keys(save.done||{});
+        const gAll={}, gDone={};
+        SCENES.forEach(s=>{ const g=s.grammar||GRAMMAR[s.id]; if(g&&g.jlpt){ gAll[g.jlpt]=(gAll[g.jlpt]||0)+1; if(save.done&&save.done[s.id])gDone[g.jlpt]=(gDone[g.jlpt]||0)+1; } });
+        const vc={}; entries.forEach(e=>{ const c=e.cefr||"?"; vc[c]=(vc[c]||0)+1; });
+        const srsIds=Object.keys(save.srs||{}).filter(id=>CARD_INDEX[id]);
+        const weak=srsIds.filter(id=>isWeak(save.srs[id])).length;
+        const due=dueCards(save).length;
+        const dayPct=Math.round(Math.min(1,(save.dayIdx||0)/DAYS.length)*100);
+        const JL=["N5","N4","N3","N2"].filter(j=>gAll[j]);
+        const CE=["A1","A2","B1","B2","C1"].filter(c=>vc[c]);
+        const Bar=({pct,color})=>(<div className="bar" style={{flex:1}}><i style={{display:"block",height:"100%",borderRadius:99,width:pct+"%",background:color||"var(--gold)"}}/></div>);
+        return (
+          <div style={{display:"grid",gap:10}}>
+            <div className="card" style={{padding:14}}>
+              <div className="eyebrow" style={{marginBottom:8}}>日々の歩み</div>
+              <div style={{display:"flex",alignItems:"center",gap:10,fontSize:13}}>
+                <span style={{minWidth:86,color:"var(--muted)"}}>{Math.min(save.dayIdx||0,DAYS.length)} / {DAYS.length} 日</span>
+                <Bar pct={dayPct}/><span style={{fontWeight:700,minWidth:38,textAlign:"right"}}>{dayPct}%</span>
+              </div>
+            </div>
+            <div className="card" style={{padding:14}}>
+              <div className="eyebrow" style={{marginBottom:8}}>文型（接觸過的場景 · 按 JLPT）</div>
+              <div style={{display:"grid",gap:8}}>
+                {JL.map(j=>{ const d=gDone[j]||0,t=gAll[j]; return (
+                  <div key={j} style={{display:"flex",alignItems:"center",gap:10,fontSize:13}}>
+                    <span style={{minWidth:36,fontWeight:700,color:"var(--gold)"}}>{j}</span>
+                    <Bar pct={Math.round(d/t*100)}/><span style={{minWidth:54,textAlign:"right",color:"var(--muted)"}}>{d} / {t}</span>
+                  </div>
+                );})}
+              </div>
+            </div>
+            <div className="card" style={{padding:14}}>
+              <div className="eyebrow" style={{marginBottom:8}}>語彙（集めた言葉 · 按 CEFR）</div>
+              {entries.length===0?<div style={{fontSize:12.5,color:"var(--muted)"}}>還沒收詞。完成場景就會進帳。</div>:
+              <div style={{display:"grid",gap:8}}>
+                {CE.map(c=>{ const mx=Math.max(...CE.map(x=>vc[x])); return (
+                  <div key={c} style={{display:"flex",alignItems:"center",gap:10,fontSize:13}}>
+                    <span style={{minWidth:36,fontWeight:700}}>{c}</span>
+                    <Bar pct={Math.round(vc[c]/mx*100)} color="var(--xp)"/><span style={{minWidth:54,textAlign:"right",color:"var(--muted)"}}>{vc[c]} 語</span>
+                  </div>
+                );})}
+              </div>}
+            </div>
+            <div className="card" style={{padding:14}}>
+              <div className="eyebrow" style={{marginBottom:8}}>記憶（SRS）</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,textAlign:"center"}}>
+                <div><div className="brush" style={{fontSize:22}}>{srsIds.length}</div><div style={{fontSize:11,color:"var(--muted)"}}>追蹤中</div></div>
+                <div><div className="brush" style={{fontSize:22,color:due>0?"var(--hp)":"var(--ink)"}}>{due}</div><div style={{fontSize:11,color:"var(--muted)"}}>到期</div></div>
+                <div><div className="brush" style={{fontSize:22,color:weak>0?"var(--gold)":"var(--ink)"}}>{weak}</div><div style={{fontSize:11,color:"var(--muted)"}}>苦手</div></div>
+              </div>
+            </div>
+            <div style={{fontSize:11,color:"var(--muted)",lineHeight:1.6,padding:"0 4px"}}>※「接觸過」＝完成過該場景，不代表精通。真正的定著看 SRS 與苦手數的變化。</div>
+          </div>
+        );
+      })()}
+      {tab==="cmp"&&<div style={{display:"grid",gap:10}}>
+        {COMPARE.map((c,n)=>(
+          <div key={n} className="card" style={{padding:14}}>
+            <div className="brush" style={{fontSize:16,marginBottom:8}}>{c.t}</div>
+            <div style={{display:"grid",gap:6}}>
+              {c.rows.map((r,m)=>(
+                <div key={m} style={{display:"flex",gap:8,alignItems:"baseline",fontSize:12.5,lineHeight:1.6}}>
+                  <span className="mincho" style={{fontWeight:700,minWidth:86,color:"var(--gold)"}}>{r[0]}</span>
+                  <span style={{flex:1,color:"var(--muted)"}}>{r[1]}</span>
+                  <span className="mincho" style={{textAlign:"right"}}>{r[2]}</span>
+                </div>
+              ))}
+            </div>
+            {c.note&&<div style={{fontSize:11.5,color:"var(--muted)",marginTop:8,paddingTop:8,borderTop:"1px solid var(--line)"}}>※ {c.note}</div>}
+          </div>
+        ))}
+      </div>}
+      {tab==="words"&&(entries.length===0
         ? <div className="card" style={{padding:30,textAlign:"center",color:"var(--muted)"}}><div className="mincho">まだ言葉を集めていない。<br/>予定をこなそう。</div></div>
         : <div style={{display:"grid",gap:8}}>
             {entries.map((e,n)=>(
@@ -13913,7 +15401,7 @@ function Codex({save,onBack}){
                 <button className="btn-dark" onClick={()=>speak(e.reading||e.jp)} style={{width:32,height:32,borderRadius:9,display:"flex",alignItems:"center",justifyContent:"center",border:"1px solid var(--line)",cursor:"pointer",flex:"none"}}><Volume2 size={14}/></button>
               </div>
             ))}
-          </div>}
+          </div>)}
     </div>
   );
 }
@@ -13952,9 +15440,10 @@ function ActionCard({node,save,onPick}){
     </button>
   );
 }
-function DayView({save,update,onPick}){
+function DayView({save,update,onPick,onReview}){
   const energy=save.energy||0;
   const slot=(save.slot||0);
+  const dueRev=dueCards(save).length;
   const idx=clamp(save.dayIdx||0,0,DAYS.length);
   const finishedAll = idx>=DAYS.length;
   const day = finishedAll ? null : DAYS[idx];
@@ -14041,6 +15530,16 @@ function DayView({save,update,onPick}){
           <button className="btn btn-sm" style={{marginTop:10}} onClick={clearBanner}>はじめる</button>
         </div>
       )}
+      {dueRev>0&&onReview&&(
+        <button className="card fade" onClick={onReview} style={{padding:12,marginBottom:12,display:"flex",alignItems:"center",gap:12,width:"100%",textAlign:"left",cursor:"pointer",border:"1px solid rgba(122,162,247,.45)",background:"linear-gradient(180deg,rgba(122,162,247,.08),var(--bg2))"}}>
+          <div style={{width:40,height:40,borderRadius:11,flex:"none",display:"flex",alignItems:"center",justifyContent:"center",fontSize:19,background:"var(--panel2)",border:"1px solid var(--line)"}}>🧠</div>
+          <div style={{flex:1,minWidth:0}}>
+            <div className="brush" style={{fontSize:14.5}}>先思い出してから始める</div>
+            <div className="eyebrow" style={{marginTop:2}}>檢索練習 · 到期 {dueRev} 枚（+6xp/枚）</div>
+          </div>
+          <ChevronRight size={16} color="var(--muted)"/>
+        </button>
+      )}
       <div style={{marginBottom:12,display:"flex",alignItems:"center",gap:8}}>
         <span style={{fontSize:22}}>{SLOT_ICON[slotName]}</span>
         <span className="brush" style={{fontSize:17}}>{flow.prompt}</span>
@@ -14061,6 +15560,137 @@ function DayView({save,update,onPick}){
         <div className="eyebrow" style={{marginBottom:6}}>この旅の到達設計（誠実なCEFR）</div>
         <div style={{fontSize:12.5,color:"var(--muted)",lineHeight:1.7}}>読解：B1＋／受控産出（語体選択・活用・組句）：B1、語体選択肢はB2／上級接觸（敬語・婉曲・慣用の認識）：C1形式を含むが自由産出の認証はなし／聴解：評価には入れず（任意の読み上げあり）、各自で補強。</div>
       </div>
+    </div>
+  );
+}
+
+/* ===================== Kana Dojo (五十音) ===================== */
+const KANA_ROWS=[
+  [["あ","ア","a"],["い","イ","i"],["う","ウ","u"],["え","エ","e"],["お","オ","o"]],
+  [["か","カ","ka"],["き","キ","ki"],["く","ク","ku"],["け","ケ","ke"],["こ","コ","ko"]],
+  [["さ","サ","sa"],["し","シ","shi"],["す","ス","su"],["せ","セ","se"],["そ","ソ","so"]],
+  [["た","タ","ta"],["ち","チ","chi"],["つ","ツ","tsu"],["て","テ","te"],["と","ト","to"]],
+  [["な","ナ","na"],["に","ニ","ni"],["ぬ","ヌ","nu"],["ね","ネ","ne"],["の","ノ","no"]],
+  [["は","ハ","ha"],["ひ","ヒ","hi"],["ふ","フ","fu"],["へ","ヘ","he"],["ほ","ホ","ho"]],
+  [["ま","マ","ma"],["み","ミ","mi"],["む","ム","mu"],["め","メ","me"],["も","モ","mo"]],
+  [["や","ヤ","ya"],null,["ゆ","ユ","yu"],null,["よ","ヨ","yo"]],
+  [["ら","ラ","ra"],["り","リ","ri"],["る","ル","ru"],["れ","レ","re"],["ろ","ロ","ro"]],
+  [["わ","ワ","wa"],null,null,null,["を","ヲ","o"]],
+  [["ん","ン","n"],null,null,null,null],
+];
+const KANA_FLAT=KANA_ROWS.flat().filter(Boolean);
+function KanaDojo({onBack}){
+  const [tab,setTab]=useState("hira"); // hira | kata | quiz
+  const [qScript,setQScript]=useState("hira");
+  const [target,setTarget]=useState(null);
+  const [qChoices,setQChoices]=useState([]);
+  const [qDone,setQDone]=useState(false);
+  const [qPick,setQPick]=useState(null);
+  const [streak,setStreak]=useState(0);
+  const [best,setBest]=useState(0);
+  const col=qScript==="hira"?0:1;
+  function newQ(script){
+    const sc=script||qScript;
+    const c=sc==="hira"?0:1;
+    const t=KANA_FLAT[(Math.random()*KANA_FLAT.length)|0];
+    const wrong=shuffle(KANA_FLAT.filter(x=>x!==t)).slice(0,3);
+    setTarget(t); setQChoices(shuffle([t,...wrong])); setQDone(false); setQPick(null);
+    setTimeout(()=>speak(t[c]),50);
+  }
+  function pick(c){
+    if(qDone)return;
+    setQPick(c); setQDone(true);
+    if(c===target){ const s2=streak+1; setStreak(s2); if(s2>best)setBest(s2); setTimeout(()=>newQ(),700); }
+    else setStreak(0);
+  }
+  const Tab=({id,label})=>(
+    <button className={tab===id?"btn btn-sm":"btn btn-dark btn-sm"} onClick={()=>{ setTab(id); if(id==="quiz")setTimeout(()=>newQ(),60); }}>{label}</button>
+  );
+  return (
+    <div className="wrap" style={{padding:16}}>
+      <TopBar title="五十音道場" sub="Kana Dojo · 零基礎的入口" onBack={onBack}/>
+      <div style={{display:"flex",gap:8,marginBottom:14,flexWrap:"wrap"}}>
+        <Tab id="hira" label="ひらがな"/><Tab id="kata" label="カタカナ"/><Tab id="quiz" label="🎧 聽音選字"/>
+      </div>
+      {(tab==="hira"||tab==="kata")&&<>
+        <div style={{fontSize:12.5,color:"var(--muted)",marginBottom:10}}>點任一格聽發音。羅馬字僅供入門對照，之後盡快脫離。</div>
+        <div style={{display:"grid",gap:6}}>
+          {KANA_ROWS.map((row,ri)=>(
+            <div key={ri} style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:6}}>
+              {row.map((cell,ci)=> cell
+                ? <button key={ci} className="card" onClick={()=>speak(tab==="hira"?cell[0]:cell[1])} style={{padding:"10px 4px",textAlign:"center",cursor:"pointer"}}>
+                    <div className="brush" style={{fontSize:22,lineHeight:1.2}}>{tab==="hira"?cell[0]:cell[1]}</div>
+                    <div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>{cell[2]}</div>
+                  </button>
+                : <div key={ci}/>)}
+            </div>
+          ))}
+        </div>
+      </>}
+      {tab==="quiz"&&<>
+        <div style={{display:"flex",gap:8,marginBottom:12,alignItems:"center"}}>
+          <button className={qScript==="hira"?"btn btn-sm":"btn btn-dark btn-sm"} onClick={()=>{setQScript("hira");setStreak(0);setTimeout(()=>newQ("hira"),60);}}>ひらがな</button>
+          <button className={qScript==="kata"?"btn btn-sm":"btn btn-dark btn-sm"} onClick={()=>{setQScript("kata");setStreak(0);setTimeout(()=>newQ("kata"),60);}}>カタカナ</button>
+          <span style={{marginLeft:"auto",fontSize:12,color:"var(--muted)"}}>連続 <b style={{color:"var(--gold)"}}>{streak}</b> · 最高 {best}</span>
+        </div>
+        <div className="card" style={{padding:20,textAlign:"center",marginBottom:12}}>
+          <div style={{fontSize:13,color:"var(--muted)",marginBottom:10}}>聽發音，選出對的假名</div>
+          <div style={{display:"flex",gap:8,justifyContent:"center"}}>
+            <button className="btn" onClick={()=>target&&speak(target[col])}><Volume2 size={18}/> もう一度</button>
+            <button className="btn btn-dark" onClick={()=>target&&speak(target[col],0.6)}>🐢</button>
+          </div>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+          {qChoices.map((c,i)=>{
+            let cls="opt"; if(qDone){ if(c===target)cls+=" good"; else if(qPick===c)cls+=" bad"; else cls+=" dim"; }
+            return <button key={i} className={cls} disabled={qDone&&qPick===target} onClick={()=>pick(c)} style={{justifyContent:"center"}}>
+              <span className="brush" style={{fontSize:26}}>{c[col]}</span>
+            </button>;
+          })}
+        </div>
+        {qDone&&qPick!==target&&<div style={{textAlign:"center",marginTop:12}}>
+          <div style={{fontSize:13,color:"var(--muted)",marginBottom:8}}>正解：<span className="brush" style={{fontSize:20,color:"var(--ink)"}}>{target[col]}</span>（{target[2]}）</div>
+          <button className="btn btn-sm" onClick={()=>newQ()}>次へ</button>
+        </div>}
+      </>}
+    </div>
+  );
+}
+
+/* ===================== Save code (存檔碼) ===================== */
+function SaveIO({save,onImport}){
+  const [open,setOpen]=useState(false);
+  const [txt,setTxt]=useState("");
+  const [msg,setMsg]=useState("");
+  function doExport(){
+    try{
+      const code=btoa(unescape(encodeURIComponent(JSON.stringify(save||{}))));
+      setTxt(code);
+      try{ navigator.clipboard&&navigator.clipboard.writeText(code); setMsg("已產生並複製存檔碼。請貼到備忘錄自行保存。"); }
+      catch(e){ setMsg("已產生存檔碼。請全選複製，貼到備忘錄保存。"); }
+    }catch(e){ setMsg("匯出失敗。"); }
+  }
+  function doImport(){
+    try{
+      const o=JSON.parse(decodeURIComponent(escape(atob(txt.trim()))));
+      if(!o||typeof o!=="object")throw 0;
+      onImport(o);
+    }catch(e){ setMsg("存檔碼無效：請確認有完整貼上。"); }
+  }
+  if(!open) return <button className="btn btn-dark btn-sm" style={{marginTop:14}} onClick={()=>setOpen(true)}>💾 存檔碼（備份／還原）</button>;
+  return (
+    <div className="card" style={{padding:14,marginTop:14,width:"100%",maxWidth:320,textAlign:"left"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+        <span className="eyebrow">存檔碼</span>
+        <button className="btn-dark btn-sm" style={{border:"1px solid var(--line)",borderRadius:8,padding:"2px 8px",cursor:"pointer"}} onClick={()=>setOpen(false)}>閉じる</button>
+      </div>
+      <div style={{fontSize:12,color:"var(--muted)",lineHeight:1.6,marginBottom:8}}>進度存在這台裝置的瀏覽器裡。清除瀏覽資料會消失——備份請匯出存檔碼；換裝置則在新裝置貼上還原。</div>
+      <textarea className="field" value={txt} onChange={e=>setTxt(e.target.value)} placeholder="貼上存檔碼以還原；或按下方匯出" rows={3} style={{width:"100%",fontSize:11,fontFamily:"monospace",resize:"vertical"}}/>
+      <div style={{display:"flex",gap:8,marginTop:8}}>
+        {save&&<button className="btn btn-sm" onClick={doExport}>匯出＋複製</button>}
+        <button className="btn btn-dark btn-sm" disabled={!txt.trim()} onClick={doImport}>還原此存檔</button>
+      </div>
+      {msg&&<div style={{fontSize:11.5,color:"var(--gold)",marginTop:8,lineHeight:1.5}}>{msg}</div>}
     </div>
   );
 }
@@ -14090,6 +15720,7 @@ function App(){
           {has&&<button className="btn" onClick={()=>{ if(!save)persist(freshSave()); setView("hub"); }}><ChevronRight size={18}/> 続きから</button>}
           <button className={has?"btn btn-dark":"btn"} onClick={()=>{ persist(freshSave()); setView("hub"); }}>{has?"最初から":"はじめる"}</button>
         </div>
+        <SaveIO save={save} onImport={(o)=>{ persist(o); setView("hub"); }}/>
       </div>
     );
   }
@@ -14098,6 +15729,7 @@ function App(){
   if(view==="review") return <Review save={save} update={update} onBack={()=>setView("hub")}/>;
   if(view==="shop") return <Shop save={save} update={update} onBack={()=>setView("hub")}/>;
   if(view==="codex") return <Codex save={save} onBack={()=>setView("hub")}/>;
+  if(view==="kana") return <KanaDojo onBack={()=>setView("hub")}/>;
 
   const due=dueCards(save).length;
   const xpNext=xpToNext(save.lv);
@@ -14117,21 +15749,24 @@ function App(){
             <div style={{display:"flex",alignItems:"center",gap:5,flex:"none"}}><Coins size={15} color="var(--gold)"/><span style={{fontWeight:800,color:"var(--gold)",fontSize:14}}>{save.gold}</span></div>
           </div>
         </div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10,marginTop:12}}>
-          <button className="card" onClick={()=>setView("review")} style={{padding:"14px 8px",display:"flex",flexDirection:"column",alignItems:"center",gap:6,cursor:"pointer",position:"relative",border:due>0?"1px solid rgba(240,82,79,.5)":"1px solid var(--line)"}}>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:8,marginTop:12}}>
+          <button className="card" onClick={()=>setView("review")} style={{padding:"14px 6px",display:"flex",flexDirection:"column",alignItems:"center",gap:6,cursor:"pointer",position:"relative",border:due>0?"1px solid rgba(240,82,79,.5)":"1px solid var(--line)"}}>
             {due>0&&<span className="dot">{due}</span>}
-            <Brain size={22} color={due>0?"var(--hp)":"var(--mana)"}/><span style={{fontSize:12,fontWeight:700}}>復習</span>
+            <Brain size={21} color={due>0?"var(--hp)":"var(--mana)"}/><span style={{fontSize:11.5,fontWeight:700}}>復習</span>
           </button>
-          <button className="card" onClick={()=>setView("shop")} style={{padding:"14px 8px",display:"flex",flexDirection:"column",alignItems:"center",gap:6,cursor:"pointer"}}>
-            <Store size={22} color="var(--gold)"/><span style={{fontSize:12,fontWeight:700}}>売店</span>
+          <button className="card" onClick={()=>setView("kana")} style={{padding:"14px 6px",display:"flex",flexDirection:"column",alignItems:"center",gap:6,cursor:"pointer"}}>
+            <span style={{fontSize:21,fontWeight:800,lineHeight:"21px",color:"var(--aff)"}} className="brush">あ</span><span style={{fontSize:11.5,fontWeight:700}}>五十音</span>
           </button>
-          <button className="card" onClick={()=>setView("codex")} style={{padding:"14px 8px",display:"flex",flexDirection:"column",alignItems:"center",gap:6,cursor:"pointer"}}>
-            <BookOpen size={22} color="var(--xp)"/><span style={{fontSize:12,fontWeight:700}}>言ノ葉帳</span>
+          <button className="card" onClick={()=>setView("shop")} style={{padding:"14px 6px",display:"flex",flexDirection:"column",alignItems:"center",gap:6,cursor:"pointer"}}>
+            <Store size={21} color="var(--gold)"/><span style={{fontSize:11.5,fontWeight:700}}>売店</span>
+          </button>
+          <button className="card" onClick={()=>setView("codex")} style={{padding:"14px 6px",display:"flex",flexDirection:"column",alignItems:"center",gap:6,cursor:"pointer"}}>
+            <BookOpen size={21} color="var(--xp)"/><span style={{fontSize:11.5,fontWeight:700}}>言ノ葉帳</span>
           </button>
         </div>
       </div>
       <div style={{flex:1,overflowY:"auto",marginTop:14}}>
-        <DayView save={save} update={update} onPick={(n)=>{ setNode(n); setView(n.event?"event":"lesson"); }}/>
+        <DayView save={save} update={update} onPick={(n)=>{ setNode(n); setView(n.event?"event":"lesson"); }} onReview={()=>setView("review")}/>
       </div>
     </div>
   );
