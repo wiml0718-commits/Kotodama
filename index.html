@@ -17031,7 +17031,7 @@ function sampleCards(lessonIds,n){
 }
 function freshSave(){
   return { name:"あなた", lv:1, xp:0, gold:60, dayIdx:0, slot:0, energy:100, seenJob:false, showJob:false, seenGuide:false,
-    done:{}, srs:{}, codex:{}, aff:{}, inv:{}, created:Date.now() };
+    done:{}, srs:{}, codex:{}, aff:{}, inv:{}, exams:{}, created:Date.now() };
 }
 function normalize(s){
   if(!s) return s;
@@ -17043,6 +17043,7 @@ function normalize(s){
   if(typeof s.seenJob!=="boolean")s.seenJob=false;
   if(typeof s.showJob!=="boolean")s.showJob=false;
   if(typeof s.seenGuide!=="boolean")s.seenGuide=true;
+  if(!s.exams||typeof s.exams!=="object")s.exams={};
   if(!s.name)s.name="あなた";
   return s;
 }
@@ -17074,7 +17075,8 @@ function Row({label,val,icon,color}){
 }
 
 /* ===================== Question (universal) ===================== */
-function Question({card,onGrade}){
+function Question({card,onGrade,threeGrade}){
+  
   const k=card.kind;
   const [done,setDone]=useState(false);
   const [ok,setOk]=useState(null);
@@ -17100,6 +17102,7 @@ function Question({card,onGrade}){
   });
 
   function grade(){ onGrade(ok?(hintUsed?"hard":"good"):"again"); }
+  const hardBtn=(threeGrade&&done&&ok)?()=>onGrade("hard"):null;
   function useHint(){
     if(hintUsed||done)return;
     const wrong=choices.map((c,i)=>i).filter(i=>choices[i]!==card.answer&&!dim.includes(i));
@@ -17133,7 +17136,7 @@ function Question({card,onGrade}){
           <div style={{fontSize:12,color:"var(--gold)",fontWeight:700,marginBottom:4}}>💡 なぜ</div>
           <div className="mincho" style={{fontSize:13.5,lineHeight:1.7}}>{card.explain}</div>
         </div>}
-        <Footer done={done} ok={ok} onNext={grade} onHint={!done?useHint:null} hintUsed={hintUsed}/>
+        <Footer done={done} ok={ok} onNext={grade} onHint={!done?useHint:null} hintUsed={hintUsed} onHard={hardBtn}/>
       </div>
     );
   }
@@ -17170,7 +17173,7 @@ function Question({card,onGrade}){
           </div>
           <div style={{fontSize:12.5,color:"var(--muted)",marginTop:6}}>{card.cn}</div>
         </div>}
-        <Footer done={done} ok={ok} onNext={grade} onHint={!done?useHint:null} hintUsed={hintUsed}/>
+        <Footer done={done} ok={ok} onNext={grade} onHint={!done?useHint:null} hintUsed={hintUsed} onHard={hardBtn}/>
       </div>
     );
   }
@@ -17200,7 +17203,7 @@ function Question({card,onGrade}){
           <div style={{fontSize:14,color:ok?"var(--good)":"var(--bad)",fontWeight:700,marginBottom:6}}>{ok?"正解！":"惜しい…"}</div>
           <div className="mincho" style={{fontSize:14,lineHeight:1.6}}>{card.explain}</div>
         </div>}
-        <Footer done={done} ok={ok} onNext={grade}/>
+        <Footer done={done} ok={ok} onNext={grade} onHard={hardBtn}/>
       </div>
     );
   }
@@ -17232,7 +17235,7 @@ function Question({card,onGrade}){
           <div className="eyebrow" style={{marginBottom:4}}>正しい並び</div>
           <div className="brush" style={{fontSize:18}}>{card.target.join(" ")}</div>
         </div>}
-        <Footer done={done} ok={ok} onNext={grade}/>
+        <Footer done={done} ok={ok} onNext={grade} onHard={hardBtn}/>
       </div>
     );
   }
@@ -17272,7 +17275,7 @@ function Question({card,onGrade}){
           <div style={{fontSize:14,color:ok?"var(--good)":"var(--bad)",fontWeight:700}}>{ok?"正解！":"正しくは"}</div>
           {!ok&&<div className="brush" style={{fontSize:24,marginTop:6}}>{card.accept[0]}</div>}
         </div>}
-        <Footer done={done} ok={ok} onNext={grade}/>
+        <Footer done={done} ok={ok} onNext={grade} onHard={hardBtn}/>
       </div>
     );
   }
@@ -17326,21 +17329,26 @@ function Question({card,onGrade}){
 
   return null;
 }
-function Footer({done,ok,onNext,onHint,hintUsed}){
+function Footer({done,ok,onNext,onHint,hintUsed,onHard}){
   return (
     <div style={{marginTop:18}}>
       {!done&&onHint&&<div style={{textAlign:"center",marginBottom:10}}>
         <button className="btn btn-dark btn-sm" onClick={onHint} disabled={hintUsed}><Star size={14}/> ヒント（1つ消す）</button>
       </div>}
-      {done&&<button className="btn" style={{width:"100%"}} onClick={onNext}>
-        {ok?"正解！ ":"次へ "}<ChevronRight size={18}/>
-      </button>}
+      {done&&(onHard&&ok
+        ? <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+            <button className="btn btn-dark" style={{border:"1px solid var(--line)"}} onClick={onHard}>難しかった</button>
+            <button className="btn" onClick={onNext}>できた <ChevronRight size={16}/></button>
+          </div>
+        : <button className="btn" style={{width:"100%"}} onClick={onNext}>
+            {ok?"正解！ ":"次へ "}<ChevronRight size={18}/>
+          </button>)}
     </div>
   );
 }
 
 /* ===================== Scene (lesson/event) ===================== */
-function Scene({node,save,update,onDone,onBack}){
+function Scene({node,save,update,onDone,onBack,onJump}){
   const [cards]=useState(()=> (node.event||node.exam) ? sampleCards(node.sample,node.sampleN||10) : (node.quiz||[]).map((q,idx)=>({...q,_id:node.id+":"+idx})) );
   const [phase,setPhase]=useState("teach");
   const [i,setI]=useState(0);
@@ -17352,6 +17360,8 @@ function Scene({node,save,update,onDone,onBack}){
 
   function finish(){
     cards.forEach(c=>{ if(!grades.current[c._id]) grades.current[c._id]="good"; });
+    const wrongIds=cards.filter(c=>grades.current[c._id]==="again").map(c=>c._id);
+    const pct=Math.round(right.current/Math.max(1,cards.length)*100);
     const replay=!!(save.done && save.done[node.id] && !node.event);
     const factor=replay?0.5:1;
     const gold=Math.round(right.current*8*tired*factor)+(node.event?40:0);
@@ -17366,9 +17376,10 @@ function Scene({node,save,update,onDone,onBack}){
       const g=gainXP(s,xpAmt);
       const energy=clamp((s.energy||0)-(node.cost||25),0,100);
       const slot=((s.slot||0)+1);
-      return {...s, srs, codex, aff, energy, slot, done:{...s.done,[node.id]:true}, gold:s.gold+gold, lv:g.lv, xp:g.xp};
+      const exams=node.exam?{...(s.exams||{}),[node.id]:{best:Math.max(((s.exams||{})[node.id]||{}).best||0,pct),last:pct,at:Date.now()}}:(s.exams||{});
+      return {...s, srs, codex, aff, energy, slot, exams, done:{...s.done,[node.id]:true}, gold:s.gold+gold, lv:g.lv, xp:g.xp};
     });
-    setReward({gold,xp:xpAmt,right:right.current,total:cards.length});
+    setReward({gold,xp:xpAmt,right:right.current,total:cards.length,pct,wrongIds});
     setPhase("done");
   }
   function onGrade(g){
@@ -17397,6 +17408,34 @@ function Scene({node,save,update,onDone,onBack}){
           {(node.aff||[]).length>0&&<><div style={{height:8}}/>
             <Row icon={<Heart size={16} color="var(--aff)"/>} label="好感度" val={node.aff.map(a=>AFF[a].label).join("・")+" +20"}/></>}
         </div>
+        {node.exam&&(()=>{
+          const best=((save.exams||{})[node.id]||{}).best||reward.pct;
+          const wrongScenes=[...new Set((reward.wrongIds||[]).map(id=>id.split(":")[0]))].map(sid=>SCENES.find(x=>x.id===sid)).filter(Boolean);
+          return (
+            <div className="card" style={{padding:14,marginTop:14,width:"100%",maxWidth:300,textAlign:"left"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline"}}>
+                <span className="eyebrow">腕試しの結果</span>
+                <span className="brush" style={{fontSize:22,color:reward.pct>=80?"var(--good)":"var(--gold)"}}>{reward.pct}%</span>
+              </div>
+              <div style={{fontSize:11.5,color:"var(--muted)",marginTop:2}}>ベスト {Math.max(best,reward.pct)}%（統計に記録）</div>
+              {wrongScenes.length>0&&<div style={{marginTop:10}}>
+                <div style={{fontSize:12,color:"var(--gold)",fontWeight:700,marginBottom:6}}>間違えた文型 → タップで復習へ</div>
+                <div style={{display:"grid",gap:6}}>
+                  {wrongScenes.map(sc=>{ const g=sc.grammar||GRAMMAR[sc.id]; return (
+                    <button key={sc.id} className="opt" style={{padding:"9px 12px"}} onClick={()=>onJump&&onJump(sc)}>
+                      <span style={{flex:1,minWidth:0}}>
+                        <span className="mincho" style={{fontSize:13.5,display:"block"}}>{g?g.point:sc.title}</span>
+                        <span style={{fontSize:11,color:"var(--muted)"}}>{sc.title}</span>
+                      </span>
+                      <ChevronRight size={14} color="var(--muted)"/>
+                    </button>
+                  );})}
+                </div>
+              </div>}
+              {wrongScenes.length===0&&<div style={{fontSize:12.5,color:"var(--good)",marginTop:8}}>全問正解。この段階は仕上がっている。</div>}
+            </div>
+          );
+        })()}
         {tired<1&&<div style={{fontSize:12,color:"var(--hp)",marginTop:10}}>※ 体力切れで報酬が半分に。休んでから挑もう。</div>}
         <div className="card" style={{padding:12,marginTop:14,width:"100%",maxWidth:300,background:"var(--panel2)"}}>
           <div style={{fontSize:12.5,color:"var(--muted)",lineHeight:1.6}}>覚えた言葉は<b style={{color:"var(--ink)"}}>復習（思い出す部屋）</b>に届く。忘れかけた頃に出てくるので、毎日のぞくと定着する。</div>
@@ -17610,6 +17649,74 @@ function DialogCard({card,onGrade}){
     </div>
   );
 }
+/* ============ 逆引き（産出）カード ============ */
+function RevCard({entry,onGrade}){
+  const clean=(entry.reading||"").replace(/[〜～]/g,"");
+  const tileable=clean.length>0&&clean.length<=6&&!/[〜～]/.test(entry.jp)&&/^[\u3041-\u3096\u30a1-\u30fa\u30fc]+$/.test(clean);
+  const [revealed,setRevealed]=useState(false);
+  const [chosen,setChosen]=useState([]);
+  const [checked,setChecked]=useState(false);
+  const [ok,setOk]=useState(false);
+  const [pool]=useState(()=>{
+    if(!tileable)return [];
+    const ans=clean.split("");
+    const kata=/[\u30a1-\u30fa\u30fc]/.test(clean);
+    const bank=(kata?"アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポーッャュョ":"あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽっゃゅょー").split("");
+    const used=new Set(ans);
+    return shuffle([...ans,...shuffle(bank.filter(c=>!used.has(c))).slice(0,4)].map((w,i)=>({w,i})));
+  });
+  const built=chosen.map(c=>c.w).join("");
+  const usedIdx=chosen.map(c=>c.i);
+  const G3=({retry})=>(
+    <div style={{display:"grid",gridTemplateColumns:retry?"1fr":"1fr 1fr",gap:10,marginTop:14}}>
+      {retry
+        ? <button className="btn" onClick={()=>onGrade("again")}>もう一度 <ChevronRight size={15}/></button>
+        : <>
+            <button className="btn btn-dark" style={{border:"1px solid var(--line)"}} onClick={()=>onGrade("hard")}>難しかった</button>
+            <button className="btn" onClick={()=>onGrade("good")}>できた <ChevronRight size={15}/></button>
+          </>}
+    </div>
+  );
+  return (
+    <div className="fade">
+      <div className="card" style={{padding:20,marginBottom:14,textAlign:"center"}}>
+        <div className="eyebrow" style={{marginBottom:8}}>🗣 逆引き · 中文 → 日文</div>
+        <div style={{fontSize:20,fontWeight:800,lineHeight:1.6}}>{entry.meaning}</div>
+        <div style={{fontSize:11.5,color:"var(--muted)",marginTop:6}}>先在腦中（或出聲）說出日文，再作答</div>
+      </div>
+      {tileable&&!checked&&<>
+        <div style={{minHeight:50,display:"flex",flexWrap:"wrap",gap:8,padding:12,border:"1.5px dashed var(--line)",borderRadius:12,marginBottom:12,background:"#0e0b1a",justifyContent:"center"}}>
+          {chosen.length===0&&<span style={{color:"var(--muted)",fontSize:13,alignSelf:"center"}}>用仮名磚拼出來</span>}
+          {chosen.map((c,n)=><button key={n} className="tok" onClick={()=>setChosen(chosen.filter((_,m)=>m!==n))}>{c.w}</button>)}
+        </div>
+        <div style={{display:"flex",flexWrap:"wrap",gap:8,justifyContent:"center",marginBottom:12}}>
+          {pool.map((t,n)=>{ const u=usedIdx.includes(t.i);
+            return <button key={n} className={"tok"+(u?" dim":"")} disabled={u} onClick={()=>setChosen([...chosen,t])}>{t.w}</button>; })}
+        </div>
+        <div style={{display:"flex",justifyContent:"center",gap:10}}>
+          <button className="btn btn-dark" disabled={!chosen.length} onClick={()=>setChosen(chosen.slice(0,-1))}>一字消す</button>
+          <button className="btn" disabled={!chosen.length} onClick={()=>{ const good=normKana(built)===normKana(clean); setOk(good); setChecked(true); speak(entry.reading); }}><Check size={16}/> 確認</button>
+        </div>
+      </>}
+      {tileable&&checked&&<div className="card pop" style={{padding:16,textAlign:"center"}}>
+        <div style={{fontSize:13,fontWeight:700,color:ok?"var(--good)":"var(--bad)"}}>{ok?"正解！":"正しくは"}</div>
+        <div className="brush" style={{fontSize:26,marginTop:6}}>{entry.jp}</div>
+        {entry.reading!==entry.jp&&<div className="mincho" style={{fontSize:14,color:"var(--muted)",marginTop:2}}>{entry.reading}</div>}
+        <G3 retry={!ok}/>
+      </div>}
+      {!tileable&&!revealed&&<div style={{display:"flex",justifyContent:"center"}}>
+        <button className="btn" onClick={()=>{ setRevealed(true); speak(entry.reading||entry.jp); }}>答えを見る</button>
+      </div>}
+      {!tileable&&revealed&&<div className="card pop" style={{padding:16,textAlign:"center"}}>
+        <div className="brush" style={{fontSize:24}}>{entry.jp}</div>
+        {entry.reading!==entry.jp&&<div className="mincho" style={{fontSize:14,color:"var(--muted)",marginTop:2}}>{entry.reading}</div>}
+        <div style={{fontSize:11.5,color:"var(--muted)",marginTop:8}}>誠實自評：說得出來嗎？</div>
+        <G3 retry={false}/>
+        <button className="btn-dark btn-sm" style={{border:"none",background:"none",color:"var(--muted)",cursor:"pointer",fontSize:12,marginTop:8}} onClick={()=>onGrade("again")}>言えなかった（もう一度）</button>
+      </div>}
+    </div>
+  );
+}
 function Review({save,update,onBack}){
   const [queue,setQueue]=useState([]);
   const [started,setStarted]=useState(false);
@@ -17617,17 +17724,20 @@ function Review({save,update,onBack}){
   const [k,setK]=useState(0);
   const [count,setCount]=useState(0);
   const [done,setDone]=useState(false);
+  const [mode,setMode]=useState("all");
 
   const dueAll=dueCards(save);
+  const revDue=Object.values(save.codex||{}).filter(e=>{ const st=(save.srs||{})["rev:"+e.jp]; return !st||st.due<=Date.now(); });
   const weakAll=Object.keys(save.srs||{}).filter(id=>CARD_INDEX[id]&&isWeak(save.srs[id]));
-  function start(mode){
-    const q=shuffle(mode==="weak"?weakAll:dueAll);
+  function start(m){
+    setMode(m);
+    const q=m==="rev"?shuffle(revDue).slice(0,20):shuffle(m==="weak"?weakAll:dueAll);
     if(q.length===0){ setDone(true); setStarted(true); return; }
     setQueue(q); setI(0); setK(0); setCount(0); setDone(false); setStarted(true);
   }
 
   function onGrade(g){
-    const id=queue[i];
+    const id=mode==="rev"?("rev:"+queue[i].jp):queue[i];
     update(s=>{
       const srs={...s.srs}; srs[id]=schedule(srs[id],g);
       const gx=g!=="again"?gainXP(s,6):{lv:s.lv,xp:s.xp};
@@ -17647,6 +17757,11 @@ function Review({save,update,onBack}){
           <div className="brush" style={{fontSize:17,marginBottom:6}}>🧠 期限が来た言葉</div>
           <div style={{fontSize:12.5,color:"var(--muted)",lineHeight:1.6,marginBottom:12}}>依 SM-2 間隔到期的卡。答對 +6xp。</div>
           <button className="btn" disabled={dueAll.length===0} onClick={()=>start("all")} style={{width:"100%"}}>はじめる（{dueAll.length} 枚）</button>
+        </div>
+        <div className="card" style={{padding:18,marginBottom:12}}>
+          <div className="brush" style={{fontSize:17,marginBottom:6}}>🗣 逆引き（産出）</div>
+          <div style={{fontSize:12.5,color:"var(--muted)",lineHeight:1.6,marginBottom:12}}>看中文→自己說出日文。短詞用假名磚拼、長詞揭示後誠實自評。一回最多 20 語（A2–B1 產出範圍）。</div>
+          <button className="btn" disabled={revDue.length===0} onClick={()=>start("rev")} style={{width:"100%"}}>産出モード（{Math.min(20,revDue.length)} 語）</button>
         </div>
         <div className="card" style={{padding:18}}>
           <div className="brush" style={{fontSize:17,marginBottom:6}}>🔥 苦手だけ</div>
@@ -17672,7 +17787,7 @@ function Review({save,update,onBack}){
 
   const remain=queue.length-i;
   const id=queue[i];
-  const card={...CARD_INDEX[id],_id:id};
+  const card=mode==="rev"?null:{...CARD_INDEX[id],_id:id};
   return (
     <div className="wrap" style={{padding:16}}>
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
@@ -17681,7 +17796,9 @@ function Review({save,update,onBack}){
         <span style={{fontSize:12,color:"var(--muted)",fontWeight:700}}>残り {remain}</span>
       </div>
       <div className="bar" style={{marginBottom:16}}><i className="xpf" style={{width:Math.min(100,count/(count+remain)*100)+"%"}}/></div>
-      <Question key={k} card={card} onGrade={onGrade}/>
+      {mode==="rev"
+        ? <RevCard key={k} entry={queue[i]} onGrade={onGrade}/>
+        : <Question key={k} card={card} onGrade={onGrade} threeGrade/>}
     </div>
   );
 }
@@ -17816,6 +17933,18 @@ function Codex({save,onBack}){
                   </div>
                 );})}
               </div>}
+            </div>
+            <div className="card" style={{padding:14}}>
+              <div className="eyebrow" style={{marginBottom:8}}>腕試し（ベスト）</div>
+              <div style={{display:"grid",gap:8}}>
+                {SCENES.filter(x=>x.exam).map(x=>{ const r=(save.exams||{})[x.id]; const pct=r?r.best:0; return (
+                  <div key={x.id} style={{display:"flex",alignItems:"center",gap:10,fontSize:12.5}}>
+                    <span style={{minWidth:96,fontWeight:700}}>{x.title.replace("腕試し・","")}</span>
+                    <Bar pct={pct} color={pct>=80?"var(--good)":"var(--gold)"}/>
+                    <span style={{minWidth:52,textAlign:"right",color:r?"var(--ink)":"var(--muted)"}}>{r?pct+"%":"未挑戦"}</span>
+                  </div>
+                );})}
+              </div>
             </div>
             <div className="card" style={{padding:14}}>
               <div className="eyebrow" style={{marginBottom:8}}>記憶（SRS）</div>
@@ -18025,6 +18154,22 @@ function DayView({save,update,onPick,onReview}){
 }
 
 /* ===================== Kana Dojo (五十音) ===================== */
+const KEIGO_DRILLS=[
+ {plain:"食べますか",who:"對方（上司・客）",answer:"召し上がりますか",choices:["召し上がりますか","いただきますか","お食べになられますか","食べてやりますか"],note:"對方吃＝尊敬 召し上がる；いただく是自己吃（謙讓）。"},
+ {plain:"（会社に）います",who:"自己（對外）",answer:"おります",choices:["おります","いらっしゃいます","ございます","まいります"],note:"自方存在用謙讓 おる；いらっしゃる是抬對方。"},
+ {plain:"見ました",who:"自己",answer:"拝見しました",choices:["拝見しました","ご覧になりました","お見しました","見てさしあげました"],note:"自己看＝謙讓 拝見；ご覧になる是對方看。"},
+ {plain:"見てください",who:"對方",answer:"ご覧ください",choices:["ご覧ください","拝見してください","お見ください","見なさい"],note:"請對方看＝ご覧ください；拝見不能套在對方身上。"},
+ {plain:"します",who:"自己",answer:"いたします",choices:["いたします","なさいます","されます","してあげます"],note:"自己做＝いたす（謙讓）；なさる是對方做（尊敬）。"},
+ {plain:"しますか",who:"對方",answer:"なさいますか",choices:["なさいますか","いたしますか","してやりますか","するんですか"],note:"對方做＝なさる（尊敬）。"},
+ {plain:"（荷物を）持ちます",who:"自己→為對方",answer:"お持ちします",choices:["お持ちします","お持ちになります","持ってやります","お持ちいたされます"],note:"為對方做＝お＋ます幹＋する（謙讓）；お〜になる是尊敬。"},
+ {plain:"ちょっと待ってください",who:"對客",answer:"少々お待ちください",choices:["少々お待ちください","お待ちしてください","ちょい待ちで","待ちなさい"],note:"接客固定句：少々お待ちください（更禮貌：お待ちいただけますか）。"},
+ {plain:"来ますか",who:"對方",answer:"いらっしゃいますか",choices:["いらっしゃいますか","参りますか","お来になりますか","うかがいますか"],note:"對方來＝いらっしゃる；参る／伺う是自己（謙讓），方向不能反。"},
+ {plain:"分かりました",who:"對上司・客",answer:"かしこまりました",choices:["かしこまりました","分かってあげました","りょうかいで〜す","かしこまってください"],note:"鄭重接受指示＝かしこまりました／承知しました。"},
+ {plain:"すみません",who:"對客（嚴重）",answer:"大変申し訳ございません",choices:["大変申し訳ございません","ごめんなさいね","すみませんです","申し訳ないっす"],note:"最高等級致歉＝申し訳ございません。"},
+ {plain:"言いました",who:"對方（上司が）",answer:"おっしゃいました",choices:["おっしゃいました","申しました","お言いになりました","言ってさしあげました"],note:"對方說＝おっしゃる；申す是自己說（謙讓）。"},
+ {plain:"もらいました",who:"自己（先生に）",answer:"いただきました",choices:["いただきました","くれました","もらってやりました","くださいませました"],note:"自己收到＝いただく；「先生給我」主語是先生時用くださる。"},
+ {plain:"お召し上がりになりますか（改錯）",who:"二重敬語修正",answer:"召し上がりますか",choices:["召し上がりますか","お召し上がられますか","召し上がってしまいますか","お食べになられますか"],note:"召し上がる已是尊敬語，再套お〜になる＝二重敬語（過度）。"},
+];
 const KANA_ROWS=[
   [["あ","ア","a"],["い","イ","i"],["う","ウ","u"],["え","エ","e"],["お","オ","o"]],
   [["か","カ","ka"],["き","キ","ki"],["く","ク","ku"],["け","ケ","ke"],["こ","コ","ko"]],
@@ -18060,6 +18205,23 @@ function KanaDojo({onBack,save}){
     setKPick(c); setKDone(true); speak(kTarget.reading);
     if(c===kTarget.reading){ const s2=kStreak+1; setKStreak(s2); if(s2>kBest)setKBest(s2); setTimeout(()=>newKanji(),900); }
     else setKStreak(0);
+  }
+  // ---- 敬語ドリル ----
+  const [gTarget,setGTarget]=useState(null);
+  const [gChoices,setGChoices]=useState([]);
+  const [gDone,setGDone]=useState(false);
+  const [gPick,setGPick]=useState(null);
+  const [gStreak,setGStreak]=useState(0);
+  const [gBest,setGBest]=useState(0);
+  function newKeigo(){
+    const t=KEIGO_DRILLS[(Math.random()*KEIGO_DRILLS.length)|0];
+    setGTarget(t); setGChoices(shuffle(t.choices)); setGDone(false); setGPick(null);
+  }
+  function pickKeigo(c){
+    if(gDone)return;
+    setGPick(c); setGDone(true); speak(gTarget.answer);
+    if(c===gTarget.answer){ const s2=gStreak+1; setGStreak(s2); if(s2>gBest)setGBest(s2); }
+    else setGStreak(0);
   }
   const [qScript,setQScript]=useState("hira");
   const [target,setTarget]=useState(null);
@@ -18140,7 +18302,35 @@ function KanaDojo({onBack,save}){
         <Tab id="hira" label="ひらがな"/><Tab id="kata" label="カタカナ"/><Tab id="quiz" label="🎧 聽音選字"/>
         <button className={tab==="num"?"btn btn-sm":"btn btn-dark btn-sm"} onClick={()=>{ setTab("num"); setTimeout(()=>newNum(),60); }}>💴 数字</button>
         <button className={tab==="kanji"?"btn btn-sm":"btn btn-dark btn-sm"} onClick={()=>{ setTab("kanji"); setTimeout(()=>newKanji(),60); }}>㊗️ 漢字</button>
+        <button className={tab==="keigo"?"btn btn-sm":"btn btn-dark btn-sm"} onClick={()=>{ setTab("keigo"); setTimeout(()=>newKeigo(),60); }}>👔 敬語</button>
       </div>
+      {tab==="keigo"&&<>
+        <div style={{display:"flex",gap:8,marginBottom:12,alignItems:"center"}}>
+          <span style={{fontSize:12.5,color:"var(--muted)"}}>普通體 → 選正確的敬語版</span>
+          <span style={{marginLeft:"auto",fontSize:12,color:"var(--muted)"}}>連続 <b style={{color:"var(--gold)"}}>{gStreak}</b> · 最高 {gBest}</span>
+        </div>
+        {gTarget&&<>
+          <div className="card" style={{padding:18,textAlign:"center",marginBottom:12}}>
+            <div className="eyebrow" style={{marginBottom:8}}>{gTarget.who}</div>
+            <div className="mincho" style={{fontSize:22}}>{gTarget.plain}</div>
+            <div style={{fontSize:11.5,color:"var(--muted)",marginTop:6}}>↓ 敬語では？</div>
+          </div>
+          <div style={{display:"grid",gap:10}}>
+            {gChoices.map((c,i)=>{
+              let cls="opt"; if(gDone){ if(c===gTarget.answer)cls+=" good"; else if(gPick===c)cls+=" bad"; else cls+=" dim"; }
+              return <button key={i} className={cls} disabled={gDone} onClick={()=>pickKeigo(c)}>
+                <span className="optkey">{String.fromCharCode(65+i)}</span>
+                <span style={{flex:1}} className="mincho">{c}</span>
+                {gDone&&c===gTarget.answer&&<Check size={18} color="var(--good)"/>}
+              </button>;
+            })}
+          </div>
+          {gDone&&<div className="card pop" style={{padding:12,marginTop:12}}>
+            <div style={{fontSize:12.5,lineHeight:1.7}}>💡 {gTarget.note}</div>
+            <button className="btn" style={{width:"100%",marginTop:10}} onClick={()=>newKeigo()}>次へ <ChevronRight size={15}/></button>
+          </div>}
+        </>}
+      </>}
       {tab==="kanji"&&<>
         {kanjiPool.length<4
         ? <div className="card" style={{padding:26,textAlign:"center",color:"var(--muted)"}}>
@@ -18342,7 +18532,7 @@ function App(){
     );
   }
 
-  if((view==="lesson"||view==="event")&&node) return <Scene node={node} save={save} update={update} onBack={()=>setView("hub")} onDone={()=>setView("hub")}/>;
+  if((view==="lesson"||view==="event")&&node) return <Scene key={node.id} node={node} save={save} update={update} onBack={()=>setView("hub")} onDone={()=>setView("hub")} onJump={(sc)=>{ setNode(sc); setView("lesson"); }}/>;
   if(view==="review") return <Review save={save} update={update} onBack={()=>setView("hub")}/>;
   if(view==="shop") return <Shop save={save} update={update} onBack={()=>setView("hub")}/>;
   if(view==="codex") return <Codex save={save} onBack={()=>setView("hub")}/>;
